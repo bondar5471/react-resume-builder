@@ -9,13 +9,22 @@ export const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    width: theme.spacing(10),
+    height: theme.spacing(10),
   },
   form: {
-    width: "100%",
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(6),
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    margin: theme.spacing(8),
+  },
+  formControl: {
+    margin: theme.spacing(3),
+  },
+  button: {
+    margin: theme.spacing(1, 1, 0, 0),
   },
 }))

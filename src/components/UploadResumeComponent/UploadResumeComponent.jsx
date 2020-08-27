@@ -1,22 +1,31 @@
 import React, { useState } from "react"
-import Avatar from "@material-ui/core/Avatar"
-import Input from "@material-ui/core/Input"
-import FileCopyIcon from "@material-ui/icons/FileCopy"
-import Typography from "@material-ui/core/Typography"
-import Box from "@material-ui/core/Box"
-import { Button } from "@material-ui/core"
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import { Button, FormControl, Typography, Box, Avatar, FormLabel, FormHelperText, Grid, Paper } from "@material-ui/core"
 import yaml from "js-yaml"
-
 import { useStyles } from "./styles"
 import ResumeForm from "../ResumeForm"
 
 export default function UploadResumeComponent() {
   const classes = useStyles()
-
   const [resumeFile, setResumeFile] = useState(null)
   const [resumeFields, setResumeFields] = useState(null)
+  const [fileName, setFileName] = useState("Upload")
 
-  const readFile = () => {
+  const hiddenFileInput = React.useRef(null);
+
+  const handleClick = event => {
+    event.preventDefault()
+    hiddenFileInput.current.click();
+  };
+
+  const handleChange = event => {
+    let file = event.target.files[0]
+    setFileName(file.name)
+    setResumeFile(file)
+  };
+
+  const readFile = (event) => {
+    event.preventDefault();
     let reader = new FileReader()
 
     reader.readAsText(resumeFile)
@@ -37,34 +46,39 @@ export default function UploadResumeComponent() {
       ) : (
         <Box>
           <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <FileCopyIcon />
-            </Avatar>
+            <Avatar variant="rounded" className={classes.avatar} src="https://image.flaticon.com/icons/svg/893/893505.svg"/>
             <Typography component="h1" variant="h5">
-              Upload resume
+              Resume Editor
             </Typography>
-            <form className={classes.form} noValidate>
-              <Input
-                type="file"
-                required
-                fullWidth
-                autoFocus
-                onChange={(e) => {
-                  e.preventDefault()
-                  setResumeFile(e.target.files[0])
-                }}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                fullWidth
-                disabled={!resumeFile}
-                onClick={() => readFile()}
-              >
-                Edit resume
-              </Button>
-            </form>
           </div>
+          <form className={classes.form} noValidate onSubmit={readFile}>
+              <FormControl component="fieldset">
+                <FormLabel component="legend">Please upload a resume file</FormLabel>
+                <input
+                  style={{ display: 'none' }}
+                  accept=".yaml, .yml"
+                  ref={hiddenFileInput}
+                  id="upload-file"
+                  name="upload-file"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  component="span"
+                  className={classes.button}
+                  startIcon={<CloudUploadIcon />}
+                  onClick={handleClick}
+                >
+                  { fileName }
+                </Button>
+                <FormHelperText> Support only .yml, .yaml files</FormHelperText>
+                <Button type="submit" variant="outlined" color="primary" disabled={!resumeFile}>
+                  Edit
+                </Button>
+              </FormControl>
+            </form>
         </Box>
       )}
     </div>
