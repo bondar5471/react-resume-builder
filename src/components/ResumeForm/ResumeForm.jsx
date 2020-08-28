@@ -14,13 +14,19 @@ import ControlPointIcon from "@material-ui/icons/ControlPoint"
 
 import { useStyles } from "./styles"
 
-export default function ResumeForm({ formData }) {
-  debugger
+export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
-  const [userDataField, setUserDataField] = useState(formData.cv.$person)
-  const [userSectionsField, setUserSectionsField] = useState(formData.cv.$sections)
+
+  const [userDataField, setUserDataField] = useState(
+    JSON.parse(localStorage.getItem("resumeFields")).cv.$person
+  )
+  const [userSectionsField, setUserSectionsField] = useState(
+    JSON.parse(localStorage.getItem("resumeFields")).cv.$sections
+  )
   const [sectionProjects, setSectionProjects] = useState(
-    formData.cv.$sections["SIGNIFICANT PROJECTS"].$projects
+    JSON.parse(localStorage.getItem("resumeFields")).cv.$sections[
+      "SIGNIFICANT PROJECTS"
+    ].$projects
   )
   const isObject = (arg) => {
     return !!arg && arg.constructor === Object
@@ -36,9 +42,41 @@ export default function ResumeForm({ formData }) {
     const newField = oldField.filter((field, i) => i != index)
     setUserSectionsField({ ...userSectionsField, [key]: newField })
   }
+
+  const addFieldResponsibility = (proj, indexProj) => {
+    const currentProj =
+      userSectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][
+        Object.keys(proj)
+      ]
+    const newResponsibility = currentProj.Responsibilities.concat("")
+    // it doesn't work
+    setUserSectionsField({
+      ...userSectionsField,
+      [["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
+        .Responsibilities]: newResponsibility,
+    })
+  }
+
+  const setSectionFieldValue = (e, key, index) => {
+    const updatedField = userSectionsField[key]
+    updatedField[index] = e.target.value
+    setUserSectionsField({ ...userSectionsField, [key]: updatedField })
+  }
+
+  const setUserFieldValue = (e, key) => {
+    setUserDataField({ ...userDataField, [key]: e.target.value })
+  }
+
+  const deleteResume = () => {
+    localStorage.removeItem("resumeFields")
+    setResumeFields(null)
+  }
   return (
     <form>
       {/* UserinfoForm */}
+      <Button fullWidth color="secondary" onClick={() => deleteResume()}>
+        Choose another file
+      </Button>
       <Typography>$person</Typography>
       {Object.entries(userDataField).map(([key, value]) => (
         <TextField
@@ -47,6 +85,7 @@ export default function ResumeForm({ formData }) {
           id="filled-basic"
           label={key}
           defaultValue={value}
+          onChange={(e) => setUserFieldValue(e, key)}
         />
       ))}
       <Typography>$sections</Typography>
@@ -63,6 +102,7 @@ export default function ResumeForm({ formData }) {
                   fullWidth
                   defaultValue={field}
                   multiline
+                  onChange={(e) => setSectionFieldValue(e, key, index)}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -92,7 +132,7 @@ export default function ResumeForm({ formData }) {
               <>
                 {label === "$projects" ? (
                   <>
-                    {sectionProjects.map((proj) => (
+                    {sectionProjects.map((proj, indexProj) => (
                       <Paper key={Object.keys(proj)}>
                         <Typography>{Object.keys(proj)}</Typography>
                         <TextField
@@ -117,7 +157,7 @@ export default function ResumeForm({ formData }) {
                                   <IconButton
                                     variant="contained"
                                     color="secondary"
-                                    // onClick={() => addFieldResponsibility(index, key)} //check this method
+                                    // onClick={() => addFieldResponsibility(proj)} //check this method
                                   >
                                     <RemoveCircleOutlineIcon />
                                   </IconButton>
@@ -129,7 +169,7 @@ export default function ResumeForm({ formData }) {
                         <Button
                           color="primary"
                           variant="contained"
-                          // onClick={() => addFieldResponsibility(key)} //check this method
+                          onClick={() => addFieldResponsibility(proj, indexProj)}
                         >
                           +
                         </Button>
@@ -160,5 +200,5 @@ export default function ResumeForm({ formData }) {
 }
 
 ResumeForm.propTypes = {
-  formData: PropTypes.objectOf(Object).isRequired,
+  setResumeFields: PropTypes.func,
 }

@@ -1,6 +1,14 @@
 import React, { useState } from "react"
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
-import { Button, FormControl, Typography, Box, Avatar, FormLabel, FormHelperText, Grid, Paper } from "@material-ui/core"
+import CloudUploadIcon from "@material-ui/icons/CloudUpload"
+import {
+  Button,
+  FormControl,
+  Typography,
+  Box,
+  Avatar,
+  FormLabel,
+  FormHelperText,
+} from "@material-ui/core"
 import yaml from "js-yaml"
 import { useStyles } from "./styles"
 import ResumeForm from "../ResumeForm"
@@ -8,30 +16,34 @@ import ResumeForm from "../ResumeForm"
 export default function UploadResumeComponent() {
   const classes = useStyles()
   const [resumeFile, setResumeFile] = useState(null)
-  const [resumeFields, setResumeFields] = useState(null)
+  const [resumeFields, setResumeFields] = useState(
+    JSON.parse(localStorage.getItem("resumeFields")) || null
+  )
   const [fileName, setFileName] = useState("Upload")
 
-  const hiddenFileInput = React.useRef(null);
+  const hiddenFileInput = React.useRef(null)
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     event.preventDefault()
-    hiddenFileInput.current.click();
-  };
+    hiddenFileInput.current.click()
+  }
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     let file = event.target.files[0]
     setFileName(file.name)
     setResumeFile(file)
-  };
+  }
 
   const readFile = (event) => {
-    event.preventDefault();
+    event.preventDefault()
     let reader = new FileReader()
 
     reader.readAsText(resumeFile)
 
     reader.onloadend = function () {
-      setResumeFields(yaml.safeLoad(reader.result))
+      const field = yaml.safeLoad(reader.result)
+      localStorage.setItem("resumeFields", JSON.stringify(field))
+      setResumeFields(field)
     }
 
     reader.onerror = function () {
@@ -42,43 +54,54 @@ export default function UploadResumeComponent() {
   return (
     <div>
       {resumeFields ? (
-        <ResumeForm formData={resumeFields} />
+        <ResumeForm setResumeFields={setResumeFields} />
       ) : (
         <Box>
           <div className={classes.paper}>
-            <Avatar variant="rounded" className={classes.avatar} src="https://image.flaticon.com/icons/svg/893/893505.svg"/>
+            <Avatar
+              variant="rounded"
+              className={classes.avatar}
+              src="https://image.flaticon.com/icons/svg/893/893505.svg"
+            />
             <Typography component="h1" variant="h5">
               Resume Editor
             </Typography>
           </div>
           <form className={classes.form} noValidate onSubmit={readFile}>
-              <FormControl component="fieldset">
-                <FormLabel component="legend">Please upload a resume file</FormLabel>
-                <input
-                  style={{ display: 'none' }}
-                  accept=".yaml, .yml"
-                  ref={hiddenFileInput}
-                  id="upload-file"
-                  name="upload-file"
-                  type="file"
-                  onChange={handleChange}
-                />
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  component="span"
-                  className={classes.button}
-                  startIcon={<CloudUploadIcon />}
-                  onClick={handleClick}
-                >
-                  { fileName }
-                </Button>
-                <FormHelperText> Support only .yml, .yaml files</FormHelperText>
-                <Button type="submit" variant="outlined" color="primary" disabled={!resumeFile}>
-                  Edit
-                </Button>
-              </FormControl>
-            </form>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">Please upload a resume file</FormLabel>
+              <input
+                style={{ display: "none" }}
+                accept=".yaml, .yml"
+                ref={hiddenFileInput}
+                id="upload-file"
+                name="upload-file"
+                type="file"
+                onChange={handleChange}
+              />
+              <Button
+                color="secondary"
+                variant="contained"
+                component="span"
+                className={classes.button}
+                startIcon={<CloudUploadIcon />}
+                onClick={handleClick}
+              >
+                {fileName}
+              </Button>
+              <FormHelperText> Support only .yml, .yaml files</FormHelperText>
+              <Button
+                className={classes.editButton}
+                type="submit"
+                variant="outlined"
+                color="primary"
+                fullWidth
+                disabled={!resumeFile}
+              >
+                Edit
+              </Button>
+            </FormControl>
+          </form>
         </Box>
       )}
     </div>
