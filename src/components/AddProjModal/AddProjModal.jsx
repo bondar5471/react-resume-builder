@@ -100,7 +100,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             cancel
           </Button>
           <Button onClick={() => newProject()} color="primary" autoFocus>
-            Agree
+            Add
           </Button>
         </DialogActions>
       </Dialog>

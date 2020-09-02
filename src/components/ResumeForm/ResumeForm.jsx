@@ -16,6 +16,8 @@ import ControlPointIcon from "@material-ui/icons/ControlPoint"
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
 import AddProjModal from "../AddProjModal"
+import TechnologyStackForm from "../TechnologyStackForm"
+import SectionForm from "../SectionForm"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
@@ -27,7 +29,9 @@ export default function ResumeForm({ setResumeFields }) {
     JSON.parse(localStorage.getItem("resumeFields")).cv.$sections
   )
 
-  const [open, setOpen] = React.useState(false)
+  const [open, setOpen] = useState(false)
+
+  const [openTsForm, setOpenTsForm] = useState(false)
 
   const handleOpen = () => {
     setOpen(true)
@@ -37,8 +41,12 @@ export default function ResumeForm({ setResumeFields }) {
     setOpen(false)
   }
 
-  const isObject = (arg) => {
-    return !!arg && arg.constructor === Object
+  const handleOpenTsForm = () => {
+    setOpenTsForm(true)
+  }
+
+  const handleCloseTsForm = () => {
+    setOpenTsForm(false)
   }
 
   const addField = (key) => {
@@ -50,6 +58,14 @@ export default function ResumeForm({ setResumeFields }) {
     const oldField = sectionsField[key]
     const newField = oldField.filter((field, i) => i !== index)
     setSectionField({ ...sectionsField, [key]: newField })
+  }
+
+  const setSingleObjectField = (value, sectionKey, key) => {
+    const updatetSection = _.set(sectionsField[sectionKey], `${key}`, value)
+    setSectionField({
+      ...sectionsField,
+      [sectionKey]: updatetSection,
+    })
   }
 
   const addFieldResponsibility = (proj, indexProj) => {
@@ -99,6 +115,17 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
+  const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
+    const updatedProject = _.set(
+      sectionsField["SIGNIFICANT PROJECTS"],
+      `$projects[${indexProj}].${Object.keys(proj)}.${fieldKey}`,
+      value
+    )
+    setSectionField({
+      ...sectionsField,
+      ["SIGNIFICANT PROJECTS"]: updatedProject,
+    })
+  }
   const createProject = (project) => {
     const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects.concat(
       project
@@ -106,6 +133,22 @@ export default function ResumeForm({ setResumeFields }) {
     setSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: { $projects: updatedProjList },
+    })
+  }
+
+  const addTools = (data) => {
+    setSectionField({
+      ...sectionsField,
+      ["TOOLS & FRAMEWORKS"]: _.assign(sectionsField["TOOLS & FRAMEWORKS"], data),
+    })
+  }
+
+  const removeTools = (key) => {
+    const updatedFields = sectionsField["TOOLS & FRAMEWORKS"]
+    delete updatedFields[key]
+    setSectionField({
+      ...sectionsField,
+      ["TOOLS & FRAMEWORKS"]: updatedFields,
     })
   }
 
@@ -127,7 +170,6 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
-  console.log(sectionsField)
   return (
     <Paper className={classes.main}>
       <form>
@@ -198,104 +240,16 @@ export default function ResumeForm({ setResumeFields }) {
             </>
           )
         )}
-        {Object.entries(sectionsField).map(([key, value]) =>
-          isObject(value) ? (
-            <>
-              {/* MultiValueForm */}
-              <Typography variant="h4">{key}</Typography>
-              {Object.entries(value).map(([label, defaultValue]) => (
-                <>
-                  {label === "$projects" ? (
-                    <>
-                      {sectionsField["SIGNIFICANT PROJECTS"].$projects.map(
-                        (proj, indexProj) => (
-                          <div key={Object.keys(proj)}>
-                            <Typography>{Object.keys(proj)}</Typography>
-                            <TextField
-                              className={classes.input}
-                              fullWidth
-                              label="name"
-                              defaultValue={Object.keys(proj)}
-                            />
-                            <TextField
-                              className={classes.input}
-                              fullWidth
-                              label="$description"
-                              defaultValue={proj[Object.keys(proj)]["$description"]}
-                            />
-                            <TextField
-                              className={classes.input}
-                              fullWidth
-                              label="Skills"
-                              defaultValue={proj[Object.keys(proj)]["Skills"]}
-                            />
-                            <Typography>Responsibilities</Typography>
-                            {proj[Object.keys(proj)]["Responsibilities"].map(
-                              (res, index) => (
-                                <Input
-                                  className={classes.input}
-                                  fullWidth
-                                  key={index}
-                                  defaultValue={res}
-                                  onChange={(e) =>
-                                    setValueResponsibility(
-                                      e.target.value,
-                                      proj,
-                                      index,
-                                      indexProj
-                                    )
-                                  }
-                                  endAdornment={
-                                    <InputAdornment position="end">
-                                      <IconButton
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() =>
-                                          removeFieldResponsibility(
-                                            proj,
-                                            index,
-                                            indexProj
-                                          )
-                                        }
-                                      >
-                                        <RemoveCircleOutlineIcon />
-                                      </IconButton>
-                                    </InputAdornment>
-                                  }
-                                />
-                              )
-                            )}
-                            <Button
-                              color="primary"
-                              variant="contained"
-                              onClick={() => addFieldResponsibility(proj, indexProj)}
-                            >
-                              +
-                            </Button>
-                            <TextField
-                              fullWidth
-                              label="Team"
-                              defaultValue={proj[Object.keys(proj)]["Team"]}
-                            />
-                          </div>
-                        )
-                      )}
-                    </>
-                  ) : (
-                    <TextField
-                      className={classes.input}
-                      fullWidth
-                      key={label}
-                      id="filled-basic"
-                      label={label}
-                      defaultValue={defaultValue}
-                    />
-                  )}
-                </>
-              ))}
-            </>
-          ) : null
-        )}
+        <SectionForm
+          sectionsField={sectionsField}
+          setValueResponsibility={setValueResponsibility}
+          removeFieldResponsibility={removeFieldResponsibility}
+          addFieldResponsibility={addFieldResponsibility}
+          setSingleObjectField={setSingleObjectField}
+          removeTools={removeTools}
+          handleOpenTsForm={handleOpenTsForm}
+          setSingleFieldProject={setSingleFieldProject}
+        />
         <Button color="secondary" fullWidth onClick={handleOpen}>
           Add proj
         </Button>
@@ -305,6 +259,11 @@ export default function ResumeForm({ setResumeFields }) {
         handleClose={handleClose}
         open={open}
         createProject={createProject}
+      />
+      <TechnologyStackForm
+        handleCloseTsForm={handleCloseTsForm}
+        openTsForm={openTsForm}
+        addTools={addTools}
       />
     </Paper>
   )
