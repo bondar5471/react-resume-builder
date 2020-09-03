@@ -1,69 +1,183 @@
 import React from "react"
 import PropTypes from "prop-types"
 import {
-  Paper,
   Typography,
   Input,
   InputAdornment,
   IconButton,
   Button,
+  TextField,
+  FormControl,
+  InputLabel,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import { useStyles } from "./styles"
 
 export default function SectionForm({
-  userSectionsField,
-  setUserSectionsField,
-  value,
-  key,
+  sectionsField,
+  setValueResponsibility,
+  removeFieldResponsibility,
+  addFieldResponsibility,
+  setSingleObjectField,
+  removeTools,
+  handleOpenTsForm,
+  setSingleFieldProject,
 }) {
   const classes = useStyles()
-  const addField = (key) => {
-    debugger
-    const oldField = userSectionsField[key]
-    setUserSectionsField({ ...userSectionsField, [key]: oldField.concat("") })
-  }
-
-  const removeField = (index, key) => {
-    const oldField = userSectionsField[key]
-    const newField = oldField.filter((field, i) => i != index)
-    setUserSectionsField({ ...userSectionsField, [key]: newField })
+  const isObject = (arg) => {
+    return !!arg && arg.constructor === Object
   }
   return (
-    <Paper>
-      <Typography>{key}</Typography>
-      {value.map((field, index) => (
-        <>
-          <Input
-            className={classes.arrayInput}
-            key={index}
-            fullWidth
-            defaultValue={field}
-            multiline
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  variant="contained"
-                  color="secondary"
-                  onClick={() => removeField(index, key)}
-                >
-                  <RemoveCircleOutlineIcon />
-                </IconButton>
-              </InputAdornment>
-            }
-          />
-        </>
-      ))}
-      <Button color="primary" variant="contained" onClick={() => addField(key)}>
-        +
-      </Button>
-    </Paper>
+    <>
+      {Object.entries(sectionsField).map(([key, value]) =>
+        isObject(value) ? (
+          <>
+            {/* MultiValueForm */}
+            <Typography variant="h4">{key}</Typography>
+            {Object.entries(value).map(([label, defaultValue]) => (
+              <>
+                {label === "$projects" ? (
+                  <>
+                    {sectionsField["SIGNIFICANT PROJECTS"].$projects.map(
+                      (proj, indexProj) => (
+                        <div key={Object.keys(proj)}>
+                          <Typography>{Object.keys(proj)}</Typography>
+                          <TextField
+                            className={classes.input}
+                            fullWidth
+                            label="$description"
+                            defaultValue={proj[Object.keys(proj)]["$description"]}
+                            onChange={(e) =>
+                              setSingleFieldProject(
+                                e.target.value,
+                                proj,
+                                "$description",
+                                indexProj
+                              )
+                            }
+                          />
+                          <TextField
+                            className={classes.input}
+                            fullWidth
+                            label="Skills"
+                            defaultValue={proj[Object.keys(proj)]["Skills"]}
+                            onChange={(e) =>
+                              setSingleFieldProject(
+                                e.target.value,
+                                proj,
+                                "Skills",
+                                indexProj
+                              )
+                            }
+                          />
+                          <Typography>Responsibilities</Typography>
+                          {proj[Object.keys(proj)]["Responsibilities"].map(
+                            (res, index) => (
+                              <Input
+                                className={classes.input}
+                                fullWidth
+                                key={index}
+                                defaultValue={res}
+                                onChange={(e) =>
+                                  setValueResponsibility(
+                                    e.target.value,
+                                    proj,
+                                    index,
+                                    indexProj
+                                  )
+                                }
+                                endAdornment={
+                                  <InputAdornment position="end">
+                                    <IconButton
+                                      variant="contained"
+                                      color="secondary"
+                                      onClick={() =>
+                                        removeFieldResponsibility(
+                                          proj,
+                                          index,
+                                          indexProj
+                                        )
+                                      }
+                                    >
+                                      <RemoveCircleOutlineIcon />
+                                    </IconButton>
+                                  </InputAdornment>
+                                }
+                              />
+                            )
+                          )}
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            onClick={() => addFieldResponsibility(proj, indexProj)}
+                          >
+                            +
+                          </Button>
+                          <TextField
+                            fullWidth
+                            label="Team"
+                            defaultValue={proj[Object.keys(proj)]["Team"]}
+                            onChange={(e) =>
+                              setSingleFieldProject(
+                                e.target.value,
+                                proj,
+                                "Team",
+                                indexProj
+                              )
+                            }
+                          />
+                        </div>
+                      )
+                    )}
+                  </>
+                ) : (
+                  <FormControl fullWidth>
+                    <InputLabel shrink htmlFor="single-input">
+                      {label}
+                    </InputLabel>
+                    <Input
+                      className={classes.input}
+                      key={label}
+                      id="single-input"
+                      defaultValue={defaultValue}
+                      onChange={(e) =>
+                        setSingleObjectField(e.target.value, key, label)
+                      }
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => removeTools(label)}
+                          >
+                            <RemoveCircleOutlineIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </FormControl>
+                )}
+              </>
+            ))}
+            {key === "TOOLS & FRAMEWORKS" ? (
+              <Button variant="contained" onClick={handleOpenTsForm}>
+                Add technology stack
+              </Button>
+            ) : null}
+          </>
+        ) : null
+      )}
+    </>
   )
 }
 
 SectionForm.propTypes = {
-  userSectionsField: PropTypes.objectOf(Object).isRequired,
-  setUserSectionsField: PropTypes.func.isRequired,
-  value: PropTypes.arrayOf(Object).isRequired,
-  key: PropTypes.string,
+  sectionsField: PropTypes.objectOf(Object).isRequired,
+  setValueResponsibility: PropTypes.func.isRequired,
+  removeFieldResponsibility: PropTypes.func.isRequired,
+  addFieldResponsibility: PropTypes.func.isRequired,
+  setSingleObjectField: PropTypes.func.isRequired,
+  removeTools: PropTypes.func.isRequired,
+  handleOpenTsForm: PropTypes.func.isRequired,
+  setSingleFieldProject: PropTypes.func.isRequired,
 }
