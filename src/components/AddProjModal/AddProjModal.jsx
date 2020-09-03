@@ -25,10 +25,10 @@ export default function AddProjModal({ handleClose, open, createProject }) {
     const project = {
       [`${name}`]: {
         $description: description,
-        Responsibilities: responsibilities,
+        Team: team,
         Role: role,
         Skills: skills,
-        Team: team,
+        Responsibilities: responsibilities,
       },
     }
     createProject(project)

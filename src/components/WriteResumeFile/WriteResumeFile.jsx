@@ -7,9 +7,8 @@ import yaml from "js-yaml"
 export default function WriteResumeFile({ userData, sectionData }) {
   const [urlFile, setUrlFile] = useState(null)
   const createFile = () => {
-    //complite cv
     const cv = { cv: { $person: userData, $sections: sectionData } }
-    const yamlStr = yaml.safeDump(cv)
+    const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 })
     const yamlWrite = new Blob([yamlStr], {
       type: "text/yaml",
     })
