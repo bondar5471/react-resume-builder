@@ -126,6 +126,7 @@ export default function ResumeForm({ setResumeFields }) {
       ["SIGNIFICANT PROJECTS"]: updatedProject,
     })
   }
+
   const createProject = (project) => {
     const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects.concat(
       project
@@ -133,6 +134,16 @@ export default function ResumeForm({ setResumeFields }) {
     setSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: { $projects: updatedProjList },
+    })
+  }
+
+  const removeProject = (key) => {
+    const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects
+    setSectionField({
+      ...sectionsField,
+      ["SIGNIFICANT PROJECTS"]: {
+        $projects: updatedProjList.filter((proj, index) => index !== key),
+      },
     })
   }
 
@@ -170,6 +181,7 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
+  console.log(sectionsField)
   return (
     <Paper className={classes.main}>
       <form>
@@ -177,82 +189,89 @@ export default function ResumeForm({ setResumeFields }) {
         <Button fullWidth color="secondary" onClick={() => deleteResume()}>
           Choose another file
         </Button>
-        <Typography variant="h4">$person</Typography>
-        {Object.entries(userDataField).map(([key, value]) => (
-          <TextField
-            className={classes.input}
-            fullWidth
-            key={key}
-            id="filled-basic"
-            label={key}
-            defaultValue={value}
-            onChange={(e) => setUserFieldValue(e, key)}
+        <Paper className={classes.userSection}>
+          <Typography variant="h4">$person</Typography>
+          {Object.entries(userDataField).map(([key, value]) => (
+            <TextField
+              className={classes.input}
+              fullWidth
+              key={key}
+              id="filled-basic"
+              label={key}
+              defaultValue={value}
+              onChange={(e) => setUserFieldValue(e, key)}
+            />
+          ))}
+        </Paper>
+        <Paper className={classes.sectionForms}>
+          <Typography variant="h4">$sections</Typography>
+          {/* SectionForm */}
+          {Object.entries(sectionsField).map(([key, value]) =>
+            Array.isArray(value) ? (
+              <>
+                <Typography>{key}</Typography>
+                {value.map((field, index) => (
+                  <>
+                    <Input
+                      className={classes.arrayInput}
+                      key={index}
+                      fullWidth
+                      defaultValue={field}
+                      multiline
+                      onChange={(e) => setSectionFieldMultiValue(e, key, index)}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            variant="contained"
+                            color="secondary"
+                            onClick={() => removeField(index, key)}
+                          >
+                            <RemoveCircleOutlineIcon />
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                    />
+                  </>
+                ))}
+                <IconButton color="primary" onClick={() => addField(key)}>
+                  <ControlPointIcon />
+                </IconButton>
+              </>
+            ) : (
+              <>
+                {typeof value === "string" ? (
+                  <>
+                    <TextField
+                      className={classes.input}
+                      fullWidth
+                      key={key}
+                      id="filled-basic"
+                      label={key}
+                      defaultValue={value}
+                      onChange={(e) =>
+                        setSectionFieldSingleValue(e.target.value, key)
+                      }
+                    />
+                  </>
+                ) : null}
+              </>
+            )
+          )}
+          <SectionForm
+            sectionsField={sectionsField}
+            setValueResponsibility={setValueResponsibility}
+            removeFieldResponsibility={removeFieldResponsibility}
+            addFieldResponsibility={addFieldResponsibility}
+            setSingleObjectField={setSingleObjectField}
+            removeTools={removeTools}
+            handleOpenTsForm={handleOpenTsForm}
+            setSingleFieldProject={setSingleFieldProject}
+            removeProject={removeProject}
           />
-        ))}
-        <Typography variant="h4">$sections</Typography>
-        {/* SectionForm */}
-        {Object.entries(sectionsField).map(([key, value]) =>
-          Array.isArray(value) ? (
-            <>
-              <Typography>{key}</Typography>
-              {value.map((field, index) => (
-                <>
-                  <Input
-                    className={classes.arrayInput}
-                    key={index}
-                    fullWidth
-                    defaultValue={field}
-                    multiline
-                    onChange={(e) => setSectionFieldMultiValue(e, key, index)}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => removeField(index, key)}
-                        >
-                          <RemoveCircleOutlineIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </>
-              ))}
-              <IconButton color="primary" onClick={() => addField(key)}>
-                <ControlPointIcon />
-              </IconButton>
-            </>
-          ) : (
-            <>
-              {typeof value === "string" ? (
-                <>
-                  <TextField
-                    className={classes.input}
-                    fullWidth
-                    key={key}
-                    id="filled-basic"
-                    label={key}
-                    defaultValue={value}
-                    onChange={(e) => setSectionFieldSingleValue(e.target.value, key)}
-                  />
-                </>
-              ) : null}
-            </>
-          )
-        )}
-        <SectionForm
-          sectionsField={sectionsField}
-          setValueResponsibility={setValueResponsibility}
-          removeFieldResponsibility={removeFieldResponsibility}
-          addFieldResponsibility={addFieldResponsibility}
-          setSingleObjectField={setSingleObjectField}
-          removeTools={removeTools}
-          handleOpenTsForm={handleOpenTsForm}
-          setSingleFieldProject={setSingleFieldProject}
-        />
-        <Button color="secondary" fullWidth onClick={handleOpen}>
-          Add proj
-        </Button>
+          <Button color="secondary" fullWidth onClick={handleOpen}>
+            Add proj
+          </Button>
+        </Paper>
       </form>
       <WriteResumeFile userData={userDataField} sectionData={sectionsField} />
       <AddProjModal
