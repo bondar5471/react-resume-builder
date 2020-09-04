@@ -11,6 +11,8 @@ import {
   InputLabel,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
+import DeleteIcon from "@material-ui/icons/Delete"
+import ControlPointIcon from "@material-ui/icons/ControlPoint"
 import { useStyles } from "./styles"
 
 export default function SectionForm({
@@ -22,6 +24,7 @@ export default function SectionForm({
   removeTools,
   handleOpenTsForm,
   setSingleFieldProject,
+  removeProject,
 }) {
   const classes = useStyles()
   const isObject = (arg) => {
@@ -106,13 +109,12 @@ export default function SectionForm({
                               />
                             )
                           )}
-                          <Button
+                          <IconButton
                             color="primary"
-                            variant="contained"
                             onClick={() => addFieldResponsibility(proj, indexProj)}
                           >
-                            +
-                          </Button>
+                            <ControlPointIcon />
+                          </IconButton>
                           <TextField
                             fullWidth
                             label="Team"
@@ -126,6 +128,13 @@ export default function SectionForm({
                               )
                             }
                           />
+                          <IconButton
+                            aria-label="Remove project"
+                            color="secondary"
+                            onClick={() => removeProject(indexProj)}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
                         </div>
                       )
                     )}
@@ -180,4 +189,5 @@ SectionForm.propTypes = {
   removeTools: PropTypes.func.isRequired,
   handleOpenTsForm: PropTypes.func.isRequired,
   setSingleFieldProject: PropTypes.func.isRequired,
+  removeProject: PropTypes.func.isRequired,
 }

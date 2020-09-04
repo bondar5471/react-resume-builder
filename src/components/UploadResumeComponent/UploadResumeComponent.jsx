@@ -21,6 +21,8 @@ export default function UploadResumeComponent() {
   )
   const [fileName, setFileName] = useState("Upload")
 
+  const [errors, setErrors] = useState([])
+
   const hiddenFileInput = React.useRef(null)
 
   const handleClick = (event) => {
@@ -47,7 +49,7 @@ export default function UploadResumeComponent() {
     }
 
     reader.onerror = function () {
-      //console.log(reader.error)
+      setErrors(reader.error)
     }
   }
 
@@ -90,6 +92,11 @@ export default function UploadResumeComponent() {
                 {fileName}
               </Button>
               <FormHelperText> Support only .yml, .yaml files</FormHelperText>
+              {errors.map((e) => (
+                <Typography color="error" key={e.message}>
+                  {e.message}
+                </Typography>
+              ))}
               <Button
                 className={classes.editButton}
                 type="submit"
