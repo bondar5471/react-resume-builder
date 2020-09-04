@@ -181,7 +181,6 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
-  console.log(sectionsField)
   return (
     <Paper className={classes.main}>
       <form>
@@ -190,7 +189,7 @@ export default function ResumeForm({ setResumeFields }) {
           Choose another file
         </Button>
         <Paper className={classes.userSection}>
-          <Typography variant="h4">$person</Typography>
+          <Typography variant="h4">User information</Typography>
           {Object.entries(userDataField).map(([key, value]) => (
             <TextField
               className={classes.input}
@@ -204,11 +203,11 @@ export default function ResumeForm({ setResumeFields }) {
           ))}
         </Paper>
         <Paper className={classes.sectionForms}>
-          <Typography variant="h4">$sections</Typography>
+          <Typography variant="h4">Section</Typography>
           {/* SectionForm */}
           {Object.entries(sectionsField).map(([key, value]) =>
             Array.isArray(value) ? (
-              <>
+              <Paper className={classes.section}>
                 <Typography>{key}</Typography>
                 {value.map((field, index) => (
                   <>
@@ -236,7 +235,7 @@ export default function ResumeForm({ setResumeFields }) {
                 <IconButton color="primary" onClick={() => addField(key)}>
                   <ControlPointIcon />
                 </IconButton>
-              </>
+              </Paper>
             ) : (
               <>
                 {typeof value === "string" ? (

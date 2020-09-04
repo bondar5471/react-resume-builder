@@ -9,6 +9,7 @@ import {
   TextField,
   FormControl,
   InputLabel,
+  Paper,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -34,16 +35,16 @@ export default function SectionForm({
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
         isObject(value) ? (
-          <>
+          <div className={classes.main}>
             {/* MultiValueForm */}
-            <Typography variant="h4">{key}</Typography>
+            <Typography variant="subtitle2">{key}</Typography>
             {Object.entries(value).map(([label, defaultValue]) => (
               <>
                 {label === "$projects" ? (
                   <>
                     {sectionsField["SIGNIFICANT PROJECTS"].$projects.map(
                       (proj, indexProj) => (
-                        <div key={Object.keys(proj)}>
+                        <Paper className={classes.section} key={Object.keys(proj)}>
                           <Typography>{Object.keys(proj)}</Typography>
                           <TextField
                             className={classes.input}
@@ -135,7 +136,7 @@ export default function SectionForm({
                           >
                             <DeleteIcon />
                           </IconButton>
-                        </div>
+                        </Paper>
                       )
                     )}
                   </>
@@ -173,7 +174,7 @@ export default function SectionForm({
                 Add technology stack
               </Button>
             ) : null}
-          </>
+          </div>
         ) : null
       )}
     </>

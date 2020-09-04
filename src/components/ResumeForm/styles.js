@@ -12,9 +12,13 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   userSection: {
-    backgroundColor: "#d6e0f0",
+    marginTop: "15px",
   },
   sectionForms: {
-    backgroundColor: "#e0ece4",
+    marginTop: "15px",
+  },
+  section: {
+    padding: "5px",
+    marginTop: "10px",
   },
 }))
