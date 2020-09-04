@@ -4,7 +4,11 @@ export const useStyles = makeStyles(() => ({
   appBar: {
     flexGrow: 1,
   },
-  brightnessButton: {
-    marginLeft: "75%",
+  // brightnessButton: {
+  //   marginLeft: "85%",
+  // },
+  logo: {
+    maxWidth: "100%",
+    height: "auto",
   },
 }))

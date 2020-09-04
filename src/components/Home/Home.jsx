@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import AppBar from "@material-ui/core/AppBar"
 import Toolbar from "@material-ui/core/Toolbar"
-import Typography from "@material-ui/core/Typography"
 import CssBaseline from "@material-ui/core/CssBaseline"
 import useScrollTrigger from "@material-ui/core/useScrollTrigger"
 import Box from "@material-ui/core/Box"
@@ -16,6 +15,7 @@ import { IconButton } from "@material-ui/core"
 import UploadResumeComponent from "../UploadResumeComponent"
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles"
 import { useStyles } from "./styles"
+import logo from "../../logo.png"
 
 function HideOnScroll(props) {
   const { children, window } = props
@@ -55,19 +55,13 @@ export default function HideAppBar(props) {
         <div className={classes.root}>
           <AppBar>
             <Toolbar>
-              <Typography variant="h6">RESUME BUILDER</Typography>
+              <img src={logo} className={classes.logo} />
               {darkState ? (
-                <IconButton
-                  onClick={handleThemeChange}
-                  className={classes.brightnessButton}
-                >
+                <IconButton onClick={handleThemeChange}>
                   <Brightness7Icon />
                 </IconButton>
               ) : (
-                <IconButton
-                  onClick={handleThemeChange}
-                  className={classes.brightnessButton}
-                >
+                <IconButton onClick={handleThemeChange}>
                   <Brightness4Icon />
                 </IconButton>
               )}
