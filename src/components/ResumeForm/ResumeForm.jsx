@@ -9,9 +9,10 @@ import {
   InputAdornment,
   Input,
   IconButton,
+  Fab,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
-import ControlPointIcon from "@material-ui/icons/ControlPoint"
+import AddIcon from "@material-ui/icons/Add"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
@@ -232,14 +233,14 @@ export default function ResumeForm({ setResumeFields }) {
                     />
                   </>
                 ))}
-                <IconButton color="primary" onClick={() => addField(key)}>
-                  <ControlPointIcon />
-                </IconButton>
+                <Fab color="primary" aria-label="add" onClick={() => addField(key)}>
+                  <AddIcon />
+                </Fab>
               </Paper>
             ) : (
               <>
                 {typeof value === "string" ? (
-                  <>
+                  <div className={classes.section}>
                     <TextField
                       className={classes.input}
                       fullWidth
@@ -251,7 +252,7 @@ export default function ResumeForm({ setResumeFields }) {
                         setSectionFieldSingleValue(e.target.value, key)
                       }
                     />
-                  </>
+                  </div>
                 ) : null}
               </>
             )
@@ -267,8 +268,8 @@ export default function ResumeForm({ setResumeFields }) {
             setSingleFieldProject={setSingleFieldProject}
             removeProject={removeProject}
           />
-          <Button color="secondary" fullWidth onClick={handleOpen}>
-            Add proj
+          <Button variant="contained" onClick={handleOpen}>
+            Add project
           </Button>
         </Paper>
       </form>

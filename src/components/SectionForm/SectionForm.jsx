@@ -10,10 +10,11 @@ import {
   FormControl,
   InputLabel,
   Paper,
+  Fab,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
-import ControlPointIcon from "@material-ui/icons/ControlPoint"
+import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 
 export default function SectionForm({
@@ -110,12 +111,13 @@ export default function SectionForm({
                               />
                             )
                           )}
-                          <IconButton
+                          <Fab
                             color="primary"
+                            aria-label="add"
                             onClick={() => addFieldResponsibility(proj, indexProj)}
                           >
-                            <ControlPointIcon />
-                          </IconButton>
+                            <AddIcon />
+                          </Fab>
                           <TextField
                             fullWidth
                             label="Team"
@@ -141,8 +143,12 @@ export default function SectionForm({
                     )}
                   </>
                 ) : (
-                  <FormControl fullWidth>
-                    <InputLabel shrink htmlFor="single-input">
+                  <FormControl fullWidth className={classes.section}>
+                    <InputLabel
+                      shrink
+                      htmlFor="single-input"
+                      className={classes.label}
+                    >
                       {label}
                     </InputLabel>
                     <Input
