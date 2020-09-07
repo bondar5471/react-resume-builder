@@ -54,7 +54,7 @@ export default function HideAppBar(props) {
       <HideOnScroll {...props}>
         <div className={classes.root}>
           <AppBar>
-            <Toolbar>
+            <Toolbar className={classes.toolBar}>
               <img src={logo} className={classes.logo} />
               {darkState ? (
                 <IconButton onClick={handleThemeChange}>

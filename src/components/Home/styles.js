@@ -8,4 +8,7 @@ export const useStyles = makeStyles(() => ({
     maxWidth: "100%",
     height: "auto",
   },
+  toolBar: {
+    justifyContent: "space-between",
+  },
 }))
