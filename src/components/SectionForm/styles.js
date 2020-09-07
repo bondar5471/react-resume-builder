@@ -25,4 +25,8 @@ export const useStyles = makeStyles((theme) => ({
     },
     color: "#393b44",
   },
+  projTitle: {
+    color: "white",
+    backgroundColor: "#797a7e",
+  },
 }))

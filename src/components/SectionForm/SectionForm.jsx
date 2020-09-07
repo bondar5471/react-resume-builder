@@ -11,6 +11,7 @@ import {
   InputLabel,
   Paper,
   Fab,
+  Grid,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -46,35 +47,45 @@ export default function SectionForm({
                     {sectionsField["SIGNIFICANT PROJECTS"].$projects.map(
                       (proj, indexProj) => (
                         <Paper className={classes.section} key={Object.keys(proj)}>
-                          <Typography>{Object.keys(proj)}</Typography>
-                          <TextField
-                            className={classes.input}
-                            fullWidth
-                            label="$description"
-                            defaultValue={proj[Object.keys(proj)]["$description"]}
-                            onChange={(e) =>
-                              setSingleFieldProject(
-                                e.target.value,
-                                proj,
-                                "$description",
-                                indexProj
-                              )
-                            }
-                          />
-                          <TextField
-                            className={classes.input}
-                            fullWidth
-                            label="Skills"
-                            defaultValue={proj[Object.keys(proj)]["Skills"]}
-                            onChange={(e) =>
-                              setSingleFieldProject(
-                                e.target.value,
-                                proj,
-                                "Skills",
-                                indexProj
-                              )
-                            }
-                          />
+                          <Typography className={classes.projTitle}>
+                            {Object.keys(proj)}
+                          </Typography>
+                          <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                label="$description"
+                                defaultValue={
+                                  proj[Object.keys(proj)]["$description"]
+                                }
+                                onChange={(e) =>
+                                  setSingleFieldProject(
+                                    e.target.value,
+                                    proj,
+                                    "$description",
+                                    indexProj
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={6}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                label="Skills"
+                                defaultValue={proj[Object.keys(proj)]["Skills"]}
+                                onChange={(e) =>
+                                  setSingleFieldProject(
+                                    e.target.value,
+                                    proj,
+                                    "Skills",
+                                    indexProj
+                                  )
+                                }
+                              />
+                            </Grid>
+                          </Grid>
                           <Typography>Responsibilities</Typography>
                           {proj[Object.keys(proj)]["Responsibilities"].map(
                             (res, index) => (

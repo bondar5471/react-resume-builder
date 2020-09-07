@@ -33,7 +33,7 @@ export default function HideAppBar(props) {
   const [darkState, setDarkState] = useState(false)
   const palletType = darkState ? "dark" : "light"
   const mainPrimaryColor = darkState ? "#424242" : "#2196f3"
-  const mainSecondaryColor = darkState ? deepOrange[900] : "#ee6f57"
+  const mainSecondaryColor = darkState ? "#ee6f57" : deepOrange[900]
   const darkTheme = createMuiTheme({
     palette: {
       type: palletType,

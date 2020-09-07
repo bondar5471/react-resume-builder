@@ -9,7 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   input: {
-    marginTop: theme.spacing(1),
+    margin: theme.spacing(1),
   },
   userSection: {
     marginTop: "15px",

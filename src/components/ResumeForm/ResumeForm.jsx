@@ -10,6 +10,7 @@ import {
   Input,
   IconButton,
   Fab,
+  Grid,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import AddIcon from "@material-ui/icons/Add"
@@ -194,7 +195,6 @@ export default function ResumeForm({ setResumeFields }) {
           {Object.entries(userDataField).map(([key, value]) => (
             <TextField
               className={classes.input}
-              fullWidth
               key={key}
               id="filled-basic"
               label={key}
@@ -209,33 +209,43 @@ export default function ResumeForm({ setResumeFields }) {
           {Object.entries(sectionsField).map(([key, value]) =>
             Array.isArray(value) ? (
               <Paper className={classes.section}>
-                <Typography>{key}</Typography>
-                {value.map((field, index) => (
-                  <>
-                    <Input
-                      className={classes.arrayInput}
-                      key={index}
-                      fullWidth
-                      defaultValue={field}
-                      multiline
-                      onChange={(e) => setSectionFieldMultiValue(e, key, index)}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            variant="contained"
-                            color="secondary"
-                            onClick={() => removeField(index, key)}
-                          >
-                            <RemoveCircleOutlineIcon />
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </>
-                ))}
-                <Fab color="primary" aria-label="add" onClick={() => addField(key)}>
-                  <AddIcon />
-                </Fab>
+                <Grid container spacing={2} justify="center">
+                  <Grid item lg={12} xs={12}>
+                    <Typography>{key}</Typography>
+                  </Grid>
+                  {value.map((field, index) => (
+                    <Grid item lg={4} xs={12} key={index} alignContent="stretch">
+                      <Input
+                        className={classes.arrayInput}
+                        fullWidth
+                        defaultValue={field}
+                        multiline
+                        rows={5}
+                        onChange={(e) => setSectionFieldMultiValue(e, key, index)}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => removeField(index, key)}
+                            >
+                              <RemoveCircleOutlineIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </Grid>
+                  ))}
+                  <Grid xs={12}>
+                    <Fab
+                      color="primary"
+                      aria-label="add"
+                      onClick={() => addField(key)}
+                    >
+                      <AddIcon />
+                    </Fab>
+                  </Grid>
+                </Grid>
               </Paper>
             ) : (
               <>
