@@ -9,7 +9,7 @@ import Container from "@material-ui/core/Container"
 import Slide from "@material-ui/core/Slide"
 import Brightness7Icon from "@material-ui/icons/Brightness7"
 import Brightness4Icon from "@material-ui/icons/Brightness4"
-import { deepPurple, deepOrange } from "@material-ui/core/colors"
+import { deepOrange } from "@material-ui/core/colors"
 import { IconButton } from "@material-ui/core"
 
 import UploadResumeComponent from "../UploadResumeComponent"
@@ -33,7 +33,7 @@ export default function HideAppBar(props) {
   const [darkState, setDarkState] = useState(false)
   const palletType = darkState ? "dark" : "light"
   const mainPrimaryColor = darkState ? "#424242" : "#2196f3"
-  const mainSecondaryColor = darkState ? deepOrange[900] : deepPurple[500]
+  const mainSecondaryColor = darkState ? deepOrange[900] : "#ee6f57"
   const darkTheme = createMuiTheme({
     palette: {
       type: palletType,
