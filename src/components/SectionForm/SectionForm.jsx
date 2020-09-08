@@ -55,7 +55,7 @@ export default function SectionForm({
                               <TextField
                                 className={classes.input}
                                 fullWidth
-                                label="$description"
+                                label="Description"
                                 defaultValue={
                                   proj[Object.keys(proj)]["$description"]
                                 }

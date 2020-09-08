@@ -183,6 +183,7 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
+
   return (
     <Paper className={classes.main}>
       <form>
@@ -191,13 +192,16 @@ export default function ResumeForm({ setResumeFields }) {
           Choose another file
         </Button>
         <Paper className={classes.userSection}>
+          {/* <Grid container>
+            \\
+          </Grid> */}
           <Typography variant="h4">User information</Typography>
           {Object.entries(userDataField).map(([key, value]) => (
             <TextField
               className={classes.input}
               key={key}
               id="filled-basic"
-              label={key}
+              label={key.substring(1)}
               defaultValue={value}
               onChange={(e) => setUserFieldValue(e, key)}
             />
@@ -214,13 +218,12 @@ export default function ResumeForm({ setResumeFields }) {
                     <Typography>{key}</Typography>
                   </Grid>
                   {value.map((field, index) => (
-                    <Grid item lg={4} xs={12} key={index} alignContent="stretch">
+                    <Grid item lg={12} xs={12} key={index} alignContent="stretch">
                       <Input
                         className={classes.arrayInput}
                         fullWidth
                         defaultValue={field}
                         multiline
-                        rows={5}
                         onChange={(e) => setSectionFieldMultiValue(e, key, index)}
                         endAdornment={
                           <InputAdornment position="end">
