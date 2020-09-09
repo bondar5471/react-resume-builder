@@ -30,7 +30,9 @@ function HideOnScroll(props) {
 
 export default function HideAppBar(props) {
   const classes = useStyles()
-  const [darkState, setDarkState] = useState(false)
+  const [darkState, setDarkState] = useState(
+    JSON.parse(localStorage.getItem("darkTheme"))
+  )
   const palletType = darkState ? "dark" : "light"
   const mainPrimaryColor = darkState ? "#424242" : "#2196f3"
   const mainSecondaryColor = darkState ? "#ee6f57" : deepOrange[900]
@@ -47,6 +49,7 @@ export default function HideAppBar(props) {
   })
   const handleThemeChange = () => {
     setDarkState(!darkState)
+    localStorage.setItem("darkTheme", !JSON.parse(darkState))
   }
   return (
     <ThemeProvider theme={darkTheme}>
