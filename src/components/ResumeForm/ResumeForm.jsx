@@ -11,6 +11,7 @@ import {
   IconButton,
   Fab,
   Grid,
+  Card,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import AddIcon from "@material-ui/icons/Add"
@@ -89,7 +90,7 @@ export default function ResumeForm({ setResumeFields }) {
     const currentProj =
       sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
     const newResponsibility = currentProj.Responsibilities.filter(
-      (field, i) => i != index
+      (field, i) => i !== index
     )
     const newProj = _.set(
       sectionsField["SIGNIFICANT PROJECTS"],
@@ -185,28 +186,38 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   return (
-    <Paper className={classes.main}>
+    <div className={classes.main}>
       <form>
         {/* UserinfoForm */}
-        <Button fullWidth color="secondary" onClick={() => deleteResume()}>
+        <Button
+          fullWidth
+          color="secondary"
+          title={"another file"}
+          onClick={() => deleteResume()}
+        >
           Choose another file
         </Button>
-        <Paper className={classes.userSection}>
-          {/* <Grid container>
-            \\
-          </Grid> */}
-          <Typography variant="h4">User information</Typography>
-          {Object.entries(userDataField).map(([key, value]) => (
-            <TextField
-              className={classes.input}
-              key={key}
-              id="filled-basic"
-              label={key.substring(1)}
-              defaultValue={value}
-              onChange={(e) => setUserFieldValue(e, key)}
-            />
-          ))}
-        </Paper>
+        <Card className={classes.section} variant="outlined">
+          <Typography variant="h6" color="textSecondary" gutterBottom>
+            User information
+          </Typography>
+          <Grid container spacing={3}>
+            {Object.entries(userDataField).map(([key, value]) => (
+              <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
+                <TextField
+                  fullWidth
+                  className={classes.input}
+                  variant="outlined"
+                  key={key}
+                  id="filled-basic"
+                  label={key.substring(1)}
+                  defaultValue={value}
+                  onChange={(e) => setUserFieldValue(e, key)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
         <Paper className={classes.sectionForms}>
           <Typography variant="h4">Section</Typography>
           {/* SectionForm */}
@@ -218,7 +229,7 @@ export default function ResumeForm({ setResumeFields }) {
                     <Typography>{key}</Typography>
                   </Grid>
                   {value.map((field, index) => (
-                    <Grid item lg={12} xs={12} key={index} alignContent="stretch">
+                    <Grid item lg={12} xs={12} key={index}>
                       <Input
                         className={classes.arrayInput}
                         fullWidth
@@ -297,7 +308,7 @@ export default function ResumeForm({ setResumeFields }) {
         openTsForm={openTsForm}
         addTools={addTools}
       />
-    </Paper>
+    </div>
   )
 }
 
