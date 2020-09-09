@@ -12,6 +12,7 @@ import {
   Paper,
   Fab,
   Grid,
+  Tooltip,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -142,13 +143,18 @@ export default function SectionForm({
                               )
                             }
                           />
-                          <IconButton
-                            aria-label="Remove project"
-                            color="secondary"
-                            onClick={() => removeProject(indexProj)}
+                          <Tooltip
+                            title={`Remove project ${Object.keys(proj)}`}
+                            placement="top"
                           >
-                            <DeleteIcon />
-                          </IconButton>
+                            <IconButton
+                              aria-label="Remove project"
+                              color="secondary"
+                              onClick={() => removeProject(indexProj)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Paper>
                       )
                     )}
