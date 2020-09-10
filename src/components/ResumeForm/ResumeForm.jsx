@@ -48,7 +48,6 @@ export default function ResumeForm({ setResumeFields }) {
   const removeField = (index, key) => {
     const oldField = sectionsField[key]
     const newField = oldField.filter((field, i) => i !== index)
-    debugger
     setSectionField({ ...sectionsField, [key]: newField })
   }
 
