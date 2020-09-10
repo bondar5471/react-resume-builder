@@ -4,8 +4,13 @@ export const useStyles = makeStyles((theme) => ({
   main: {
     padding: "20px",
   },
-  arrayInput: {
-    marginTop: theme.spacing(1),
+  marginBottom: {
+    marginBottom: "10px",
+  },
+  addButtonBox: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   section: {
     marginTop: "15px",

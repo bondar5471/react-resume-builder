@@ -1,26 +1,14 @@
 import React, { useState } from "react"
 import _ from "lodash"
 import { PropTypes } from "prop-types"
-import {
-  TextField,
-  Typography,
-  Paper,
-  Button,
-  InputAdornment,
-  Input,
-  IconButton,
-  Fab,
-  Grid,
-  Card,
-} from "@material-ui/core"
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
-import AddIcon from "@material-ui/icons/Add"
+import { TextField, Typography, Button, Grid, Card } from "@material-ui/core"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
 import AddProjModal from "../AddProjModal"
 import TechnologyStackForm from "../TechnologyStackForm"
 import SectionForm from "../SectionForm"
+import MainSectionPartForm from "../MainSectionPartForm"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
@@ -60,6 +48,7 @@ export default function ResumeForm({ setResumeFields }) {
   const removeField = (index, key) => {
     const oldField = sectionsField[key]
     const newField = oldField.filter((field, i) => i !== index)
+    debugger
     setSectionField({ ...sectionsField, [key]: newField })
   }
 
@@ -197,11 +186,11 @@ export default function ResumeForm({ setResumeFields }) {
         >
           Choose another file
         </Button>
-        <Card className={classes.section} variant="outlined">
+        <Card className={classes.section} variant="elevation1">
           <Typography variant="h6" color="textSecondary" gutterBottom>
             User information
           </Typography>
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             {Object.entries(userDataField).map(([key, value]) => (
               <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
                 <TextField
@@ -218,84 +207,27 @@ export default function ResumeForm({ setResumeFields }) {
             ))}
           </Grid>
         </Card>
-        <Paper className={classes.sectionForms}>
-          <Typography variant="h4">Section</Typography>
-          {/* SectionForm */}
-          {Object.entries(sectionsField).map(([key, value]) =>
-            Array.isArray(value) ? (
-              <Paper className={classes.section}>
-                <Grid container spacing={2} justify="center">
-                  <Grid item lg={12} xs={12}>
-                    <Typography>{key}</Typography>
-                  </Grid>
-                  {value.map((field, index) => (
-                    <Grid item lg={12} xs={12} key={index}>
-                      <Input
-                        className={classes.arrayInput}
-                        fullWidth
-                        defaultValue={field}
-                        multiline
-                        onChange={(e) => setSectionFieldMultiValue(e, key, index)}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => removeField(index, key)}
-                            >
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </Grid>
-                  ))}
-                  <Grid xs={12}>
-                    <Fab
-                      color="primary"
-                      aria-label="add"
-                      onClick={() => addField(key)}
-                    >
-                      <AddIcon />
-                    </Fab>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ) : (
-              <>
-                {typeof value === "string" ? (
-                  <div className={classes.section}>
-                    <TextField
-                      className={classes.input}
-                      fullWidth
-                      key={key}
-                      id="filled-basic"
-                      label={key}
-                      defaultValue={value}
-                      onChange={(e) =>
-                        setSectionFieldSingleValue(e.target.value, key)
-                      }
-                    />
-                  </div>
-                ) : null}
-              </>
-            )
-          )}
-          <SectionForm
-            sectionsField={sectionsField}
-            setValueResponsibility={setValueResponsibility}
-            removeFieldResponsibility={removeFieldResponsibility}
-            addFieldResponsibility={addFieldResponsibility}
-            setSingleObjectField={setSingleObjectField}
-            removeTools={removeTools}
-            handleOpenTsForm={handleOpenTsForm}
-            setSingleFieldProject={setSingleFieldProject}
-            removeProject={removeProject}
-          />
-          <Button variant="contained" onClick={handleOpen}>
-            Add project
-          </Button>
-        </Paper>
+        <MainSectionPartForm
+          sectionsField={sectionsField}
+          setSectionFieldMultiValue={setSectionFieldMultiValue}
+          setSectionFieldSingleValue={setSectionFieldSingleValue}
+          addField={addField}
+          removeField={removeField}
+        />
+        <SectionForm
+          sectionsField={sectionsField}
+          setValueResponsibility={setValueResponsibility}
+          removeFieldResponsibility={removeFieldResponsibility}
+          addFieldResponsibility={addFieldResponsibility}
+          setSingleObjectField={setSingleObjectField}
+          removeTools={removeTools}
+          handleOpenTsForm={handleOpenTsForm}
+          setSingleFieldProject={setSingleFieldProject}
+          removeProject={removeProject}
+        />
+        <Button variant="contained" onClick={handleOpen}>
+          Add project
+        </Button>
       </form>
       <WriteResumeFile userData={userDataField} sectionData={sectionsField} />
       <AddProjModal
