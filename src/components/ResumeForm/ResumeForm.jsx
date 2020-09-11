@@ -7,7 +7,7 @@ import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
 import AddProjModal from "../AddProjModal"
 import TechnologyStackForm from "../TechnologyStackForm"
-import SectionForm from "../SectionForm"
+import SecondarySectionPartForm from "../SecondarySectionPartForm"
 import MainSectionPartForm from "../MainSectionPartForm"
 
 export default function ResumeForm({ setResumeFields }) {
@@ -213,7 +213,7 @@ export default function ResumeForm({ setResumeFields }) {
           addField={addField}
           removeField={removeField}
         />
-        <SectionForm
+        <SecondarySectionPartForm
           sectionsField={sectionsField}
           setValueResponsibility={setValueResponsibility}
           removeFieldResponsibility={removeFieldResponsibility}

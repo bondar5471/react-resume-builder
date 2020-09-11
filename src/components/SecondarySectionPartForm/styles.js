@@ -8,11 +8,15 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   input: {
-    marginTop: theme.spacing(1),
+    width: "100%",
+  },
+  addBtn: {
+    height: "100%",
+    width: "100%",
   },
   section: {
-    padding: "10px",
-    marginTop: "10px",
+    padding: "16px",
+    marginTop: "15px",
   },
   label: {
     padding: "10px",
