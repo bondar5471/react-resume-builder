@@ -8,11 +8,11 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
   },
   input: {
-    marginTop: theme.spacing(1),
+    width: "100%",
   },
   section: {
-    padding: "10px",
-    marginTop: "10px",
+    padding: "16px",
+    marginTop: "15px",
   },
   label: {
     padding: "10px",
@@ -26,7 +26,7 @@ export const useStyles = makeStyles((theme) => ({
     color: "#393b44",
   },
   projTitle: {
-    color: "white",
-    backgroundColor: "#797a7e",
+    fontStyle: "italic",
+    fontWeight: "bold",
   },
 }))

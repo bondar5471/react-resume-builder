@@ -1,25 +1,14 @@
 import React, { useState } from "react"
 import _ from "lodash"
 import { PropTypes } from "prop-types"
-import {
-  TextField,
-  Typography,
-  Paper,
-  Button,
-  InputAdornment,
-  Input,
-  IconButton,
-  Fab,
-  Grid,
-} from "@material-ui/core"
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
-import AddIcon from "@material-ui/icons/Add"
+import { TextField, Typography, Button, Grid, Card } from "@material-ui/core"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
 import AddProjModal from "../AddProjModal"
 import TechnologyStackForm from "../TechnologyStackForm"
-import SectionForm from "../SectionForm"
+import SecondarySectionPartForm from "../SecondarySectionPartForm"
+import MainSectionPartForm from "../MainSectionPartForm"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
@@ -89,7 +78,7 @@ export default function ResumeForm({ setResumeFields }) {
     const currentProj =
       sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
     const newResponsibility = currentProj.Responsibilities.filter(
-      (field, i) => i != index
+      (field, i) => i !== index
     )
     const newProj = _.set(
       sectionsField["SIGNIFICANT PROJECTS"],
@@ -183,105 +172,61 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
+
   return (
-    <Paper className={classes.main}>
+    <div className={classes.main}>
       <form>
         {/* UserinfoForm */}
-        <Button fullWidth color="secondary" onClick={() => deleteResume()}>
+        <Button
+          fullWidth
+          color="secondary"
+          title={"another file"}
+          onClick={() => deleteResume()}
+        >
           Choose another file
         </Button>
-        <Paper className={classes.userSection}>
-          <Typography variant="h4">User information</Typography>
-          {Object.entries(userDataField).map(([key, value]) => (
-            <TextField
-              className={classes.input}
-              key={key}
-              id="filled-basic"
-              label={key}
-              defaultValue={value}
-              onChange={(e) => setUserFieldValue(e, key)}
-            />
-          ))}
-        </Paper>
-        <Paper className={classes.sectionForms}>
-          <Typography variant="h4">Section</Typography>
-          {/* SectionForm */}
-          {Object.entries(sectionsField).map(([key, value]) =>
-            Array.isArray(value) ? (
-              <Paper className={classes.section}>
-                <Grid container spacing={2} justify="center">
-                  <Grid item lg={12} xs={12}>
-                    <Typography>{key}</Typography>
-                  </Grid>
-                  {value.map((field, index) => (
-                    <Grid item lg={4} xs={12} key={index} alignContent="stretch">
-                      <Input
-                        className={classes.arrayInput}
-                        fullWidth
-                        defaultValue={field}
-                        multiline
-                        rows={5}
-                        onChange={(e) => setSectionFieldMultiValue(e, key, index)}
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => removeField(index, key)}
-                            >
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
-                    </Grid>
-                  ))}
-                  <Grid xs={12}>
-                    <Fab
-                      color="primary"
-                      aria-label="add"
-                      onClick={() => addField(key)}
-                    >
-                      <AddIcon />
-                    </Fab>
-                  </Grid>
-                </Grid>
-              </Paper>
-            ) : (
-              <>
-                {typeof value === "string" ? (
-                  <div className={classes.section}>
-                    <TextField
-                      className={classes.input}
-                      fullWidth
-                      key={key}
-                      id="filled-basic"
-                      label={key}
-                      defaultValue={value}
-                      onChange={(e) =>
-                        setSectionFieldSingleValue(e.target.value, key)
-                      }
-                    />
-                  </div>
-                ) : null}
-              </>
-            )
-          )}
-          <SectionForm
-            sectionsField={sectionsField}
-            setValueResponsibility={setValueResponsibility}
-            removeFieldResponsibility={removeFieldResponsibility}
-            addFieldResponsibility={addFieldResponsibility}
-            setSingleObjectField={setSingleObjectField}
-            removeTools={removeTools}
-            handleOpenTsForm={handleOpenTsForm}
-            setSingleFieldProject={setSingleFieldProject}
-            removeProject={removeProject}
-          />
-          <Button variant="contained" onClick={handleOpen}>
-            Add project
-          </Button>
-        </Paper>
+        <Card className={classes.section} variant="elevation1">
+          <Typography variant="h6" color="textSecondary" gutterBottom>
+            User information
+          </Typography>
+          <Grid container spacing={2}>
+            {Object.entries(userDataField).map(([key, value]) => (
+              <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
+                <TextField
+                  fullWidth
+                  className={classes.input}
+                  variant="outlined"
+                  key={key}
+                  id="filled-basic"
+                  label={key.substring(1)}
+                  defaultValue={value}
+                  onChange={(e) => setUserFieldValue(e, key)}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </Card>
+        <MainSectionPartForm
+          sectionsField={sectionsField}
+          setSectionFieldMultiValue={setSectionFieldMultiValue}
+          setSectionFieldSingleValue={setSectionFieldSingleValue}
+          addField={addField}
+          removeField={removeField}
+        />
+        <SecondarySectionPartForm
+          sectionsField={sectionsField}
+          setValueResponsibility={setValueResponsibility}
+          removeFieldResponsibility={removeFieldResponsibility}
+          addFieldResponsibility={addFieldResponsibility}
+          setSingleObjectField={setSingleObjectField}
+          removeTools={removeTools}
+          handleOpenTsForm={handleOpenTsForm}
+          setSingleFieldProject={setSingleFieldProject}
+          removeProject={removeProject}
+        />
+        <Button variant="contained" onClick={handleOpen}>
+          Add project
+        </Button>
       </form>
       <WriteResumeFile userData={userDataField} sectionData={sectionsField} />
       <AddProjModal
@@ -294,7 +239,7 @@ export default function ResumeForm({ setResumeFields }) {
         openTsForm={openTsForm}
         addTools={addTools}
       />
-    </Paper>
+    </div>
   )
 }
 
