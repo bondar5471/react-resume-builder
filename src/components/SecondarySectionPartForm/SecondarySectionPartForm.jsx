@@ -20,6 +20,7 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
+import Icon from "@material-ui/core/Icon"
 
 export default function SecondarySectionPartForm({
   sectionsField,
@@ -43,6 +44,11 @@ export default function SecondarySectionPartForm({
           <Card className={classes.section}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
+              {key === "TOOLS & FRAMEWORKS" ? (
+                <IconButton onClick={handleOpenTsForm}>
+                  <AddIcon />
+                </IconButton>
+              ) : null}
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {Object.entries(value).map(([label, defaultValue]) => (
@@ -51,124 +57,139 @@ export default function SecondarySectionPartForm({
                     <>
                       {sectionsField["SIGNIFICANT PROJECTS"].$projects.map(
                         (proj, indexProj) => (
-                          <Paper className={classes.section} key={Object.keys(proj)}>
-                            <Typography className={classes.projTitle}>
-                              {Object.keys(proj)}
-                            </Typography>
-                            <Grid container spacing={3}>
-                              <Grid item sm={6} xs={12}>
-                                <TextField
-                                  className={classes.input}
-                                  fullWidth
-                                  label="Description"
-                                  defaultValue={
-                                    proj[Object.keys(proj)]["$description"]
-                                  }
-                                  onChange={(e) =>
-                                    setSingleFieldProject(
-                                      e.target.value,
-                                      proj,
-                                      "$description",
-                                      indexProj
-                                    )
-                                  }
-                                />
-                              </Grid>
-                              <Grid item xs={6}>
-                                <TextField
-                                  className={classes.input}
-                                  fullWidth
-                                  label="Skills"
-                                  defaultValue={proj[Object.keys(proj)]["Skills"]}
-                                  onChange={(e) =>
-                                    setSingleFieldProject(
-                                      e.target.value,
-                                      proj,
-                                      "Skills",
-                                      indexProj
-                                    )
-                                  }
-                                />
-                              </Grid>
+                          <>
+                            <Grid item sm={12} xs={12}>
+                              <Typography
+                                fontStyle="italic"
+                                className={classes.projTitle}
+                                variant="subtitle2"
+                                gutterBottom
+                              >
+                                {Object.keys(proj)}
+                              </Typography>
                             </Grid>
-                            <Typography>Responsibilities</Typography>
+                            <Grid item sm={12} xs={12}>
+                              <TextField
+                                fullWidth
+                                className={classes.input}
+                                label="Team"
+                                variant="outlined"
+                                defaultValue={proj[Object.keys(proj)]["Team"]}
+                                onChange={(e) =>
+                                  setSingleFieldProject(
+                                    e.target.value,
+                                    proj,
+                                    "Team",
+                                    indexProj
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item sm={6} xs={12}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                label="Description"
+                                variant="outlined"
+                                defaultValue={
+                                  proj[Object.keys(proj)]["$description"]
+                                }
+                                onChange={(e) =>
+                                  setSingleFieldProject(
+                                    e.target.value,
+                                    proj,
+                                    "$description",
+                                    indexProj
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item sm={6} xs={12}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                variant="outlined"
+                                label="Skills"
+                                defaultValue={proj[Object.keys(proj)]["Skills"]}
+                                onChange={(e) =>
+                                  setSingleFieldProject(
+                                    e.target.value,
+                                    proj,
+                                    "Skills",
+                                    indexProj
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item sm={12} xs={12}>
+                              <Typography>
+                                Responsibilities
+                                <IconButton
+                                  variant="contained"
+                                  color="primary"
+                                  onClick={() =>
+                                    addFieldResponsibility(proj, indexProj)
+                                  }
+                                >
+                                  <AddIcon />
+                                </IconButton>
+                              </Typography>
+                            </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(
                               (res, index) => (
-                                <Input
-                                  className={classes.input}
-                                  fullWidth
-                                  key={index}
-                                  defaultValue={res}
-                                  onChange={(e) =>
-                                    setValueResponsibility(
-                                      e.target.value,
-                                      proj,
-                                      index,
-                                      indexProj
-                                    )
-                                  }
-                                  endAdornment={
-                                    <InputAdornment position="end">
-                                      <IconButton
-                                        variant="contained"
-                                        color="secondary"
-                                        onClick={() =>
-                                          removeFieldResponsibility(
-                                            proj,
-                                            index,
-                                            indexProj
-                                          )
-                                        }
-                                      >
-                                        <RemoveCircleOutlineIcon />
-                                      </IconButton>
-                                    </InputAdornment>
-                                  }
-                                />
+                                <Grid item sm={12} xs={12}>
+                                  <OutlinedInput
+                                    className={classes.input}
+                                    fullWidth
+                                    key={index}
+                                    defaultValue={res}
+                                    onChange={(e) =>
+                                      setValueResponsibility(
+                                        e.target.value,
+                                        proj,
+                                        index,
+                                        indexProj
+                                      )
+                                    }
+                                    endAdornment={
+                                      <InputAdornment position="end">
+                                        <IconButton
+                                          variant="contained"
+                                          color="secondary"
+                                          onClick={() =>
+                                            removeFieldResponsibility(
+                                              proj,
+                                              index,
+                                              indexProj
+                                            )
+                                          }
+                                        >
+                                          <RemoveCircleOutlineIcon />
+                                        </IconButton>
+                                      </InputAdornment>
+                                    }
+                                  />
+                                </Grid>
                               )
                             )}
-                            <Fab
-                              color="primary"
-                              aria-label="add"
-                              onClick={() => addFieldResponsibility(proj, indexProj)}
-                            >
-                              <AddIcon />
-                            </Fab>
-                            <TextField
-                              fullWidth
-                              label="Team"
-                              defaultValue={proj[Object.keys(proj)]["Team"]}
-                              onChange={(e) =>
-                                setSingleFieldProject(
-                                  e.target.value,
-                                  proj,
-                                  "Team",
-                                  indexProj
-                                )
-                              }
-                            />
-                            <Tooltip
+                            <Button
                               title={`Remove project ${Object.keys(proj)}`}
-                              placement="top"
+                              onClick={() => removeProject(indexProj)}
+                              endIcon={<DeleteIcon />}
                             >
-                              <IconButton
-                                aria-label="Remove project"
-                                color="secondary"
-                                onClick={() => removeProject(indexProj)}
-                              >
-                                <DeleteIcon />
-                              </IconButton>
-                            </Tooltip>
-                          </Paper>
+                              {`Remove project ${Object.keys(proj)}`}
+                            </Button>
+                          </>
                         )
                       )}
                     </>
                   ) : (
                     <Grid item sm={6} xs={12}>
-                      <OutlinedInput
+                      <TextField
                         className={classes.input}
                         key={label}
                         label={label}
+                        variant="outlined"
                         defaultValue={defaultValue}
                         onChange={(e) =>
                           setSingleObjectField(e.target.value, key, label)
@@ -189,18 +210,6 @@ export default function SecondarySectionPartForm({
                   )}
                 </>
               ))}
-
-              {key === "TOOLS & FRAMEWORKS" ? (
-                <Grid item sm={6} xs={12}>
-                  <Button
-                    className={classes.addBtn}
-                    variant="contained"
-                    onClick={handleOpenTsForm}
-                  >
-                    Add technology stack
-                  </Button>
-                </Grid>
-              ) : null}
             </Grid>
           </Card>
         ) : null
