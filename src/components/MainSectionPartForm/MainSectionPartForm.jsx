@@ -37,7 +37,7 @@ export default function MainSectionPartForm({
                 <Grid item sm={6} xs={12} key={index}>
                   <OutlinedInput
                     fullWidth
-                    defaultValue={field}
+                    value={field}
                     multiline
                     rows={3}
                     variant="outlined"
