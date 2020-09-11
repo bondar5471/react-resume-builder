@@ -21,6 +21,10 @@ export default function ResumeForm({ setResumeFields }) {
     JSON.parse(localStorage.getItem("resumeFields")).cv.$sections
   )
 
+  const debounceSetUserDataField = React.useRef(
+    _.debounce((v) => setUserDataField(v), 500)
+  ).current
+
   const [open, setOpen] = useState(false)
 
   const [openTsForm, setOpenTsForm] = useState(false)
@@ -156,7 +160,6 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const setSectionFieldMultiValue = (value, key, index) => {
-    debugger
     const updatedField = sectionsField[key]
     updatedField[index] = value
     setSectionField({ ...sectionsField, [key]: updatedField })
@@ -167,17 +170,15 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const setUserFieldValue = (value, key) => {
-    debugger
     const updatedState = userDataField
     const newState = { ...updatedState, [key]: value }
-    setUserDataField(newState)
+    debounceSetUserDataField(newState)
   }
 
   const deleteResume = () => {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
-  console.log(userDataField)
   return (
     <div className={classes.main}>
       <form>

@@ -1,14 +1,11 @@
 import React from "react"
 import { Grid, TextField, Typography } from "@material-ui/core"
 import PropTypes from "prop-types"
-
-import { debounce } from "../../services/debounce"
+import _ from "lodash"
 
 export default function UserForm({ setUserFieldValue, userDataField }) {
-  const debounceUserFieldValue = React.useCallback(
-    debounce(setUserFieldValue, 300),
-    []
-  )
+  // const debounceUserFieldValue = React.useRef(_.debounce(setUserFieldValue, 300), [])
+  //   .current
   return (
     <>
       <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -24,7 +21,7 @@ export default function UserForm({ setUserFieldValue, userDataField }) {
               id="filled-basic"
               label={key.substring(1)}
               defaultValue={value}
-              onChange={(e) => debounceUserFieldValue(e.target.value, key)}
+              onChange={(e) => setUserFieldValue(e.target.value, key)}
             />
           </Grid>
         ))}
