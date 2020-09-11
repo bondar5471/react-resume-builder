@@ -31,6 +31,13 @@ export default function MainSectionPartForm({
           <Card className={classes.section} key={key}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
+              <IconButton
+                variant="contained"
+                color="primary"
+                onClick={() => addField(key)}
+              >
+                <AddIcon />
+              </IconButton>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {value.map((field, index) => (
@@ -56,18 +63,6 @@ export default function MainSectionPartForm({
                   />
                 </Grid>
               ))}
-              <Grid className={classes.addButtonBox} item sm={6} xs={6}>
-                <Button
-                  className={classes.addFieldBtn}
-                  variant="outlined"
-                  size="small"
-                  color="primary"
-                  aria-label="add"
-                  onClick={() => addField(key)}
-                >
-                  <AddIcon />
-                </Button>
-              </Grid>
             </Grid>
           </Card>
         ) : (
