@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Button,
   Card,
   Grid,
   IconButton,
@@ -13,6 +12,7 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import { PropTypes } from "prop-types"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
+import { debounce } from "../../services/debounce"
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -23,9 +23,17 @@ export default function MainSectionPartForm({
 }) {
   const classes = useStyles()
 
+  const debounceSetMultiValue = React.useCallback(
+    debounce(setSectionFieldMultiValue, 3000),
+    []
+  )
+
+  const debounceSetSingleValue = React.useCallback(
+    debounce(setSectionFieldSingleValue, 300),
+    []
+  )
   return (
     <>
-      {/* SectionForm */}
       {Object.entries(sectionsField).map(([key, value]) =>
         Array.isArray(value) ? (
           <Card className={classes.section} key={key}>
@@ -48,7 +56,9 @@ export default function MainSectionPartForm({
                     multiline
                     rows={3}
                     variant="outlined"
-                    onChange={(e) => setSectionFieldMultiValue(e, key, index)}
+                    onChange={(e) =>
+                      debounceSetMultiValue(e.target.value, key, index)
+                    }
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
@@ -77,7 +87,7 @@ export default function MainSectionPartForm({
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
-                  onChange={(e) => setSectionFieldSingleValue(e.target.value, key)}
+                  onChange={(e) => debounceSetSingleValue(e.target.value, key)}
                 />
               </Card>
             ) : null}

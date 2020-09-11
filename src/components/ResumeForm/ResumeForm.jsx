@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import _ from "lodash"
 import { PropTypes } from "prop-types"
-import { TextField, Typography, Button, Grid, Card } from "@material-ui/core"
+import { Button, Card } from "@material-ui/core"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
@@ -9,6 +9,7 @@ import AddProjModal from "../AddProjModal"
 import TechnologyStackForm from "../TechnologyStackForm"
 import SecondarySectionPartForm from "../SecondarySectionPartForm"
 import MainSectionPartForm from "../MainSectionPartForm"
+import UserForm from "../UserForm"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
@@ -154,9 +155,10 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
-  const setSectionFieldMultiValue = (e, key, index) => {
+  const setSectionFieldMultiValue = (value, key, index) => {
+    debugger
     const updatedField = sectionsField[key]
-    updatedField[index] = e.target.value
+    updatedField[index] = value
     setSectionField({ ...sectionsField, [key]: updatedField })
   }
 
@@ -164,15 +166,18 @@ export default function ResumeForm({ setResumeFields }) {
     setSectionField({ ...sectionsField, [key]: value })
   }
 
-  const setUserFieldValue = (e, key) => {
-    setUserDataField({ ...userDataField, [key]: e.target.value })
+  const setUserFieldValue = (value, key) => {
+    debugger
+    const updatedState = userDataField
+    const newState = { ...updatedState, [key]: value }
+    setUserDataField(newState)
   }
 
   const deleteResume = () => {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
-
+  console.log(userDataField)
   return (
     <div className={classes.main}>
       <form>
@@ -186,25 +191,10 @@ export default function ResumeForm({ setResumeFields }) {
           Choose another file
         </Button>
         <Card className={classes.section} variant="elevation1">
-          <Typography variant="h6" color="textSecondary" gutterBottom>
-            User information
-          </Typography>
-          <Grid container spacing={2}>
-            {Object.entries(userDataField).map(([key, value]) => (
-              <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
-                <TextField
-                  fullWidth
-                  className={classes.input}
-                  variant="outlined"
-                  key={key}
-                  id="filled-basic"
-                  label={key.substring(1)}
-                  defaultValue={value}
-                  onChange={(e) => setUserFieldValue(e, key)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <UserForm
+            setUserFieldValue={setUserFieldValue}
+            userDataField={userDataField}
+          />
         </Card>
         <MainSectionPartForm
           sectionsField={sectionsField}

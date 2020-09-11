@@ -2,17 +2,11 @@ import React from "react"
 import PropTypes from "prop-types"
 import {
   Typography,
-  Input,
   InputAdornment,
   IconButton,
   Button,
   TextField,
-  FormControl,
-  InputLabel,
-  Paper,
-  Fab,
   Grid,
-  Tooltip,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -20,7 +14,8 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
-import Icon from "@material-ui/core/Icon"
+
+import { debounce } from "../../services/debounce"
 
 export default function SecondarySectionPartForm({
   sectionsField,
@@ -37,6 +32,19 @@ export default function SecondarySectionPartForm({
   const isObject = (arg) => {
     return !!arg && arg.constructor === Object
   }
+  const debounceSetSingleField = React.useCallback(
+    debounce(setSingleFieldProject, 300),
+    []
+  )
+  const debounceSetValueResponsibility = React.useCallback(
+    debounce(setValueResponsibility, 300),
+    []
+  )
+
+  const debounceSetSingleObjectField = React.useCallback(
+    debounce(setSingleObjectField, 300),
+    []
+  )
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -76,7 +84,7 @@ export default function SecondarySectionPartForm({
                                 variant="outlined"
                                 defaultValue={proj[Object.keys(proj)]["Team"]}
                                 onChange={(e) =>
-                                  setSingleFieldProject(
+                                  debounceSetSingleField(
                                     e.target.value,
                                     proj,
                                     "Team",
@@ -95,7 +103,7 @@ export default function SecondarySectionPartForm({
                                   proj[Object.keys(proj)]["$description"]
                                 }
                                 onChange={(e) =>
-                                  setSingleFieldProject(
+                                  debounceSetSingleField(
                                     e.target.value,
                                     proj,
                                     "$description",
@@ -112,7 +120,7 @@ export default function SecondarySectionPartForm({
                                 label="Skills"
                                 defaultValue={proj[Object.keys(proj)]["Skills"]}
                                 onChange={(e) =>
-                                  setSingleFieldProject(
+                                  debounceSetSingleField(
                                     e.target.value,
                                     proj,
                                     "Skills",
@@ -137,14 +145,14 @@ export default function SecondarySectionPartForm({
                             </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(
                               (res, index) => (
-                                <Grid item sm={12} xs={12}>
+                                <Grid item sm={12} xs={12} key={index}>
                                   <OutlinedInput
                                     className={classes.input}
                                     fullWidth
                                     key={index}
                                     defaultValue={res}
                                     onChange={(e) =>
-                                      setValueResponsibility(
+                                      debounceSetValueResponsibility(
                                         e.target.value,
                                         proj,
                                         index,
@@ -192,7 +200,7 @@ export default function SecondarySectionPartForm({
                         variant="outlined"
                         defaultValue={defaultValue}
                         onChange={(e) =>
-                          setSingleObjectField(e.target.value, key, label)
+                          debounceSetSingleObjectField(e.target.value, key, label)
                         }
                         endAdornment={
                           <InputAdornment position="end">
