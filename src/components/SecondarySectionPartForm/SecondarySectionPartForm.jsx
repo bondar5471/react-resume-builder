@@ -15,8 +15,6 @@ import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
 
-import { debounce } from "../../services/debounce"
-
 export default function SecondarySectionPartForm({
   sectionsField,
   setValueResponsibility,
@@ -32,19 +30,6 @@ export default function SecondarySectionPartForm({
   const isObject = (arg) => {
     return !!arg && arg.constructor === Object
   }
-  const debounceSetSingleField = React.useCallback(
-    debounce(setSingleFieldProject, 300),
-    []
-  )
-  const debounceSetValueResponsibility = React.useCallback(
-    debounce(setValueResponsibility, 300),
-    []
-  )
-
-  const debounceSetSingleObjectField = React.useCallback(
-    debounce(setSingleObjectField, 300),
-    []
-  )
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -84,7 +69,7 @@ export default function SecondarySectionPartForm({
                                 variant="outlined"
                                 defaultValue={proj[Object.keys(proj)]["Team"]}
                                 onChange={(e) =>
-                                  debounceSetSingleField(
+                                  setSingleFieldProject(
                                     e.target.value,
                                     proj,
                                     "Team",
@@ -103,7 +88,7 @@ export default function SecondarySectionPartForm({
                                   proj[Object.keys(proj)]["$description"]
                                 }
                                 onChange={(e) =>
-                                  debounceSetSingleField(
+                                  setSingleFieldProject(
                                     e.target.value,
                                     proj,
                                     "$description",
@@ -120,7 +105,7 @@ export default function SecondarySectionPartForm({
                                 label="Skills"
                                 defaultValue={proj[Object.keys(proj)]["Skills"]}
                                 onChange={(e) =>
-                                  debounceSetSingleField(
+                                  setSingleFieldProject(
                                     e.target.value,
                                     proj,
                                     "Skills",
@@ -145,14 +130,13 @@ export default function SecondarySectionPartForm({
                             </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(
                               (res, index) => (
-                                <Grid item sm={12} xs={12} key={index}>
+                                <Grid item sm={12} xs={12} key={res}>
                                   <OutlinedInput
                                     className={classes.input}
                                     fullWidth
-                                    key={index}
                                     defaultValue={res}
                                     onChange={(e) =>
-                                      debounceSetValueResponsibility(
+                                      setValueResponsibility(
                                         e.target.value,
                                         proj,
                                         index,
@@ -200,7 +184,7 @@ export default function SecondarySectionPartForm({
                         variant="outlined"
                         defaultValue={defaultValue}
                         onChange={(e) =>
-                          debounceSetSingleObjectField(e.target.value, key, label)
+                          setSingleObjectField(e.target.value, key, label)
                         }
                         endAdornment={
                           <InputAdornment position="end">

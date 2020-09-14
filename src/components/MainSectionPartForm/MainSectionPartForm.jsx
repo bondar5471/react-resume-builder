@@ -12,7 +12,6 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import { PropTypes } from "prop-types"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
-import { debounce } from "../../services/debounce"
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -23,15 +22,6 @@ export default function MainSectionPartForm({
 }) {
   const classes = useStyles()
 
-  const debounceSetMultiValue = React.useCallback(
-    debounce(setSectionFieldMultiValue, 3000),
-    []
-  )
-
-  const debounceSetSingleValue = React.useCallback(
-    debounce(setSectionFieldSingleValue, 300),
-    []
-  )
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -39,25 +29,22 @@ export default function MainSectionPartForm({
           <Card className={classes.section} key={key}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
-              <IconButton
-                variant="contained"
-                color="primary"
-                onClick={() => addField(key)}
-              >
+              <IconButton variant="contained" onClick={() => addField(key)}>
                 <AddIcon />
               </IconButton>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {value.map((field, index) => (
-                <Grid item sm={6} xs={12} key={index}>
+                <Grid item sm={6} xs={12} key={field}>
                   <OutlinedInput
+                    ref={React.createRef()}
                     fullWidth
-                    value={field}
+                    defaultValue={field}
                     multiline
                     rows={3}
                     variant="outlined"
                     onChange={(e) =>
-                      debounceSetMultiValue(e.target.value, key, index)
+                      setSectionFieldMultiValue(e.target.value, key, index)
                     }
                     endAdornment={
                       <InputAdornment position="end">
@@ -87,7 +74,7 @@ export default function MainSectionPartForm({
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
-                  onChange={(e) => debounceSetSingleValue(e.target.value, key)}
+                  onChange={(e) => setSectionFieldSingleValue(e.target.value, key)}
                 />
               </Card>
             ) : null}

@@ -1,11 +1,8 @@
 import React from "react"
 import { Grid, TextField, Typography } from "@material-ui/core"
 import PropTypes from "prop-types"
-import _ from "lodash"
 
 export default function UserForm({ setUserFieldValue, userDataField }) {
-  // const debounceUserFieldValue = React.useRef(_.debounce(setUserFieldValue, 300), [])
-  //   .current
   return (
     <>
       <Typography variant="h6" color="textSecondary" gutterBottom>
