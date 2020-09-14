@@ -2,17 +2,11 @@ import React from "react"
 import PropTypes from "prop-types"
 import {
   Typography,
-  Input,
   InputAdornment,
   IconButton,
   Button,
   TextField,
-  FormControl,
-  InputLabel,
-  Paper,
-  Fab,
   Grid,
-  Tooltip,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -20,7 +14,6 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
-import Icon from "@material-ui/core/Icon"
 
 export default function SecondarySectionPartForm({
   sectionsField,
@@ -137,11 +130,10 @@ export default function SecondarySectionPartForm({
                             </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(
                               (res, index) => (
-                                <Grid item sm={12} xs={12}>
+                                <Grid item sm={12} xs={12} key={res}>
                                   <OutlinedInput
                                     className={classes.input}
                                     fullWidth
-                                    key={index}
                                     defaultValue={res}
                                     onChange={(e) =>
                                       setValueResponsibility(

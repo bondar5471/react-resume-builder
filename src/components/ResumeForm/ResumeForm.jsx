@@ -1,7 +1,7 @@
 import React, { useState } from "react"
-import _ from "lodash"
+import { debounce, set, assign } from "lodash"
 import { PropTypes } from "prop-types"
-import { TextField, Typography, Button, Grid, Card } from "@material-ui/core"
+import { Button, Card } from "@material-ui/core"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
@@ -9,6 +9,7 @@ import AddProjModal from "../AddProjModal"
 import TechnologyStackForm from "../TechnologyStackForm"
 import SecondarySectionPartForm from "../SecondarySectionPartForm"
 import MainSectionPartForm from "../MainSectionPartForm"
+import UserForm from "../UserForm"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
@@ -19,6 +20,14 @@ export default function ResumeForm({ setResumeFields }) {
   const [sectionsField, setSectionField] = useState(
     JSON.parse(localStorage.getItem("resumeFields")).cv.$sections
   )
+
+  const debounceSetUserDataField = React.useRef(
+    debounce((state) => setUserDataField(state), 300)
+  ).current
+
+  const debounceSetSectionField = React.useRef(
+    debounce((state) => setSectionField(state), 300)
+  ).current
 
   const [open, setOpen] = useState(false)
 
@@ -52,8 +61,8 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const setSingleObjectField = (value, sectionKey, key) => {
-    const updatetSection = _.set(sectionsField[sectionKey], `${key}`, value)
-    setSectionField({
+    const updatetSection = set(sectionsField[sectionKey], `${key}`, value)
+    debounceSetSectionField({
       ...sectionsField,
       [sectionKey]: updatetSection,
     })
@@ -63,7 +72,7 @@ export default function ResumeForm({ setResumeFields }) {
     const currentProj =
       sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
     const newResponsibility = currentProj.Responsibilities.concat("")
-    const newProj = _.set(
+    const newProj = set(
       sectionsField["SIGNIFICANT PROJECTS"],
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       newResponsibility
@@ -80,7 +89,7 @@ export default function ResumeForm({ setResumeFields }) {
     const newResponsibility = currentProj.Responsibilities.filter(
       (field, i) => i !== index
     )
-    const newProj = _.set(
+    const newProj = set(
       sectionsField["SIGNIFICANT PROJECTS"],
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       newResponsibility
@@ -95,24 +104,24 @@ export default function ResumeForm({ setResumeFields }) {
     const currentProj =
       sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
     currentProj.Responsibilities[index] = value
-    const newProj = _.set(
+    const newProj = set(
       sectionsField["SIGNIFICANT PROJECTS"],
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       currentProj.Responsibilities
     )
-    setSectionField({
+    debounceSetSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: newProj,
     })
   }
 
   const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
-    const updatedProject = _.set(
+    const updatedProject = set(
       sectionsField["SIGNIFICANT PROJECTS"],
       `$projects[${indexProj}].${Object.keys(proj)}.${fieldKey}`,
       value
     )
-    setSectionField({
+    debounceSetSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: updatedProject,
     })
@@ -141,7 +150,7 @@ export default function ResumeForm({ setResumeFields }) {
   const addTools = (data) => {
     setSectionField({
       ...sectionsField,
-      ["TOOLS & FRAMEWORKS"]: _.assign(sectionsField["TOOLS & FRAMEWORKS"], data),
+      ["TOOLS & FRAMEWORKS"]: assign(sectionsField["TOOLS & FRAMEWORKS"], data),
     })
   }
 
@@ -154,25 +163,26 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
-  const setSectionFieldMultiValue = (e, key, index) => {
+  const setSectionFieldMultiValue = (value, key, index) => {
     const updatedField = sectionsField[key]
-    updatedField[index] = e.target.value
-    setSectionField({ ...sectionsField, [key]: updatedField })
+    updatedField[index] = value
+    debounceSetSectionField({ ...sectionsField, [key]: updatedField })
   }
 
   const setSectionFieldSingleValue = (value, key) => {
-    setSectionField({ ...sectionsField, [key]: value })
+    debounceSetSectionField({ ...sectionsField, [key]: value })
   }
 
-  const setUserFieldValue = (e, key) => {
-    setUserDataField({ ...userDataField, [key]: e.target.value })
+  const setUserFieldValue = (value, key) => {
+    const updatedState = userDataField
+    const newState = { ...updatedState, [key]: value }
+    debounceSetUserDataField(newState)
   }
 
   const deleteResume = () => {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
-
   return (
     <div className={classes.main}>
       <form>
@@ -186,25 +196,10 @@ export default function ResumeForm({ setResumeFields }) {
           Choose another file
         </Button>
         <Card className={classes.section} variant="elevation1">
-          <Typography variant="h6" color="textSecondary" gutterBottom>
-            User information
-          </Typography>
-          <Grid container spacing={2}>
-            {Object.entries(userDataField).map(([key, value]) => (
-              <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
-                <TextField
-                  fullWidth
-                  className={classes.input}
-                  variant="outlined"
-                  key={key}
-                  id="filled-basic"
-                  label={key.substring(1)}
-                  defaultValue={value}
-                  onChange={(e) => setUserFieldValue(e, key)}
-                />
-              </Grid>
-            ))}
-          </Grid>
+          <UserForm
+            setUserFieldValue={setUserFieldValue}
+            userDataField={userDataField}
+          />
         </Card>
         <MainSectionPartForm
           sectionsField={sectionsField}

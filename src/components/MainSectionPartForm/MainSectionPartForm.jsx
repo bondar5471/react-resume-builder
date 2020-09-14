@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Button,
   Card,
   Grid,
   IconButton,
@@ -25,30 +24,28 @@ export default function MainSectionPartForm({
 
   return (
     <>
-      {/* SectionForm */}
       {Object.entries(sectionsField).map(([key, value]) =>
         Array.isArray(value) ? (
           <Card className={classes.section} key={key}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
-              <IconButton
-                variant="contained"
-                color="primary"
-                onClick={() => addField(key)}
-              >
+              <IconButton variant="contained" onClick={() => addField(key)}>
                 <AddIcon />
               </IconButton>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {value.map((field, index) => (
-                <Grid item sm={6} xs={12} key={index}>
+                <Grid item sm={6} xs={12} key={field}>
                   <OutlinedInput
+                    ref={React.createRef()}
                     fullWidth
-                    value={field}
+                    defaultValue={field}
                     multiline
                     rows={3}
                     variant="outlined"
-                    onChange={(e) => setSectionFieldMultiValue(e, key, index)}
+                    onChange={(e) =>
+                      setSectionFieldMultiValue(e.target.value, key, index)
+                    }
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
