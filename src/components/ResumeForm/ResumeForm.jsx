@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { debounce, set, assign } from "lodash"
 import { PropTypes } from "prop-types"
 import { Button, Card } from "@material-ui/core"
+import ReplayIcon from "@material-ui/icons/Replay"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
@@ -10,15 +11,18 @@ import TechnologyStackForm from "../TechnologyStackForm"
 import SecondarySectionPartForm from "../SecondarySectionPartForm"
 import MainSectionPartForm from "../MainSectionPartForm"
 import UserForm from "../UserForm"
+import { useStickyState } from "../../services/StickyState"
 
 export default function ResumeForm({ setResumeFields }) {
   const classes = useStyles()
 
-  const [userDataField, setUserDataField] = useState(
-    JSON.parse(localStorage.getItem("resumeFields")).cv.$person
+  const [userDataField, setUserDataField] = useStickyState(
+    JSON.parse(localStorage.getItem("resumeFields")).cv.$person,
+    "udpdatedUserState"
   )
-  const [sectionsField, setSectionField] = useState(
-    JSON.parse(localStorage.getItem("resumeFields")).cv.$sections
+  const [sectionsField, setSectionField] = useStickyState(
+    JSON.parse(localStorage.getItem("resumeFields")).cv.$sections,
+    "updatedSectionState"
   )
 
   const debounceSetUserDataField = React.useRef(
@@ -183,6 +187,12 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem("resumeFields")
     setResumeFields(null)
   }
+
+  const resetChange = () => {
+    setUserDataField(JSON.parse(localStorage.getItem("resumeFields")).cv.$person)
+    setSectionField(JSON.parse(localStorage.getItem("resumeFields")).cv.$sections)
+  }
+
   return (
     <div className={classes.main}>
       <form>
@@ -194,6 +204,15 @@ export default function ResumeForm({ setResumeFields }) {
           onClick={() => deleteResume()}
         >
           Choose another file
+        </Button>
+        <Button
+          fullWidth
+          variant="contained"
+          color="default"
+          onClick={() => resetChange()}
+        >
+          Reset change
+          <ReplayIcon />
         </Button>
         <Card className={classes.section} variant="elevation1">
           <UserForm

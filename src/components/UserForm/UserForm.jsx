@@ -10,11 +10,11 @@ export default function UserForm({ setUserFieldValue, userDataField }) {
       </Typography>
       <Grid container spacing={2}>
         {Object.entries(userDataField).map(([key, value]) => (
-          <Grid key={key} item sm={key === "$photo" ? 12 : 6} xs={12}>
+          <Grid key={value} item sm={key === "$photo" ? 12 : 6} xs={12}>
             <TextField
               fullWidth
               variant="outlined"
-              key={key}
+              key={value}
               id="filled-basic"
               label={key.substring(1)}
               defaultValue={value}
