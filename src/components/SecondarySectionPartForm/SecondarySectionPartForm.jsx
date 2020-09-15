@@ -69,7 +69,7 @@ export default function SecondarySectionPartForm({
                                 label="Team"
                                 variant="outlined"
                                 defaultValue={proj[Object.keys(proj)]["Team"]}
-                                onChange={(e) =>
+                                onBlur={(e) =>
                                   setSingleFieldProject(
                                     e.target.value,
                                     proj,
@@ -89,7 +89,7 @@ export default function SecondarySectionPartForm({
                                 defaultValue={
                                   proj[Object.keys(proj)]["$description"]
                                 }
-                                onChange={(e) =>
+                                onBlur={(e) =>
                                   setSingleFieldProject(
                                     e.target.value,
                                     proj,
@@ -107,7 +107,7 @@ export default function SecondarySectionPartForm({
                                 variant="outlined"
                                 label="Skills"
                                 defaultValue={proj[Object.keys(proj)]["Skills"]}
-                                onChange={(e) =>
+                                onBlur={(e) =>
                                   setSingleFieldProject(
                                     e.target.value,
                                     proj,
@@ -138,7 +138,7 @@ export default function SecondarySectionPartForm({
                                     className={classes.input}
                                     fullWidth
                                     defaultValue={res}
-                                    onChange={(e) =>
+                                    onBlur={(e) =>
                                       setValueResponsibility(
                                         e.target.value,
                                         proj,
@@ -188,7 +188,7 @@ export default function SecondarySectionPartForm({
                         label={label}
                         variant="outlined"
                         defaultValue={defaultValue}
-                        onChange={(e) =>
+                        onBlur={(e) =>
                           setSingleObjectField(e.target.value, key, label)
                         }
                         endAdornment={

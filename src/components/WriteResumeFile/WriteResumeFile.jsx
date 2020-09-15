@@ -4,7 +4,7 @@ import SaveIcon from "@material-ui/icons/Save"
 import { PropTypes } from "prop-types"
 import yaml from "js-yaml"
 
-export default function WriteResumeFile({ userData, sectionData }) {
+export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null)
   const createFile = () => {
     const cv = { cv: { $person: userData, $sections: sectionData } }
@@ -31,6 +31,7 @@ export default function WriteResumeFile({ userData, sectionData }) {
         </Button>
       ) : (
         <Button
+          disabled={globalError}
           variant="contained"
           color="primary"
           fullWidth
