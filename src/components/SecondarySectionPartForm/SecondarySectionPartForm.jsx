@@ -64,6 +64,7 @@ export default function SecondarySectionPartForm({
                             <Grid item sm={12} xs={12}>
                               <TextField
                                 fullWidth
+                                key={proj[Object.keys(proj)]["Team"]}
                                 className={classes.input}
                                 label="Team"
                                 variant="outlined"
@@ -82,6 +83,7 @@ export default function SecondarySectionPartForm({
                               <TextField
                                 className={classes.input}
                                 fullWidth
+                                key={proj[Object.keys(proj)]["$description"]}
                                 label="Description"
                                 variant="outlined"
                                 defaultValue={
@@ -100,6 +102,7 @@ export default function SecondarySectionPartForm({
                             <Grid item sm={6} xs={12}>
                               <TextField
                                 className={classes.input}
+                                key={proj[Object.keys(proj)]["Skills"]}
                                 fullWidth
                                 variant="outlined"
                                 label="Skills"
@@ -166,6 +169,8 @@ export default function SecondarySectionPartForm({
                             )}
                             <Button
                               title={`Remove project ${Object.keys(proj)}`}
+                              variant="contained"
+                              color="secondary"
                               onClick={() => removeProject(indexProj)}
                               endIcon={<DeleteIcon />}
                             >
@@ -179,7 +184,7 @@ export default function SecondarySectionPartForm({
                     <Grid item sm={6} xs={12}>
                       <TextField
                         className={classes.input}
-                        key={label}
+                        key={defaultValue}
                         label={label}
                         variant="outlined"
                         defaultValue={defaultValue}

@@ -100,8 +100,8 @@ export default function UploadResumeComponent() {
               <Button
                 className={classes.editButton}
                 type="submit"
-                variant="outlined"
-                color="primary"
+                variant="contained"
+                color="default"
                 fullWidth
                 disabled={!resumeFile}
               >

@@ -26,7 +26,7 @@ export default function MainSectionPartForm({
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
         Array.isArray(value) ? (
-          <Card className={classes.section} key={key}>
+          <Card className={classes.section} key={value}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
               <IconButton variant="contained" onClick={() => addField(key)}>
@@ -65,12 +65,11 @@ export default function MainSectionPartForm({
         ) : (
           <>
             {typeof value === "string" ? (
-              <Card className={classes.section} key={key}>
+              <Card className={classes.section} key={value}>
                 <TextField
                   className={classes.marginBottom}
                   fullWidth
                   variant="outlined"
-                  key={key}
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
