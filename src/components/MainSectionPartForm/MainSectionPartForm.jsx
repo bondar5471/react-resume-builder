@@ -43,7 +43,7 @@ export default function MainSectionPartForm({
                     multiline
                     rows={3}
                     variant="outlined"
-                    onChange={(e) =>
+                    onBlur={(e) =>
                       setSectionFieldMultiValue(e.target.value, key, index)
                     }
                     endAdornment={
@@ -73,7 +73,7 @@ export default function MainSectionPartForm({
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
-                  onChange={(e) => setSectionFieldSingleValue(e.target.value, key)}
+                  onBlur={(e) => setSectionFieldSingleValue(e.target.value, key)}
                 />
               </Card>
             ) : null}

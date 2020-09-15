@@ -25,6 +25,8 @@ export default function ResumeForm({ setResumeFields }) {
     "updatedSectionState"
   )
 
+  const [globalError, setGlobalError] = useState(false)
+
   const debounceSetUserDataField = React.useRef(
     debounce((state) => setUserDataField(state), 300)
   ).current
@@ -218,6 +220,7 @@ export default function ResumeForm({ setResumeFields }) {
           <UserForm
             setUserFieldValue={setUserFieldValue}
             userDataField={userDataField}
+            setGlobalError={setGlobalError}
           />
         </Card>
         <MainSectionPartForm
@@ -242,7 +245,11 @@ export default function ResumeForm({ setResumeFields }) {
           Add project
         </Button>
       </form>
-      <WriteResumeFile userData={userDataField} sectionData={sectionsField} />
+      <WriteResumeFile
+        userData={userDataField}
+        sectionData={sectionsField}
+        globalError={globalError}
+      />
       <AddProjModal
         handleClose={handleClose}
         open={open}

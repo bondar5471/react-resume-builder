@@ -66,7 +66,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Project name"
               required
-              onChange={(e) => setName(e.target.value)}
+              onBlur={(e) => setName(e.target.value)}
             />
 
             <TextField
@@ -74,7 +74,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Description"
               required
-              onChange={(e) => setDescription(e.target.value)}
+              onBlur={(e) => setDescription(e.target.value)}
             />
             <Typography align="center">Responsibilities:</Typography>
             {responsibilities.map((res, index) => (
@@ -84,7 +84,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
                 variant="filled"
                 defaultValue={res}
                 required
-                onChange={(e) => handleChangeRes(e.target.value, index)}
+                onBlur={(e) => handleChangeRes(e.target.value, index)}
               />
             ))}
             <Fab
@@ -99,21 +99,21 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Role"
               required
-              onChange={(e) => setRole(e.target.value)}
+              onBlur={(e) => setRole(e.target.value)}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Skills"
               required
-              onChange={(e) => setSkills(e.target.value)}
+              onBlur={(e) => setSkills(e.target.value)}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Team info"
               required
-              onChange={(e) => setTeam(e.target.value)}
+              onBlur={(e) => setTeam(e.target.value)}
             />
             <DialogActions>
               <Button onClick={handleClose} variant="contained">

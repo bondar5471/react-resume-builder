@@ -34,13 +34,13 @@ export default function TechnologyStackForm({
             fullWidth
             variant="filled"
             label="Category"
-            onChange={(e) => setCategory(e.target.value)}
+            onBlur={(e) => setCategory(e.target.value)}
           />
           <TextField
             fullWidth
             variant="filled"
             label="Stack"
-            onChange={(e) => setStack(e.target.value)}
+            onBlur={(e) => setStack(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

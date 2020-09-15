@@ -79,7 +79,7 @@ export default function UploadResumeComponent() {
                 id="upload-file"
                 name="upload-file"
                 type="file"
-                onChange={handleChange}
+                onBlur={handleChange}
               />
               <Button
                 color="secondary"
