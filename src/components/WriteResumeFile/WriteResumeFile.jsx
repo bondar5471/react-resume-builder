@@ -3,6 +3,8 @@ import { Button } from "@material-ui/core"
 import SaveIcon from "@material-ui/icons/Save"
 import { PropTypes } from "prop-types"
 import yaml from "js-yaml"
+import Tooltip from "@material-ui/core/Tooltip"
+import { makeStyles } from "@material-ui/core/styles"
 
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null)
@@ -30,15 +32,26 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           Download Resume File
         </Button>
       ) : (
-        <Button
-          disabled={globalError}
-          variant="contained"
-          color="primary"
-          fullWidth
-          onClick={() => createFile()}
+        <Tooltip
+          element={"span"}
+          title={
+            <span style={{ fontSize: "24px" }}>
+              {globalError ? "On of the inputs are blank" : ""}
+            </span>
+          }
         >
-          Save to *.yaml
-        </Button>
+          <span>
+            <Button
+              disabled={globalError}
+              variant="contained"
+              color="primary"
+              fullWidth
+              onClick={() => createFile()}
+            >
+              Save to *.yaml
+            </Button>
+          </span>
+        </Tooltip>
       )}
     </div>
   )
@@ -47,4 +60,5 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
 WriteResumeFile.propTypes = {
   userData: PropTypes.objectOf(Object).isRequired,
   sectionData: PropTypes.objectOf(Object).isRequired,
+  globalError: PropTypes.bool,
 }

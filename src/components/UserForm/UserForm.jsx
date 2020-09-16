@@ -1,21 +1,13 @@
 import React from "react"
 import { Grid, TextField, Typography } from "@material-ui/core"
 import PropTypes from "prop-types"
+import { handleInput } from "../../services/HandleInput"
 
 export default function UserForm({
   setUserFieldValue,
   userDataField,
   setGlobalError,
 }) {
-  const handleInput = (value, key) => {
-    if (!value) {
-      setGlobalError(true)
-    } else {
-      setGlobalError(false)
-    }
-
-    setUserFieldValue(value, key)
-  }
   return (
     <>
       <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -32,7 +24,13 @@ export default function UserForm({
               id="filled-basic"
               label={key.substring(1)}
               defaultValue={value}
-              onBlur={(e) => handleInput(e.target.value, key)}
+              onBlur={(e) =>
+                handleInput(
+                  setGlobalError,
+                  e.target.value,
+                  setUserFieldValue(e.target.value, key)
+                )
+              }
               helperText={!value ? "This field is required" : null}
             />
           </Grid>
