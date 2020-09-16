@@ -191,6 +191,7 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const resetChange = () => {
+    setGlobalError(false)
     setUserDataField(JSON.parse(localStorage.getItem("resumeFields")).cv.$person)
     setSectionField(JSON.parse(localStorage.getItem("resumeFields")).cv.$sections)
   }
@@ -229,6 +230,7 @@ export default function ResumeForm({ setResumeFields }) {
           setSectionFieldSingleValue={setSectionFieldSingleValue}
           addField={addField}
           removeField={removeField}
+          setGlobalError={setGlobalError}
         />
         <SecondarySectionPartForm
           sectionsField={sectionsField}
@@ -240,6 +242,7 @@ export default function ResumeForm({ setResumeFields }) {
           handleOpenTsForm={handleOpenTsForm}
           setSingleFieldProject={setSingleFieldProject}
           removeProject={removeProject}
+          setGlobalError={setGlobalError}
         />
         <Button variant="contained" onClick={handleOpen}>
           Add project
