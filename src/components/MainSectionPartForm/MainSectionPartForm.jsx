@@ -34,20 +34,19 @@ export default function MainSectionPartForm({
           <Card className={classes.section} key={value}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
-              <>
-                {disablebAddField(value) ? (
-                  <Tooltip title="Please fill all input fields" placement="right">
-                    <span>
-                      <IconButton
-                        disabled={disablebAddField(value)}
-                        variant="contained"
-                        onClick={() => addField(key)}
-                      >
-                        <AddIcon />
-                      </IconButton>
+              <Tooltip
+                element={"span"}
+                title={
+                  disablebAddField(value) ? (
+                    <span style={{ fontSize: "22px" }}>
+                      Please fill all input fields
                     </span>
-                  </Tooltip>
-                ) : (
+                  ) : (
+                    ""
+                  )
+                }
+              >
+                <span>
                   <IconButton
                     disabled={disablebAddField(value)}
                     variant="contained"
@@ -55,8 +54,8 @@ export default function MainSectionPartForm({
                   >
                     <AddIcon />
                   </IconButton>
-                )}
-              </>
+                </span>
+              </Tooltip>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {value.map((field, index) => (

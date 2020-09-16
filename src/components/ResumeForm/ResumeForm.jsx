@@ -1,7 +1,14 @@
 import React, { useState } from "react"
 import { debounce, set, assign } from "lodash"
 import { PropTypes } from "prop-types"
-import { Button, Card } from "@material-ui/core"
+import {
+  Button,
+  Card,
+  DialogContent,
+  Dialog,
+  DialogActions,
+  DialogContentText,
+} from "@material-ui/core"
 import ReplayIcon from "@material-ui/icons/Replay"
 
 import { useStyles } from "./styles"
@@ -26,6 +33,8 @@ export default function ResumeForm({ setResumeFields }) {
   )
 
   const [globalError, setGlobalError] = useState(false)
+
+  const [cancelEditFile, setCancelEditFile] = useState(false)
 
   const debounceSetUserDataField = React.useRef(
     debounce((state) => setUserDataField(state), 300)
@@ -53,6 +62,10 @@ export default function ResumeForm({ setResumeFields }) {
 
   const handleCloseTsForm = () => {
     setOpenTsForm(false)
+  }
+
+  const closeCancelEditFile = () => {
+    setCancelEditFile(false)
   }
 
   const addField = (key) => {
@@ -186,7 +199,7 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const deleteResume = () => {
-    localStorage.removeItem("resumeFields")
+    localStorage.clear()
     setResumeFields(null)
   }
 
@@ -204,7 +217,7 @@ export default function ResumeForm({ setResumeFields }) {
           fullWidth
           color="secondary"
           title={"another file"}
-          onClick={() => deleteResume()}
+          onClick={() => setCancelEditFile(true)}
         >
           Choose another file
         </Button>
@@ -263,6 +276,24 @@ export default function ResumeForm({ setResumeFields }) {
         openTsForm={openTsForm}
         addTools={addTools}
       />
+      <Dialog
+        open={cancelEditFile}
+        onClose={closeCancelEditFile}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to choose another file and cancel your current changes?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeCancelEditFile} autoFocus>
+            Disagree
+          </Button>
+          <Button onClick={() => deleteResume()}>Agree</Button>
+        </DialogActions>
+      </Dialog>
     </div>
   )
 }

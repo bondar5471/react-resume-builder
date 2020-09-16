@@ -137,44 +137,35 @@ export default function SecondarySectionPartForm({
                             <Grid item sm={12} xs={12}>
                               <Typography>
                                 Responsibilities
-                                <>
-                                  {disablebAddField(
-                                    proj[Object.keys(proj)]["Responsibilities"]
-                                  ) ? (
-                                    <Tooltip
-                                      title="Please fill all input fields"
-                                      placement="right"
-                                    >
-                                      <span>
-                                        <IconButton
-                                          variant="contained"
-                                          disabled={disablebAddField(
-                                            proj[Object.keys(proj)][
-                                              "Responsibilities"
-                                            ]
-                                          )}
-                                          onClick={() =>
-                                            addFieldResponsibility(proj, indexProj)
-                                          }
-                                        >
-                                          <AddIcon />
-                                        </IconButton>
+                                <Tooltip
+                                  element={"span"}
+                                  placement="right"
+                                  title={
+                                    disablebAddField(
+                                      proj[Object.keys(proj)]["Responsibilities"]
+                                    ) ? (
+                                      <span style={{ fontSize: "22px" }}>
+                                        Please fill all input fields
                                       </span>
-                                    </Tooltip>
-                                  ) : (
+                                    ) : (
+                                      ""
+                                    )
+                                  }
+                                >
+                                  <span>
                                     <IconButton
-                                      variant="contained"
                                       disabled={disablebAddField(
                                         proj[Object.keys(proj)]["Responsibilities"]
                                       )}
+                                      variant="contained"
                                       onClick={() =>
                                         addFieldResponsibility(proj, indexProj)
                                       }
                                     >
                                       <AddIcon />
                                     </IconButton>
-                                  )}
-                                </>
+                                  </span>
+                                </Tooltip>
                               </Typography>
                             </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(
