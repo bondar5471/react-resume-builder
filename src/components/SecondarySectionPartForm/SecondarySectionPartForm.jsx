@@ -14,6 +14,7 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
+import { handleInput } from "../../services/HandleInput"
 
 export default function SecondarySectionPartForm({
   sectionsField,
@@ -25,6 +26,7 @@ export default function SecondarySectionPartForm({
   handleOpenTsForm,
   setSingleFieldProject,
   removeProject,
+  setGlobalError,
 }) {
   const classes = useStyles()
   const isObject = (arg) => {
@@ -70,11 +72,15 @@ export default function SecondarySectionPartForm({
                                 variant="outlined"
                                 defaultValue={proj[Object.keys(proj)]["Team"]}
                                 onBlur={(e) =>
-                                  setSingleFieldProject(
+                                  handleInput(
+                                    setGlobalError,
                                     e.target.value,
-                                    proj,
-                                    "Team",
-                                    indexProj
+                                    setSingleFieldProject(
+                                      e.target.value,
+                                      proj,
+                                      "Team",
+                                      indexProj
+                                    )
                                   )
                                 }
                               />
@@ -90,11 +96,15 @@ export default function SecondarySectionPartForm({
                                   proj[Object.keys(proj)]["$description"]
                                 }
                                 onBlur={(e) =>
-                                  setSingleFieldProject(
+                                  handleInput(
+                                    setGlobalError,
                                     e.target.value,
-                                    proj,
-                                    "$description",
-                                    indexProj
+                                    setSingleFieldProject(
+                                      e.target.value,
+                                      proj,
+                                      "$description",
+                                      indexProj
+                                    )
                                   )
                                 }
                               />
@@ -108,11 +118,15 @@ export default function SecondarySectionPartForm({
                                 label="Skills"
                                 defaultValue={proj[Object.keys(proj)]["Skills"]}
                                 onBlur={(e) =>
-                                  setSingleFieldProject(
+                                  handleInput(
+                                    setGlobalError,
                                     e.target.value,
-                                    proj,
-                                    "Skills",
-                                    indexProj
+                                    setSingleFieldProject(
+                                      e.target.value,
+                                      proj,
+                                      "Skills",
+                                      indexProj
+                                    )
                                   )
                                 }
                               />
@@ -139,11 +153,15 @@ export default function SecondarySectionPartForm({
                                     fullWidth
                                     defaultValue={res}
                                     onBlur={(e) =>
-                                      setValueResponsibility(
+                                      handleInput(
+                                        setGlobalError,
                                         e.target.value,
-                                        proj,
-                                        index,
-                                        indexProj
+                                        setValueResponsibility(
+                                          e.target.value,
+                                          proj,
+                                          index,
+                                          indexProj
+                                        )
                                       )
                                     }
                                     endAdornment={
@@ -189,7 +207,11 @@ export default function SecondarySectionPartForm({
                         variant="outlined"
                         defaultValue={defaultValue}
                         onBlur={(e) =>
-                          setSingleObjectField(e.target.value, key, label)
+                          handleInput(
+                            setGlobalError,
+                            e.target.value,
+                            setSingleObjectField(e.target.value, key, label)
+                          )
                         }
                         endAdornment={
                           <InputAdornment position="end">
@@ -225,4 +247,5 @@ SecondarySectionPartForm.propTypes = {
   handleOpenTsForm: PropTypes.func.isRequired,
   setSingleFieldProject: PropTypes.func.isRequired,
   removeProject: PropTypes.func.isRequired,
+  setGlobalError: PropTypes.bool,
 }

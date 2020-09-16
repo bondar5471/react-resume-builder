@@ -12,6 +12,7 @@ import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
 import { PropTypes } from "prop-types"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
+import { handleInput } from "../../services/HandleInput"
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -19,6 +20,7 @@ export default function MainSectionPartForm({
   setSectionFieldSingleValue,
   removeField,
   addField,
+  setGlobalError,
 }) {
   const classes = useStyles()
 
@@ -44,7 +46,11 @@ export default function MainSectionPartForm({
                     rows={3}
                     variant="outlined"
                     onBlur={(e) =>
-                      setSectionFieldMultiValue(e.target.value, key, index)
+                      handleInput(
+                        setGlobalError,
+                        e.target.value,
+                        setSectionFieldMultiValue(e.target.value, key, index)
+                      )
                     }
                     endAdornment={
                       <InputAdornment position="end">
@@ -73,7 +79,13 @@ export default function MainSectionPartForm({
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
-                  onBlur={(e) => setSectionFieldSingleValue(e.target.value, key)}
+                  onBlur={(e) =>
+                    handleInput(
+                      setGlobalError,
+                      e.target.value,
+                      setSectionFieldSingleValue(e.target.value, key)
+                    )
+                  }
                 />
               </Card>
             ) : null}
@@ -90,4 +102,5 @@ MainSectionPartForm.propTypes = {
   setSectionFieldMultiValue: PropTypes.func,
   removeField: PropTypes.func,
   addField: PropTypes.func,
+  setGlobalError: PropTypes.bool,
 }
