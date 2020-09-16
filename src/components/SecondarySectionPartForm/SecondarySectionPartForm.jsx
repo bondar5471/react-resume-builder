@@ -7,6 +7,7 @@ import {
   Button,
   TextField,
   Grid,
+  Tooltip,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -15,6 +16,8 @@ import { useStyles } from "./styles"
 import Card from "@material-ui/core/Card"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
 import { handleInput } from "../../services/HandleInput"
+
+import { disablebAddField } from "../../services/validationAddField"
 
 export default function SecondarySectionPartForm({
   sectionsField,
@@ -134,15 +137,35 @@ export default function SecondarySectionPartForm({
                             <Grid item sm={12} xs={12}>
                               <Typography>
                                 Responsibilities
-                                <IconButton
-                                  variant="contained"
-                                  color="primary"
-                                  onClick={() =>
-                                    addFieldResponsibility(proj, indexProj)
+                                <Tooltip
+                                  element={"span"}
+                                  placement="right"
+                                  title={
+                                    disablebAddField(
+                                      proj[Object.keys(proj)]["Responsibilities"]
+                                    ) ? (
+                                      <span style={{ fontSize: "22px" }}>
+                                        Please fill all input fields
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )
                                   }
                                 >
-                                  <AddIcon />
-                                </IconButton>
+                                  <span>
+                                    <IconButton
+                                      disabled={disablebAddField(
+                                        proj[Object.keys(proj)]["Responsibilities"]
+                                      )}
+                                      variant="contained"
+                                      onClick={() =>
+                                        addFieldResponsibility(proj, indexProj)
+                                      }
+                                    >
+                                      <AddIcon />
+                                    </IconButton>
+                                  </span>
+                                </Tooltip>
                               </Typography>
                             </Grid>
                             {proj[Object.keys(proj)]["Responsibilities"].map(

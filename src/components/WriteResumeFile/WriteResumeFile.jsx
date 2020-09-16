@@ -4,7 +4,6 @@ import SaveIcon from "@material-ui/icons/Save"
 import { PropTypes } from "prop-types"
 import yaml from "js-yaml"
 import Tooltip from "@material-ui/core/Tooltip"
-import { makeStyles } from "@material-ui/core/styles"
 
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null)
@@ -35,9 +34,11 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
         <Tooltip
           element={"span"}
           title={
-            <span style={{ fontSize: "24px" }}>
-              {globalError ? "On of the inputs are blank" : ""}
-            </span>
+            globalError ? (
+              <span style={{ fontSize: "22px" }}>On of the inputs are blank</span>
+            ) : (
+              ""
+            )
           }
         >
           <span>

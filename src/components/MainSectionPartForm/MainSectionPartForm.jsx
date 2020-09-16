@@ -5,6 +5,7 @@ import {
   IconButton,
   InputAdornment,
   TextField,
+  Tooltip,
   Typography,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
@@ -13,6 +14,8 @@ import { useStyles } from "./styles"
 import { PropTypes } from "prop-types"
 import OutlinedInput from "@material-ui/core/OutlinedInput"
 import { handleInput } from "../../services/HandleInput"
+
+import { disablebAddField } from "../../services/validationAddField"
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -31,9 +34,28 @@ export default function MainSectionPartForm({
           <Card className={classes.section} key={value}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
-              <IconButton variant="contained" onClick={() => addField(key)}>
-                <AddIcon />
-              </IconButton>
+              <Tooltip
+                element={"span"}
+                title={
+                  disablebAddField(value) ? (
+                    <span style={{ fontSize: "22px" }}>
+                      Please fill all input fields
+                    </span>
+                  ) : (
+                    ""
+                  )
+                }
+              >
+                <span>
+                  <IconButton
+                    disabled={disablebAddField(value)}
+                    variant="contained"
+                    onClick={() => addField(key)}
+                  >
+                    <AddIcon />
+                  </IconButton>
+                </span>
+              </Tooltip>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {value.map((field, index) => (
