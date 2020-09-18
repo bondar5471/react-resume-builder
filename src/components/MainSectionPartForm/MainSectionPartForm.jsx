@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Card,
   Grid,
@@ -7,7 +7,17 @@ import {
   TextField,
   Tooltip,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogTitle,
+  List,
+  ListItem,
+  DialogContent,
+  Button,
+  ListItemSecondaryAction,
+  ListItemText,
 } from "@material-ui/core"
+import chunk from "lodash/chunk"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import AddIcon from "@material-ui/icons/Add"
 import { useStyles } from "./styles"
@@ -23,9 +33,47 @@ export default function MainSectionPartForm({
   setSectionFieldSingleValue,
   removeField,
   addField,
+  addFieldToEducation,
+  removeFieldFromEducation,
+  updateFieldToEducation,
   setGlobalError,
 }) {
+  const [openEducationForm, setOpenEducationForm] = useState(false)
+  const [openEditForm, setOpenEditForm] = useState(false)
+  const [editedField, setEditedFied] = useState([])
+  const [institution, setInstitution] = useState("")
+  const [degree, setDegree] = useState("")
+  const [updatedIndex, setUpdatedIndex] = useState(null)
+  const [educationArray, setEducationArray] = useState([])
   const classes = useStyles()
+
+  const handleCloseCreate = () => {
+    setOpenEducationForm(false)
+  }
+
+  const handleCloseEdit = () => {
+    setOpenEditForm(false)
+  }
+
+  const splitArray = (value) => {
+    const splitedArray = chunk(value, 2)
+    return splitedArray
+  }
+
+  const updateField = (pair, key, education) => {
+    setEditedFied(pair)
+    setUpdatedIndex(key)
+    setEducationArray(education)
+    setOpenEditForm(true)
+  }
+
+  const handleUpdate = () => {
+    let updatedEducationArray = educationArray
+    updatedEducationArray[updatedIndex] = [institution, degree]
+    const fields = [].concat.apply([], updatedEducationArray)
+    updateFieldToEducation(fields)
+    setOpenEditForm(false)
+  }
 
   return (
     <>
@@ -50,45 +98,96 @@ export default function MainSectionPartForm({
                   <IconButton
                     disabled={disablebAddField(value)}
                     variant="contained"
-                    onClick={() => addField(key)}
+                    onClick={() =>
+                      key === "EDUCATION"
+                        ? setOpenEducationForm(true)
+                        : addField(key)
+                    }
                   >
                     <AddIcon />
                   </IconButton>
                 </span>
               </Tooltip>
             </Typography>
-            <Grid container spacing={2} justify="flex-start">
-              {value.map((field, index) => (
-                <Grid item sm={6} xs={12} key={field}>
-                  <OutlinedInput
-                    ref={React.createRef()}
-                    fullWidth
-                    defaultValue={field}
-                    multiline
-                    rows={3}
-                    variant="outlined"
-                    onBlur={(e) =>
-                      handleInput(
-                        setGlobalError,
-                        e.target.value,
-                        setSectionFieldMultiValue(e.target.value, key, index)
-                      )
-                    }
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          variant="contained"
-                          color="secondary"
-                          onClick={() => removeField(index, key)}
+            <>
+              {key === "EDUCATION" ? (
+                <List component="nav">
+                  <Grid container spacing={2} justify="flex-start">
+                    {splitArray(value).map((pair, index) => (
+                      <Grid
+                        item
+                        xs={12}
+                        key={index}
+                        className={classes.educationContainer}
+                      >
+                        <ListItem
+                          button
+                          onClick={() => updateField(pair, index, splitArray(value))}
                         >
-                          <RemoveCircleOutlineIcon />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
+                          <ListItemText
+                            primary={
+                              <React.Fragment>
+                                <Typography key={value}>
+                                  Educational institution: {pair[0]}
+                                </Typography>
+                                <Typography key={value}>
+                                  Degree: {pair[1]}
+                                </Typography>
+                              </React.Fragment>
+                            }
+                          />
+                          <ListItemSecondaryAction>
+                            <InputAdornment position="end">
+                              <IconButton
+                                variant="contained"
+                                color="secondary"
+                                onClick={() =>
+                                  removeFieldFromEducation(pair[0], pair[1])
+                                }
+                              >
+                                <RemoveCircleOutlineIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          </ListItemSecondaryAction>
+                        </ListItem>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </List>
+              ) : (
+                <Grid container spacing={2} justify="flex-start">
+                  {value.map((field, index) => (
+                    <Grid item xs={12} key={field}>
+                      <OutlinedInput
+                        ref={React.createRef()}
+                        fullWidth
+                        defaultValue={field}
+                        multiline
+                        variant="outlined"
+                        onBlur={(e) =>
+                          handleInput(
+                            setGlobalError,
+                            e.target.value,
+                            setSectionFieldMultiValue(e.target.value, key, index)
+                          )
+                        }
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <IconButton
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => removeField(index, key)}
+                            >
+                              <RemoveCircleOutlineIcon />
+                            </IconButton>
+                          </InputAdornment>
+                        }
+                      />
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
+              )}
+            </>
           </Card>
         ) : (
           <>
@@ -111,6 +210,91 @@ export default function MainSectionPartForm({
                 />
               </Card>
             ) : null}
+            <Dialog
+              open={openEducationForm}
+              onClose={handleCloseCreate}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Add education information"}
+              </DialogTitle>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  addFieldToEducation([institution, degree])
+                  handleCloseCreate()
+                }}
+              >
+                <DialogContent>
+                  <TextField
+                    required
+                    className={classes.marginBottom}
+                    fullWidth
+                    variant="outlined"
+                    id="filled-basic"
+                    label="Educational institution"
+                    onBlur={(e) => setInstitution(e.target.value)}
+                  />
+                  <TextField
+                    required
+                    className={classes.marginBottom}
+                    fullWidth
+                    variant="outlined"
+                    id="filled-basic"
+                    label="Degree"
+                    onBlur={(e) => setDegree(e.target.value)}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseCreate}>Cancel</Button>
+                  <Button type="submit">Add</Button>
+                </DialogActions>
+              </form>
+            </Dialog>
+            <Dialog
+              open={openEditForm}
+              onClose={handleCloseEdit}
+              aria-labelledby="alert-dialog-title"
+              aria-describedby="alert-dialog-description"
+            >
+              <DialogTitle id="alert-dialog-title">
+                {"Add education information"}
+              </DialogTitle>
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault()
+                  handleUpdate()
+                }}
+              >
+                <DialogContent>
+                  <TextField
+                    required
+                    className={classes.marginBottom}
+                    fullWidth
+                    variant="outlined"
+                    id="filled-basic"
+                    label="Educational institution"
+                    defaultValue={editedField[0]}
+                    onBlur={(e) => setInstitution(e.target.value)}
+                  />
+                  <TextField
+                    required
+                    className={classes.marginBottom}
+                    fullWidth
+                    variant="outlined"
+                    id="filled-basic"
+                    label="Degree"
+                    defaultValue={editedField[1]}
+                    onBlur={(e) => setDegree(e.target.value)}
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={handleCloseEdit}>Cancel</Button>
+                  <Button type="submit">Edit</Button>
+                </DialogActions>
+              </form>
+            </Dialog>
           </>
         )
       )}
@@ -124,5 +308,8 @@ MainSectionPartForm.propTypes = {
   setSectionFieldMultiValue: PropTypes.func,
   removeField: PropTypes.func,
   addField: PropTypes.func,
+  addFieldToEducation: PropTypes.func,
+  removeFieldFromEducation: PropTypes.func,
+  updateFieldToEducation: PropTypes.func,
   setGlobalError: PropTypes.bool,
 }

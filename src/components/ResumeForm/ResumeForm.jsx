@@ -10,6 +10,7 @@ import {
   DialogContentText,
 } from "@material-ui/core"
 import ReplayIcon from "@material-ui/icons/Replay"
+import DescriptionIcon from "@material-ui/icons/Description"
 
 import { useStyles } from "./styles"
 import WriteResumeFile from "../WriteResumeFile"
@@ -209,6 +210,23 @@ export default function ResumeForm({ setResumeFields }) {
     setSectionField(JSON.parse(localStorage.getItem("resumeFields")).cv.$sections)
   }
 
+  const addFieldToEducation = (fields) => {
+    const updatedField = sectionsField["EDUCATION"]
+    const newState = updatedField.concat(fields)
+    debounceSetSectionField({ ...sectionsField, ["EDUCATION"]: newState })
+  }
+
+  const removeFieldFromEducation = (institution, degree) => {
+    const updatedField = sectionsField["EDUCATION"]
+    const valuesToRemove = [institution, degree]
+    const newState = updatedField.filter((el) => !valuesToRemove.includes(el))
+    debounceSetSectionField({ ...sectionsField, ["EDUCATION"]: newState })
+  }
+
+  const updateFieldToEducation = (fields) => {
+    debounceSetSectionField({ ...sectionsField, ["EDUCATION"]: fields })
+  }
+
   return (
     <div className={classes.main}>
       <form>
@@ -220,6 +238,7 @@ export default function ResumeForm({ setResumeFields }) {
           onClick={() => setCancelEditFile(true)}
         >
           Choose another file
+          <DescriptionIcon />
         </Button>
         <Button
           fullWidth
@@ -243,6 +262,9 @@ export default function ResumeForm({ setResumeFields }) {
           setSectionFieldSingleValue={setSectionFieldSingleValue}
           addField={addField}
           removeField={removeField}
+          addFieldToEducation={addFieldToEducation}
+          removeFieldFromEducation={removeFieldFromEducation}
+          updateFieldToEducation={updateFieldToEducation}
           setGlobalError={setGlobalError}
         />
         <SecondarySectionPartForm
