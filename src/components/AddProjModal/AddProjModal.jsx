@@ -72,6 +72,8 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             <TextField
               fullWidth
               variant="filled"
+              multiline
+              rows={3}
               label="Description"
               required
               onBlur={(e) => setDescription(e.target.value)}
@@ -112,7 +114,6 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               fullWidth
               variant="filled"
               label="Team info"
-              required
               onBlur={(e) => setTeam(e.target.value)}
             />
             <DialogActions>

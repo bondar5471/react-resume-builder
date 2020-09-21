@@ -30,6 +30,7 @@ export default function SecondarySectionPartForm({
   setSingleFieldProject,
   removeProject,
   setGlobalError,
+  changeProjectName,
 }) {
   const classes = useStyles()
   const isObject = (arg) => {
@@ -58,6 +59,7 @@ export default function SecondarySectionPartForm({
                           <>
                             <Grid item sm={12} xs={12}>
                               <Typography
+                                key={Object.keys(proj)}
                                 fontStyle="italic"
                                 className={classes.projTitle}
                                 variant="subtitle2"
@@ -67,6 +69,49 @@ export default function SecondarySectionPartForm({
                               </Typography>
                             </Grid>
                             <Grid item sm={12} xs={12}>
+                              <TextField
+                                className={classes.input}
+                                key={Object.keys(proj)}
+                                fullWidth
+                                variant="outlined"
+                                label="Name"
+                                defaultValue={Object.keys(proj)}
+                                onBlur={(e) =>
+                                  changeProjectName(
+                                    e.target.value,
+                                    indexProj,
+                                    Object.keys(proj)
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                key={proj[Object.keys(proj)]["$description"]}
+                                label="Description"
+                                variant="outlined"
+                                multiline
+                                rows={4}
+                                defaultValue={
+                                  proj[Object.keys(proj)]["$description"]
+                                }
+                                onBlur={(e) =>
+                                  handleInput(
+                                    setGlobalError,
+                                    e.target.value,
+                                    setSingleFieldProject(
+                                      e.target.value,
+                                      proj,
+                                      "$description",
+                                      indexProj
+                                    )
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item sm={6} xs={12}>
                               <TextField
                                 fullWidth
                                 key={proj[Object.keys(proj)]["Team"]}
@@ -82,30 +127,6 @@ export default function SecondarySectionPartForm({
                                       e.target.value,
                                       proj,
                                       "Team",
-                                      indexProj
-                                    )
-                                  )
-                                }
-                              />
-                            </Grid>
-                            <Grid item sm={6} xs={12}>
-                              <TextField
-                                className={classes.input}
-                                fullWidth
-                                key={proj[Object.keys(proj)]["$description"]}
-                                label="Description"
-                                variant="outlined"
-                                defaultValue={
-                                  proj[Object.keys(proj)]["$description"]
-                                }
-                                onBlur={(e) =>
-                                  handleInput(
-                                    setGlobalError,
-                                    e.target.value,
-                                    setSingleFieldProject(
-                                      e.target.value,
-                                      proj,
-                                      "$description",
                                       indexProj
                                     )
                                   )
