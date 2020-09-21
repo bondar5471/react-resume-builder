@@ -50,9 +50,10 @@ export default function TechnologyStackForm({
         <DialogTitle id="alert-dialog-title">{"Add new category"}</DialogTitle>
         <DialogContent>
           <Autocomplete
+            freeSolo
             className={classes.textField}
             options={options.map((option) => option)}
-            onChange={(event, newValue) => {
+            onInputChange={(event, newValue) => {
               setCategory(newValue)
             }}
             style={{ width: "100%" }}
