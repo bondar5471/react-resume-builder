@@ -8,6 +8,7 @@ import {
   TextField,
   Grid,
   Tooltip,
+  InputLabel,
 } from "@material-ui/core"
 import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
 import DeleteIcon from "@material-ui/icons/Delete"
@@ -244,10 +245,13 @@ export default function SecondarySectionPartForm({
                     </>
                   ) : (
                     <Grid item sm={6} xs={12}>
-                      <TextField
+                      <InputLabel htmlFor="component-outlined">
+                        <Typography variant="subtitle2">{label}</Typography>
+                      </InputLabel>
+                      <OutlinedInput
+                        id="component-outlined"
                         className={classes.input}
                         key={defaultValue}
-                        label={label}
                         variant="outlined"
                         defaultValue={defaultValue}
                         onBlur={(e) =>
@@ -291,5 +295,6 @@ SecondarySectionPartForm.propTypes = {
   handleOpenTsForm: PropTypes.func.isRequired,
   setSingleFieldProject: PropTypes.func.isRequired,
   removeProject: PropTypes.func.isRequired,
+  changeProjectName: PropTypes.func.isRequired,
   setGlobalError: PropTypes.bool,
 }
