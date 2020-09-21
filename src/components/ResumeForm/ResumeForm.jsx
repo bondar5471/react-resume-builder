@@ -157,6 +157,21 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
+  const changeProjectName = (name, projectIndex, oldName) => {
+    const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects
+    const projectInfo = updatedProjList[projectIndex][oldName]
+    const projectList = updatedProjList.filter(
+      (proj, index) => index !== projectIndex
+    )
+    projectList.splice(projectIndex, 0, {
+      [name]: projectInfo,
+    })
+    setSectionField({
+      ...sectionsField,
+      ["SIGNIFICANT PROJECTS"]: { $projects: projectList },
+    })
+  }
+
   const removeProject = (key) => {
     const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects
     setSectionField({
@@ -278,6 +293,7 @@ export default function ResumeForm({ setResumeFields }) {
           setSingleFieldProject={setSingleFieldProject}
           removeProject={removeProject}
           setGlobalError={setGlobalError}
+          changeProjectName={changeProjectName}
         />
         <Button variant="contained" onClick={handleOpen}>
           Add project
