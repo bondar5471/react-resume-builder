@@ -58,7 +58,7 @@ export default function HideAppBar(props) {
         <div className={classes.root}>
           <AppBar>
             <Toolbar className={classes.toolBar}>
-              <img src={logo} className={classes.logo} />
+              <img alt="logo" src={logo} className={classes.logo} />
               {darkState ? (
                 <IconButton onClick={handleThemeChange}>
                   <Brightness7Icon />
