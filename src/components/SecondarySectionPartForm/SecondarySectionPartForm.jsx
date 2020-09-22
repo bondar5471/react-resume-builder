@@ -37,6 +37,14 @@ export default function SecondarySectionPartForm({
   const isObject = (arg) => {
     return !!arg && arg.constructor === Object
   }
+  const splitValue = (proj) => {
+    const keyProject = Object.keys(proj)
+    if (proj[keyProject]["Team"]) {
+      const teamInfo = proj[keyProject]["Team"]
+      const getNumber = teamInfo.split(" ")[0]
+      return getNumber
+    }
+  }
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -112,29 +120,34 @@ export default function SecondarySectionPartForm({
                                 }
                               />
                             </Grid>
-                            <Grid item sm={6} xs={12}>
-                              <TextField
-                                fullWidth
-                                key={proj[Object.keys(proj)]["Team"]}
-                                className={classes.input}
-                                label="Team"
-                                variant="outlined"
-                                defaultValue={proj[Object.keys(proj)]["Team"]}
-                                onBlur={(e) =>
-                                  handleInput(
-                                    setGlobalError,
-                                    e.target.value,
-                                    setSingleFieldProject(
-                                      e.target.value,
-                                      proj,
-                                      "Team",
-                                      indexProj
-                                    )
-                                  )
-                                }
-                              />
-                            </Grid>
-                            <Grid item sm={6} xs={12}>
+                            <>
+                              {proj[Object.keys(proj)]["Team"] ? (
+                                <Grid item sm={6} xs={12}>
+                                  <TextField
+                                    type="number"
+                                    fullWidth
+                                    key={proj[Object.keys(proj)]["Team"]}
+                                    className={classes.input}
+                                    label="Team"
+                                    variant="outlined"
+                                    defaultValue={splitValue(proj)}
+                                    onBlur={(e) =>
+                                      setSingleFieldProject(
+                                        +e.target.value,
+                                        proj,
+                                        "Team",
+                                        indexProj
+                                      )
+                                    }
+                                  />
+                                </Grid>
+                              ) : null}
+                            </>
+                            <Grid
+                              item
+                              sm={proj[Object.keys(proj)]["Team"] ? 6 : 12}
+                              xs={12}
+                            >
                               <TextField
                                 className={classes.input}
                                 key={proj[Object.keys(proj)]["Skills"]}
@@ -150,6 +163,28 @@ export default function SecondarySectionPartForm({
                                       e.target.value,
                                       proj,
                                       "Skills",
+                                      indexProj
+                                    )
+                                  )
+                                }
+                              />
+                            </Grid>
+                            <Grid item xs={12}>
+                              <TextField
+                                className={classes.input}
+                                fullWidth
+                                key={proj[Object.keys(proj)]["Role"]}
+                                label="Role"
+                                variant="outlined"
+                                defaultValue={proj[Object.keys(proj)]["Role"]}
+                                onBlur={(e) =>
+                                  handleInput(
+                                    setGlobalError,
+                                    e.target.value,
+                                    setSingleFieldProject(
+                                      e.target.value,
+                                      proj,
+                                      "Role",
                                       indexProj
                                     )
                                   )

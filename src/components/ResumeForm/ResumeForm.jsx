@@ -45,6 +45,8 @@ export default function ResumeForm({ setResumeFields }) {
     debounce((state) => setSectionField(state), 300)
   ).current
 
+  const projectSectionField = sectionsField["SIGNIFICANT PROJECTS"]
+
   const [open, setOpen] = useState(false)
 
   const [openTsForm, setOpenTsForm] = useState(false)
@@ -89,11 +91,10 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const addFieldResponsibility = (proj, indexProj) => {
-    const currentProj =
-      sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
+    const currentProj = projectSectionField.$projects[indexProj][Object.keys(proj)]
     const newResponsibility = currentProj.Responsibilities.concat("")
     const newProj = set(
-      sectionsField["SIGNIFICANT PROJECTS"],
+      projectSectionField,
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       newResponsibility
     )
@@ -104,13 +105,12 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const removeFieldResponsibility = (proj, index, indexProj) => {
-    const currentProj =
-      sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
+    const currentProj = projectSectionField.$projects[indexProj][Object.keys(proj)]
     const newResponsibility = currentProj.Responsibilities.filter(
       (field, i) => i !== index
     )
     const newProj = set(
-      sectionsField["SIGNIFICANT PROJECTS"],
+      projectSectionField,
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       newResponsibility
     )
@@ -121,11 +121,10 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const setValueResponsibility = (value, proj, index, indexProj) => {
-    const currentProj =
-      sectionsField["SIGNIFICANT PROJECTS"].$projects[indexProj][Object.keys(proj)]
+    const currentProj = projectSectionField.$projects[indexProj][Object.keys(proj)]
     currentProj.Responsibilities[index] = value
     const newProj = set(
-      sectionsField["SIGNIFICANT PROJECTS"],
+      projectSectionField,
       `$projects[${indexProj}].${Object.keys(proj)}.Responsibilities`,
       currentProj.Responsibilities
     )
@@ -135,9 +134,30 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
-  const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
+  const updateTeamInformation = (value, indexProj, proj, fieldKey) => {
+    let updatedProject
+    if (value === 0) {
+      const updatedProjectList = projectSectionField.$projects
+      updatedProject =
+        projectSectionField.$projects[`${indexProj}`][Object.keys(proj)]
+
+      delete updatedProject[fieldKey]
+      updatedProjectList.splice(indexProj, 1, {
+        [Object.keys(proj)]: updatedProject,
+      })
+      debounceSetSectionField({
+        ...sectionsField,
+        ["SIGNIFICANT PROJECTS"]: { $projects: updatedProjectList },
+      })
+    } else {
+      const team = `${value} people`
+      updateProjectField(indexProj, proj, fieldKey, team)
+    }
+  }
+
+  const updateProjectField = (indexProj, proj, fieldKey, value) => {
     const updatedProject = set(
-      sectionsField["SIGNIFICANT PROJECTS"],
+      projectSectionField,
       `$projects[${indexProj}].${Object.keys(proj)}.${fieldKey}`,
       value
     )
@@ -147,10 +167,16 @@ export default function ResumeForm({ setResumeFields }) {
     })
   }
 
+  const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
+    if (typeof value === "number") {
+      updateTeamInformation(value, indexProj, proj, fieldKey)
+    } else {
+      updateProjectField(indexProj, proj, fieldKey, value)
+    }
+  }
+
   const createProject = (project) => {
-    const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects.concat(
-      project
-    )
+    const updatedProjList = projectSectionField.$projects.concat(project)
     setSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: { $projects: updatedProjList },
@@ -158,7 +184,7 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const changeProjectName = (name, projectIndex, oldName) => {
-    const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects
+    const updatedProjList = projectSectionField.$projects
     const projectInfo = updatedProjList[projectIndex][oldName]
     const projectList = updatedProjList.filter(
       (proj, index) => index !== projectIndex
@@ -173,7 +199,7 @@ export default function ResumeForm({ setResumeFields }) {
   }
 
   const removeProject = (key) => {
-    const updatedProjList = sectionsField["SIGNIFICANT PROJECTS"].$projects
+    const updatedProjList = projectSectionField.$projects
     setSectionField({
       ...sectionsField,
       ["SIGNIFICANT PROJECTS"]: {
