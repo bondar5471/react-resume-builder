@@ -28,9 +28,10 @@ export default function TechnologyStackForm({
   const options = [
     "Programming Languages",
     "Ruby",
+    "JavaScript",
+    "PHP",
     "Testing Tools",
     "Databases",
-    "JavaScript",
     "Responsive design",
     "CSS",
     "Version Control Systems",

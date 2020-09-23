@@ -3,6 +3,7 @@ import { debounce, set, assign } from "lodash"
 import { PropTypes } from "prop-types"
 import {
   Button,
+  ButtonGroup,
   Card,
   DialogContent,
   Dialog,
@@ -271,25 +272,20 @@ export default function ResumeForm({ setResumeFields }) {
   return (
     <div className={classes.main}>
       <form>
-        {/* UserinfoForm */}
-        <Button
-          fullWidth
-          color="secondary"
-          title={"another file"}
-          onClick={() => setCancelEditFile(true)}
-        >
-          Choose another file
-          <DescriptionIcon />
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
-          color="default"
-          onClick={() => resetChange()}
-        >
-          Reset change
-          <ReplayIcon />
-        </Button>
+        <ButtonGroup fullWidth>
+          <Button
+            color="secondary"
+            variant="contained"
+            onClick={() => setCancelEditFile(true)}
+          >
+            Choose another file
+            <DescriptionIcon />
+          </Button>
+          <Button variant="contained" color="default" onClick={() => resetChange()}>
+            Reset change
+            <ReplayIcon />
+          </Button>
+        </ButtonGroup>
         <Card className={classes.section} variant="elevation1">
           <UserForm
             setUserFieldValue={setUserFieldValue}
