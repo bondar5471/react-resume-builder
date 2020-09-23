@@ -32,6 +32,7 @@ export default function SecondarySectionPartForm({
   removeProject,
   setGlobalError,
   changeProjectName,
+  handleOpen,
 }) {
   const classes = useStyles()
   const isObject = (arg) => {
@@ -52,11 +53,13 @@ export default function SecondarySectionPartForm({
           <Card className={classes.section}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
-              {key === "TOOLS & FRAMEWORKS" ? (
-                <IconButton onClick={handleOpenTsForm}>
-                  <AddIcon />
-                </IconButton>
-              ) : null}
+              <IconButton
+                onClick={
+                  key === "SIGNIFICANT PROJECTS" ? handleOpen : handleOpenTsForm
+                }
+              >
+                <AddIcon />
+              </IconButton>
             </Typography>
             <Grid container spacing={2} justify="flex-start">
               {Object.entries(value).map(([label, defaultValue]) => (
@@ -331,5 +334,6 @@ SecondarySectionPartForm.propTypes = {
   setSingleFieldProject: PropTypes.func.isRequired,
   removeProject: PropTypes.func.isRequired,
   changeProjectName: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired,
   setGlobalError: PropTypes.bool,
 }
