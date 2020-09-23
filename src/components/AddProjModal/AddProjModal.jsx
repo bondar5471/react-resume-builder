@@ -10,6 +10,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core"
+import omit from "lodash/omit"
 import AddIcon from "@material-ui/icons/Add"
 
 import { useStyles } from "./styles"
@@ -21,7 +22,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
   const [responsibilities, setResponsibilities] = useState([""])
   const [role, setRole] = useState("")
   const [skills, setSkills] = useState("")
-  const [team, setTeam] = useState("")
+  const [team, setTeam] = useState(0)
 
   const handleChangeRes = (value, index) => {
     const updatedData = responsibilities
@@ -30,17 +31,23 @@ export default function AddProjModal({ handleClose, open, createProject }) {
   }
 
   const newProject = () => {
-    const project = {
+    let project = {
       [`${name}`]: {
         $description: description,
-        Team: team,
+        Team: `${team} people`,
         Role: role,
         Skills: skills,
         Responsibilities: responsibilities,
       },
     }
-    createProject(project)
-    handleClose()
+    if (team === 0 || team === "") {
+      const projectInfo = omit(project[name], ["Team"])
+      createProject({ [name]: projectInfo })
+      handleClose()
+    } else {
+      createProject(project)
+      handleClose()
+    }
   }
   return (
     <div>
@@ -114,7 +121,8 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               fullWidth
               variant="filled"
               label="Team info"
-              onBlur={(e) => setTeam(e.target.value)}
+              type="number"
+              onBlur={(e) => setTeam(+e.target.value)}
             />
             <DialogActions>
               <Button onClick={handleClose} variant="contained">

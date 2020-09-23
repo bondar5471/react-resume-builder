@@ -309,6 +309,7 @@ export default function ResumeForm({ setResumeFields }) {
           setGlobalError={setGlobalError}
         />
         <SecondarySectionPartForm
+          handleOpen={handleOpen}
           sectionsField={sectionsField}
           setValueResponsibility={setValueResponsibility}
           removeFieldResponsibility={removeFieldResponsibility}
@@ -321,9 +322,6 @@ export default function ResumeForm({ setResumeFields }) {
           setGlobalError={setGlobalError}
           changeProjectName={changeProjectName}
         />
-        <Button variant="contained" onClick={handleOpen}>
-          Add project
-        </Button>
       </form>
       <WriteResumeFile
         userData={userDataField}
