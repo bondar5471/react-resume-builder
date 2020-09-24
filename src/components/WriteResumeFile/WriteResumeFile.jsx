@@ -26,6 +26,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           id="download_link"
           download="resume.yaml"
           href={urlFile}
+          onClick={() => setUrlFile(null)}
           startIcon={<SaveIcon />}
         >
           Download Resume File

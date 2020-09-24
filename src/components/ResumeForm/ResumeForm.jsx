@@ -1,15 +1,7 @@
 import React, { useState } from "react"
 import { debounce, set, assign } from "lodash"
 import { PropTypes } from "prop-types"
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  DialogContent,
-  Dialog,
-  DialogActions,
-  DialogContentText,
-} from "@material-ui/core"
+import { Button, ButtonGroup, Card } from "@material-ui/core"
 import ReplayIcon from "@material-ui/icons/Replay"
 import DescriptionIcon from "@material-ui/icons/Description"
 
@@ -20,6 +12,7 @@ import TechnologyStackForm from "../TechnologyStackForm"
 import SecondarySectionPartForm from "../SecondarySectionPartForm"
 import MainSectionPartForm from "../MainSectionPartForm"
 import UserForm from "../UserForm"
+import ResetFileAlert from "../ResetFileAlert"
 import { useStickyState } from "../../services/StickyState"
 
 export default function ResumeForm({ setResumeFields }) {
@@ -272,7 +265,7 @@ export default function ResumeForm({ setResumeFields }) {
   return (
     <div className={classes.main}>
       <form>
-        <ButtonGroup fullWidth>
+        <ButtonGroup fullWidth disableElevation>
           <Button
             color="secondary"
             variant="contained"
@@ -334,24 +327,11 @@ export default function ResumeForm({ setResumeFields }) {
         openTsForm={openTsForm}
         addTools={addTools}
       />
-      <Dialog
-        open={cancelEditFile}
-        onClose={closeCancelEditFile}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Do you want to choose another file and cancel your current changes?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeCancelEditFile} autoFocus>
-            Disagree
-          </Button>
-          <Button onClick={() => deleteResume()}>Agree</Button>
-        </DialogActions>
-      </Dialog>
+      <ResetFileAlert
+        cancelEditFile={cancelEditFile}
+        closeCancelEditFile={closeCancelEditFile}
+        deleteResume={deleteResume}
+      />
     </div>
   )
 }
