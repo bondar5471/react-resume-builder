@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import CloudUploadIcon from "@material-ui/icons/CloudUpload"
 import {
   Button,
@@ -8,13 +8,35 @@ import {
   Avatar,
   FormLabel,
   FormHelperText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  List,
+  ListItem,
+  Collapse,
+  ListItemText,
 } from "@material-ui/core"
 import yaml from "js-yaml"
+import GitHubIcon from "@material-ui/icons/GitHub"
+import ExpandLess from "@material-ui/icons/ExpandLess"
+import ExpandMore from "@material-ui/icons/ExpandMore"
+
 import { useStyles } from "./styles"
 import ResumeForm from "../ResumeForm"
+import {
+  getFileFromFolderRepo,
+  getListFolderRepo,
+  getSingleFile,
+} from "../../services/HandlerGit"
 
 export default function UploadResumeComponent() {
   const classes = useStyles()
+  const [repoFolders, setRepoFolders] = useState(null)
+  const [listFiles, setListFiles] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [isOpenListFiles, setIsOpenListFiles] = useState(false)
+  const [isOpenGitModal, setIsOpenGitModal] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
   const [resumeFields, setResumeFields] = useState(
     JSON.parse(localStorage.getItem("resumeFields")) || null
@@ -22,6 +44,46 @@ export default function UploadResumeComponent() {
   const [fileName, setFileName] = useState("Upload")
 
   const [errors, setErrors] = useState([])
+
+  async function getRepoFolders() {
+    try {
+      setLoading(true)
+      const responce = await getListFolderRepo()
+      setRepoFolders(responce)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+  async function getListFiles(path) {
+    try {
+      setLoading(true)
+      const responce = await getFileFromFolderRepo(path)
+      setListFiles(responce)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+  async function getFile(path) {
+    try {
+      setLoading(true)
+      const responce = await getSingleFile(path)
+      const decodeContext = atob(responce.content)
+      const field = yaml.safeLoad(decodeContext)
+      localStorage.setItem("resumeFields", JSON.stringify(field))
+      setResumeFields(field)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+  useEffect(() => {
+    getRepoFolders()
+  }, [])
 
   const hiddenFileInput = React.useRef(null)
 
@@ -51,6 +113,15 @@ export default function UploadResumeComponent() {
     reader.onerror = function () {
       setErrors(reader.error)
     }
+  }
+
+  const openDir = async (path) => {
+    await getListFiles(path)
+    setIsOpenListFiles(!isOpenListFiles)
+  }
+
+  const setFileFromGit = async (path) => {
+    await getFile(path)
   }
 
   return (
@@ -107,8 +178,62 @@ export default function UploadResumeComponent() {
               >
                 Edit
               </Button>
+              <Button
+                onClick={() => setIsOpenGitModal(true)}
+                className={classes.editButton}
+                variant="contained"
+                color="primary"
+                fullWidth
+                startIcon={<GitHubIcon />}
+              >
+                Upload from repo git
+              </Button>
             </FormControl>
           </form>
+          <Dialog
+            fullWidth
+            maxWidth="md"
+            onClose={() => setIsOpenGitModal(false)}
+            aria-labelledby="simple-dialog-title"
+            open={isOpenGitModal}
+          >
+            <DialogTitle id="simple-dialog-title">Choose file</DialogTitle>
+            <DialogContent>
+              <List
+                component="nav"
+                aria-labelledby="nested-list-subheader"
+                className={classes.root}
+              >
+                {repoFolders &&
+                  repoFolders.map((item) => (
+                    <>
+                      <ListItem
+                        button
+                        onClick={() => openDir(item.path)}
+                        key={item.name}
+                      >
+                        <ListItemText primary={item.name} />
+                        {isOpenListFiles ? <ExpandLess /> : <ExpandMore />}
+                      </ListItem>
+                      <Collapse in={isOpenListFiles} timeout="auto" unmountOnExit>
+                        <List component="div" disablePadding>
+                          {listFiles &&
+                            listFiles.map((file) => (
+                              <ListItem
+                                button
+                                key={file.name}
+                                onClick={() => setFileFromGit(file.path)}
+                              >
+                                <ListItemText primary={file.name} />
+                              </ListItem>
+                            ))}
+                        </List>
+                      </Collapse>
+                    </>
+                  ))}
+              </List>
+            </DialogContent>
+          </Dialog>
         </Box>
       )}
     </div>
