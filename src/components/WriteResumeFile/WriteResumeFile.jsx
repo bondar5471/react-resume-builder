@@ -106,16 +106,18 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
               >
                 {`Save to ${fileName}.yaml`}
               </Button>
-              <Button
-                disabled={globalError || fileNameValidation()}
-                variant="contained"
-                color="secondary"
-                fullWidth
-                startIcon={<GitHubIcon />}
-                onClick={() => updateFileOnRepo()}
-              >
-                {`Update on repo `}
-              </Button>
+              {localStorage.getItem("currentPath") ? (
+                <Button
+                  disabled={globalError || fileNameValidation()}
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  startIcon={<GitHubIcon />}
+                  onClick={() => updateFileOnRepo()}
+                >
+                  {`Update on repo `}
+                </Button>
+              ) : null}
             </span>
           </Tooltip>
         </Card>
