@@ -1,15 +1,25 @@
 import React, { useState } from "react"
-import { Button, Card, TextField } from "@material-ui/core"
+import { Button, Card, TextField, Snackbar } from "@material-ui/core"
 import SaveIcon from "@material-ui/icons/Save"
 import { PropTypes } from "prop-types"
 import yaml from "js-yaml"
 import Tooltip from "@material-ui/core/Tooltip"
+import GitHubIcon from "@material-ui/icons/GitHub"
+import MuiAlert from "@material-ui/lab/Alert"
 
 import { useStyles } from "./styles"
+import { updateOrCreateFile } from "../../services/HandlerGit"
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />
+}
 
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null)
   const [fileName, setFileName] = useState("resume")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState("")
+  const [openAlert, setOpenAlert] = useState(false)
 
   const createFile = () => {
     const cv = { cv: { $person: userData, $sections: sectionData } }
@@ -19,6 +29,25 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     })
     const downloadUrl = window.URL.createObjectURL(yamlWrite)
     setUrlFile(downloadUrl)
+  }
+
+  async function updateResume() {
+    try {
+      setLoading(true)
+      const cv = { cv: { $person: userData, $sections: sectionData } }
+      const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 })
+      const responce = await updateOrCreateFile(btoa(yamlStr))
+      setOpenAlert(responce.status === 200)
+      localStorage.setItem("currentSha", responce.data.content.sha)
+    } catch (e) {
+      setError(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const updateFileOnRepo = async () => {
+    await updateResume()
   }
 
   const fileNameValidation = () => {
@@ -77,10 +106,29 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
               >
                 {`Save to ${fileName}.yaml`}
               </Button>
+              <Button
+                disabled={globalError || fileNameValidation()}
+                variant="contained"
+                color="secondary"
+                fullWidth
+                startIcon={<GitHubIcon />}
+                onClick={() => updateFileOnRepo()}
+              >
+                {`Update on repo `}
+              </Button>
             </span>
           </Tooltip>
         </Card>
       )}
+      <Snackbar
+        open={openAlert}
+        autoHideDuration={6000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert onClose={() => setOpenAlert(false)} severity="success">
+          Updated successfully!
+        </Alert>
+      </Snackbar>
     </div>
   )
 }

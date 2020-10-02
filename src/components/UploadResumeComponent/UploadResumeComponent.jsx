@@ -73,6 +73,8 @@ export default function UploadResumeComponent() {
       const responce = await getSingleFile(path)
       const decodeContext = atob(responce.content)
       const field = yaml.safeLoad(decodeContext)
+      localStorage.setItem("currentSha", responce.sha)
+      localStorage.setItem("currentPath", path)
       localStorage.setItem("resumeFields", JSON.stringify(field))
       setResumeFields(field)
     } catch (e) {
