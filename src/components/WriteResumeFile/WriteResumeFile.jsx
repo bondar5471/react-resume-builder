@@ -18,7 +18,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const [urlFile, setUrlFile] = useState(null)
   const [fileName, setFileName] = useState("resume")
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const [error, setError] = useState(null)
   const [openAlert, setOpenAlert] = useState(false)
 
   const createFile = () => {
@@ -108,7 +108,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
               </Button>
               {localStorage.getItem("currentPath") ? (
                 <Button
-                  disabled={globalError || fileNameValidation()}
+                  disabled={globalError || fileNameValidation() || loading}
                   variant="contained"
                   color="secondary"
                   fullWidth
@@ -129,6 +129,15 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       >
         <Alert onClose={() => setOpenAlert(false)} severity="success">
           Updated successfully!
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        open={error}
+        autoHideDuration={6000}
+        onClose={() => setOpenAlert(false)}
+      >
+        <Alert onClose={() => setOpenAlert(false)} severity="error">
+          Sorry, something went wrong.
         </Alert>
       </Snackbar>
     </div>

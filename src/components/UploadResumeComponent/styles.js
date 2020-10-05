@@ -30,4 +30,20 @@ export const useStyles = makeStyles((theme) => ({
   editButton: {
     marginTop: theme.spacing(2),
   },
+  spin: {
+    marginLeft: "47%",
+    marginRight: "47%",
+    width: "6%",
+  },
+  dialogContent: {
+    padding: theme.spacing(2),
+  },
+  list: {
+    margin: theme.spacing(2),
+  },
+  listItem: {
+    backgroundColor: "#e1f2fb",
+    marginTop: theme.spacing(1),
+    border: "2px solid #838383",
+  },
 }))
