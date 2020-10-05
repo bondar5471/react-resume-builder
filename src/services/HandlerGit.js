@@ -1,6 +1,6 @@
+import { token } from "./HandleEnv"
 const { Octokit } = require("@octokit/rest")
-// eslint-disable-next-line no-undef
-const token = process.env.REACT_APP_GIT_TOKEN
+
 const owner = "bondar5471"
 const repo = "resume"
 
@@ -26,15 +26,6 @@ const getFileFromFolderRepo = async (path) => {
   return result.data
 }
 
-const getSingleFile = async (path) => {
-  const file = await octokit.repos.getContent({
-    owner,
-    repo,
-    path: `${path}`,
-  })
-  return file.data
-}
-
 const updateOrCreateFile = async (content) => {
   const sha = localStorage.getItem("currentSha")
   const path = localStorage.getItem("currentPath")
@@ -51,9 +42,4 @@ const updateOrCreateFile = async (content) => {
   return response
 }
 
-export {
-  getFileFromFolderRepo,
-  getListFolderRepo,
-  getSingleFile,
-  updateOrCreateFile,
-}
+export { getFileFromFolderRepo, getListFolderRepo, updateOrCreateFile }

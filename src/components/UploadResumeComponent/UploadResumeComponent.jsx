@@ -23,11 +23,7 @@ import ExpandMore from "@material-ui/icons/ExpandMore"
 
 import { useStyles } from "./styles"
 import ResumeForm from "../ResumeForm"
-import {
-  getFileFromFolderRepo,
-  getListFolderRepo,
-  getSingleFile,
-} from "../../services/HandlerGit"
+import { getFileFromFolderRepo, getListFolderRepo } from "../../services/HandlerGit"
 
 export default function UploadResumeComponent() {
   const classes = useStyles()
@@ -70,7 +66,7 @@ export default function UploadResumeComponent() {
   async function getFile(path) {
     try {
       setLoading(true)
-      const responce = await getSingleFile(path)
+      const responce = await getFileFromFolderRepo(path)
       const decodeContext = atob(responce.content)
       const field = yaml.safeLoad(decodeContext)
       localStorage.setItem("currentSha", responce.sha)
