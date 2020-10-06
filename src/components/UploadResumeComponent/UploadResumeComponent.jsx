@@ -22,6 +22,7 @@ import yaml from "js-yaml"
 import GitHubIcon from "@material-ui/icons/GitHub"
 import ExpandLess from "@material-ui/icons/ExpandLess"
 import ExpandMore from "@material-ui/icons/ExpandMore"
+import { decode } from "js-base64"
 
 import { useStyles } from "./styles"
 import ResumeForm from "../ResumeForm"
@@ -69,7 +70,7 @@ export default function UploadResumeComponent() {
   async function getFile(path) {
     try {
       const responce = await getFileFromFolderRepo(path)
-      const decodeContext = atob(responce.content)
+      const decodeContext = decode(responce.content)
       const field = yaml.safeLoad(decodeContext)
       localStorage.setItem("currentSha", responce.sha)
       localStorage.setItem("currentPath", path)
