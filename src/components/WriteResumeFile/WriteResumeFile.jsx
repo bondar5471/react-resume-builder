@@ -6,6 +6,7 @@ import yaml from "js-yaml"
 import Tooltip from "@material-ui/core/Tooltip"
 import GitHubIcon from "@material-ui/icons/GitHub"
 import MuiAlert from "@material-ui/lab/Alert"
+import { encode } from "js-base64"
 
 import { useStyles } from "./styles"
 import { updateOrCreateFile } from "../../services/HandlerGit"
@@ -36,7 +37,8 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       setLoading(true)
       const cv = { cv: { $person: userData, $sections: sectionData } }
       const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 })
-      const responce = await updateOrCreateFile(btoa(yamlStr))
+      const encodeContent = encode(yamlStr)
+      const responce = await updateOrCreateFile(encodeContent)
       setOpenAlert(responce.status === 200)
       localStorage.setItem("currentSha", responce.data.content.sha)
     } catch (e) {
