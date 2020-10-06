@@ -15,6 +15,8 @@ import {
   ListItem,
   Collapse,
   ListItemText,
+  CircularProgress,
+  Paper,
 } from "@material-ui/core"
 import yaml from "js-yaml"
 import GitHubIcon from "@material-ui/icons/GitHub"
@@ -30,7 +32,8 @@ export default function UploadResumeComponent() {
   const [repoFolders, setRepoFolders] = useState(null)
   const [listFiles, setListFiles] = useState(null)
   const [error, setError] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [loadingFolder, setLoadingFolder] = useState(false)
+  const [loadingFiles, setLoadingFiles] = useState(false)
   const [isOpenListFiles, setIsOpenListFiles] = useState(false)
   const [isOpenGitModal, setIsOpenGitModal] = useState(false)
   const [resumeFile, setResumeFile] = useState(null)
@@ -43,29 +46,28 @@ export default function UploadResumeComponent() {
 
   async function getRepoFolders() {
     try {
-      setLoading(true)
+      setLoadingFolder(true)
       const responce = await getListFolderRepo()
       setRepoFolders(responce)
     } catch (e) {
       setError(e)
     } finally {
-      setLoading(false)
+      setLoadingFolder(false)
     }
   }
   async function getListFiles(path) {
     try {
-      setLoading(true)
+      setLoadingFiles(true)
       const responce = await getFileFromFolderRepo(path)
       setListFiles(responce)
     } catch (e) {
       setError(e)
     } finally {
-      setLoading(false)
+      setLoadingFiles(false)
     }
   }
   async function getFile(path) {
     try {
-      setLoading(true)
       const responce = await getFileFromFolderRepo(path)
       const decodeContext = atob(responce.content)
       const field = yaml.safeLoad(decodeContext)
@@ -75,8 +77,6 @@ export default function UploadResumeComponent() {
       setResumeFields(field)
     } catch (e) {
       setError(e)
-    } finally {
-      setLoading(false)
     }
   }
   useEffect(() => {
@@ -197,15 +197,26 @@ export default function UploadResumeComponent() {
           >
             <DialogTitle id="simple-dialog-title">Choose file</DialogTitle>
             <DialogContent>
+              <Paper className={classes.dialogContent}>
+                <Typography>
+                  Select file from current ones in git repository
+                </Typography>
+              </Paper>
+              {error ? <Typography color="error">{error.message}</Typography> : null}
+            </DialogContent>
+            {loadingFolder ? (
+              <CircularProgress color="secondary" className={classes.spin} />
+            ) : (
               <List
                 component="nav"
                 aria-labelledby="nested-list-subheader"
-                className={classes.root}
+                className={classes.list}
               >
                 {repoFolders &&
                   repoFolders.map((item) => (
                     <>
                       <ListItem
+                        className={classes.listItem}
                         button
                         onClick={() => openDir(item.path)}
                         key={item.name}
@@ -214,23 +225,30 @@ export default function UploadResumeComponent() {
                         {isOpenListFiles ? <ExpandLess /> : <ExpandMore />}
                       </ListItem>
                       <Collapse in={isOpenListFiles} timeout="auto" unmountOnExit>
-                        <List component="div" disablePadding>
-                          {listFiles &&
-                            listFiles.map((file) => (
-                              <ListItem
-                                button
-                                key={file.name}
-                                onClick={() => setFileFromGit(file.path)}
-                              >
-                                <ListItemText primary={file.name} />
-                              </ListItem>
-                            ))}
-                        </List>
+                        {loadingFiles ? (
+                          <CircularProgress
+                            color="secondary"
+                            className={classes.spin}
+                          />
+                        ) : (
+                          <List component="div" disablePadding>
+                            {listFiles &&
+                              listFiles.map((file) => (
+                                <ListItem
+                                  button
+                                  key={file.name}
+                                  onClick={() => setFileFromGit(file.path)}
+                                >
+                                  <ListItemText primary={file.name} />
+                                </ListItem>
+                              ))}
+                          </List>
+                        )}
                       </Collapse>
                     </>
                   ))}
               </List>
-            </DialogContent>
+            )}
           </Dialog>
         </Box>
       )}
