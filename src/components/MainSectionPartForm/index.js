@@ -1,3 +1,3 @@
-import MainSectionPartForm from "./MainSectionPartForm"
+import MainSectionPartForm from './MainSectionPartForm';
 
-export default MainSectionPartForm
+export default MainSectionPartForm;

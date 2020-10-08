@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from 'react';
 import {
   Card,
   Grid,
@@ -16,16 +16,15 @@ import {
   Button,
   ListItemSecondaryAction,
   ListItemText,
-} from "@material-ui/core"
-import chunk from "lodash/chunk"
-import RemoveCircleOutlineIcon from "@material-ui/icons/RemoveCircleOutline"
-import AddIcon from "@material-ui/icons/Add"
-import { useStyles } from "./styles"
-import { PropTypes } from "prop-types"
-import OutlinedInput from "@material-ui/core/OutlinedInput"
-import { handleInput } from "../../services/HandleInput"
+} from '@material-ui/core';
+import chunk from 'lodash/chunk';
+import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import AddIcon from '@material-ui/icons/Add';
+import { useStyles } from './styles';
+import { PropTypes } from 'prop-types';
+import { handleInput } from '../../services/HandleInput';
 
-import { disablebAddField } from "../../services/validationAddField"
+import { disablebAddField } from '../../services/validationAddField';
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -38,59 +37,57 @@ export default function MainSectionPartForm({
   updateFieldToEducation,
   setGlobalError,
 }) {
-  const [openEducationForm, setOpenEducationForm] = useState(false)
-  const [openEditForm, setOpenEditForm] = useState(false)
-  const [editedField, setEditedFied] = useState([])
-  const [institution, setInstitution] = useState("")
-  const [degree, setDegree] = useState("")
-  const [updatedIndex, setUpdatedIndex] = useState(null)
-  const [educationArray, setEducationArray] = useState([])
-  const classes = useStyles()
+  const [openEducationForm, setOpenEducationForm] = useState(false);
+  const [openEditForm, setOpenEditForm] = useState(false);
+  const [editedField, setEditedFied] = useState([]);
+  const [institution, setInstitution] = useState('');
+  const [degree, setDegree] = useState('');
+  const [updatedIndex, setUpdatedIndex] = useState(null);
+  const [educationArray, setEducationArray] = useState([]);
+  const classes = useStyles();
 
   const handleCloseCreate = () => {
-    setOpenEducationForm(false)
-  }
+    setOpenEducationForm(false);
+  };
 
   const handleCloseEdit = () => {
-    setOpenEditForm(false)
-  }
+    setOpenEditForm(false);
+  };
 
-  const splitArray = (value) => {
-    const splitedArray = chunk(value, 2)
-    return splitedArray
-  }
+  const splitArray = value => {
+    const splitedArray = chunk(value, 2);
+    return splitedArray;
+  };
 
   const updateField = (pair, key, education) => {
-    setEditedFied(pair)
-    setUpdatedIndex(key)
-    setEducationArray(education)
-    setOpenEditForm(true)
-  }
+    setEditedFied(pair);
+    setUpdatedIndex(key);
+    setEducationArray(education);
+    setOpenEditForm(true);
+  };
 
   const handleUpdate = () => {
-    let updatedEducationArray = educationArray
-    updatedEducationArray[updatedIndex] = [institution, degree]
-    const fields = [].concat.apply([], updatedEducationArray)
-    updateFieldToEducation(fields)
-    setOpenEditForm(false)
-  }
+    let updatedEducationArray = educationArray;
+    updatedEducationArray[updatedIndex] = [institution, degree];
+    const fields = [].concat.apply([], updatedEducationArray);
+    updateFieldToEducation(fields);
+    setOpenEditForm(false);
+  };
 
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
         Array.isArray(value) ? (
-          <Card className={classes.section} key={value}>
+          <Card className={classes.section} key={key}>
             <Typography variant="h6" color="textSecondary" gutterBottom>
               {key}
               <Tooltip
-                element={"span"}
+                element={'span'}
                 title={
                   disablebAddField(value) ? (
-                    <span style={{ fontSize: "22px" }}>
-                      Please fill all input fields
-                    </span>
+                    <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
                   ) : (
-                    ""
+                    ''
                   )
                 }
               >
@@ -99,9 +96,7 @@ export default function MainSectionPartForm({
                     disabled={disablebAddField(value)}
                     variant="contained"
                     onClick={() =>
-                      key === "EDUCATION"
-                        ? setOpenEducationForm(true)
-                        : addField(key)
+                      key === 'EDUCATION' ? setOpenEducationForm(true) : addField(key)
                     }
                   >
                     <AddIcon />
@@ -110,16 +105,11 @@ export default function MainSectionPartForm({
               </Tooltip>
             </Typography>
             <>
-              {key === "EDUCATION" ? (
+              {key === 'EDUCATION' ? (
                 <List component="nav">
                   <Grid container spacing={2} justify="flex-start">
                     {splitArray(value).map((pair, index) => (
-                      <Grid
-                        item
-                        xs={12}
-                        key={index}
-                        className={classes.educationContainer}
-                      >
+                      <Grid item xs={12} key={index} className={classes.educationContainer}>
                         <ListItem
                           button
                           onClick={() => updateField(pair, index, splitArray(value))}
@@ -127,12 +117,10 @@ export default function MainSectionPartForm({
                           <ListItemText
                             primary={
                               <React.Fragment>
-                                <Typography key={value}>
+                                <Typography key={`${pair[0]}-institution`}>
                                   Educational institution: {pair[0]}
                                 </Typography>
-                                <Typography key={value}>
-                                  Degree: {pair[1]}
-                                </Typography>
+                                <Typography key={`${pair[1]}-degree`}>Degree: {pair[1]}</Typography>
                               </React.Fragment>
                             }
                           />
@@ -141,9 +129,7 @@ export default function MainSectionPartForm({
                               <IconButton
                                 variant="contained"
                                 color="secondary"
-                                onClick={() =>
-                                  removeFieldFromEducation(pair[0], pair[1])
-                                }
+                                onClick={() => removeFieldFromEducation(pair[0], pair[1])}
                               >
                                 <RemoveCircleOutlineIcon />
                               </IconButton>
@@ -157,31 +143,33 @@ export default function MainSectionPartForm({
               ) : (
                 <Grid container spacing={2} justify="flex-start">
                   {value.map((field, index) => (
-                    <Grid item xs={12} key={field}>
-                      <OutlinedInput
-                        ref={React.createRef()}
+                    <Grid item xs={12} key={`${field}-section`}>
+                      <TextField
                         fullWidth
+                        key={`${field}-field`}
                         defaultValue={field}
                         multiline
                         variant="outlined"
-                        onBlur={(e) =>
+                        onBlur={e =>
                           handleInput(
                             setGlobalError,
                             e.target.value,
-                            setSectionFieldMultiValue(e.target.value, key, index)
+                            setSectionFieldMultiValue(e.target.value, key, index),
                           )
                         }
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => removeField(index, key)}
-                            >
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        }
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => removeField(index, key)}
+                              >
+                                <RemoveCircleOutlineIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          ),
+                        }}
                       />
                     </Grid>
                   ))}
@@ -191,7 +179,7 @@ export default function MainSectionPartForm({
           </Card>
         ) : (
           <>
-            {typeof value === "string" ? (
+            {typeof value === 'string' ? (
               <Card className={classes.section} key={value}>
                 <TextField
                   className={classes.marginBottom}
@@ -200,11 +188,11 @@ export default function MainSectionPartForm({
                   id="filled-basic"
                   label={key}
                   defaultValue={value}
-                  onBlur={(e) =>
+                  onBlur={e =>
                     handleInput(
                       setGlobalError,
                       e.target.value,
-                      setSectionFieldSingleValue(e.target.value, key)
+                      setSectionFieldSingleValue(e.target.value, key),
                     )
                   }
                 />
@@ -216,14 +204,12 @@ export default function MainSectionPartForm({
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">
-                {"Add education information"}
-              </DialogTitle>
+              <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
               <form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  addFieldToEducation([institution, degree])
-                  handleCloseCreate()
+                onSubmit={e => {
+                  e.preventDefault();
+                  addFieldToEducation([institution, degree]);
+                  handleCloseCreate();
                 }}
               >
                 <DialogContent>
@@ -234,7 +220,7 @@ export default function MainSectionPartForm({
                     variant="outlined"
                     id="filled-basic"
                     label="Educational institution"
-                    onBlur={(e) => setInstitution(e.target.value)}
+                    onBlur={e => setInstitution(e.target.value)}
                   />
                   <TextField
                     required
@@ -243,7 +229,7 @@ export default function MainSectionPartForm({
                     variant="outlined"
                     id="filled-basic"
                     label="Degree"
-                    onBlur={(e) => setDegree(e.target.value)}
+                    onBlur={e => setDegree(e.target.value)}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -258,13 +244,11 @@ export default function MainSectionPartForm({
               aria-labelledby="alert-dialog-title"
               aria-describedby="alert-dialog-description"
             >
-              <DialogTitle id="alert-dialog-title">
-                {"Add education information"}
-              </DialogTitle>
+              <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
               <form
-                onSubmit={(e) => {
-                  e.preventDefault()
-                  handleUpdate()
+                onSubmit={e => {
+                  e.preventDefault();
+                  handleUpdate();
                 }}
               >
                 <DialogContent>
@@ -276,7 +260,7 @@ export default function MainSectionPartForm({
                     id="filled-basic"
                     label="Educational institution"
                     defaultValue={editedField[0]}
-                    onBlur={(e) => setInstitution(e.target.value)}
+                    onBlur={e => setInstitution(e.target.value)}
                   />
                   <TextField
                     required
@@ -286,7 +270,7 @@ export default function MainSectionPartForm({
                     id="filled-basic"
                     label="Degree"
                     defaultValue={editedField[1]}
-                    onBlur={(e) => setDegree(e.target.value)}
+                    onBlur={e => setDegree(e.target.value)}
                   />
                 </DialogContent>
                 <DialogActions>
@@ -296,14 +280,14 @@ export default function MainSectionPartForm({
               </form>
             </Dialog>
           </>
-        )
+        ),
       )}
     </>
-  )
+  );
 }
 
 MainSectionPartForm.propTypes = {
-  sectionsField: PropTypes.array,
+  sectionsField: PropTypes.object,
   setSectionFieldSingleValue: PropTypes.func,
   setSectionFieldMultiValue: PropTypes.func,
   removeField: PropTypes.func,
@@ -311,5 +295,5 @@ MainSectionPartForm.propTypes = {
   addFieldToEducation: PropTypes.func,
   removeFieldFromEducation: PropTypes.func,
   updateFieldToEducation: PropTypes.func,
-  setGlobalError: PropTypes.bool,
-}
+  setGlobalError: PropTypes.func,
+};

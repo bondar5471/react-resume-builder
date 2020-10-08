@@ -1,11 +1,11 @@
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles((theme) => ({
+export const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
@@ -14,9 +14,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   form: {
     marginTop: theme.spacing(6),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   submit: {
     margin: theme.spacing(8),
@@ -31,9 +31,9 @@ export const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
   spin: {
-    marginLeft: "47%",
-    marginRight: "47%",
-    width: "6%",
+    marginLeft: '47%',
+    marginRight: '47%',
+    width: '6%',
   },
   dialogContent: {
     padding: theme.spacing(2),
@@ -42,8 +42,8 @@ export const useStyles = makeStyles((theme) => ({
     margin: theme.spacing(2),
   },
   listItem: {
-    backgroundColor: "#e1f2fb",
+    backgroundColor: '#e1f2fb',
     marginTop: theme.spacing(1),
-    border: "2px solid #838383",
+    border: '2px solid #838383',
   },
-}))
+}));

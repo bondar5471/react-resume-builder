@@ -1,3 +1,3 @@
-import ResetFileAlert from "./ResetFileAlert"
+import ResetFileAlert from './ResetFileAlert';
 
-export default ResetFileAlert
+export default ResetFileAlert;

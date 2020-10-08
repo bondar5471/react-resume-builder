@@ -1,3 +1,3 @@
-import ResumeForm from "./ResumeForm"
+import ResumeForm from './ResumeForm';
 
-export default ResumeForm
+export default ResumeForm;

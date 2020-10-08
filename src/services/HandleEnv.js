@@ -1,4 +1,4 @@
 // eslint-disable-next-line no-undef
-const token = process.env.REACT_APP_GIT_TOKEN
+const token = process.env.REACT_APP_GIT_TOKEN;
 
-export { token }
+export { token };
