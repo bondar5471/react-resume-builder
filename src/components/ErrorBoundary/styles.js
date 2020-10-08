@@ -1,24 +1,24 @@
 const styles = {
   wraper: {
-    width: "100%",
-    marginTop: "15%",
+    width: '100%',
+    marginTop: '15%',
   },
   head: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   message: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   paper: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
-    margin: "8px",
-    width: "180px",
-    height: "180px",
+    margin: '8px',
+    width: '180px',
+    height: '180px',
   },
-}
+};
 
-export default styles
+export default styles;

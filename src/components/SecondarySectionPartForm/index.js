@@ -1,3 +1,3 @@
-import SecondarySectionPartForm from "./SecondarySectionPartForm"
+import SecondarySectionPartForm from './SecondarySectionPartForm';
 
-export default SecondarySectionPartForm
+export default SecondarySectionPartForm;

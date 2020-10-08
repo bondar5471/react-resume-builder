@@ -1,27 +1,27 @@
-import React, { Component } from "react"
-import PropTypes from "prop-types"
-import { withStyles } from "@material-ui/core/styles"
-import Typography from "@material-ui/core/Typography"
-import Divider from "@material-ui/core/Divider"
-import Avatar from "@material-ui/core/Avatar"
-import styles from "./styles"
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import styles from './styles';
 
 class ErrorBoundary extends Component {
   constructor(props) {
-    super(props)
-    this.state = { hasError: false }
+    super(props);
+    this.state = { hasError: false };
   }
 
   componentDidCatch() {
     this.setState({
       hasError: true,
-    })
+    });
   }
 
   render() {
-    const { hasError } = this.state
-    const { children } = this.props
-    const { classes } = this.props
+    const { hasError } = this.state;
+    const { children } = this.props;
+    const { classes } = this.props;
     if (hasError) {
       return (
         <div className={classes.wraper}>
@@ -43,16 +43,16 @@ class ErrorBoundary extends Component {
           </Typography>
           <Divider variant="inset" component="div" />
         </div>
-      )
+      );
     }
 
-    return children
+    return children;
   }
 }
 
 ErrorBoundary.propTypes = {
   children: PropTypes.element.isRequired,
   classes: PropTypes.objectOf(Object).isRequired,
-}
+};
 
-export default withStyles(styles)(ErrorBoundary)
+export default withStyles(styles)(ErrorBoundary);

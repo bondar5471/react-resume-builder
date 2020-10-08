@@ -1,8 +1,8 @@
 export const handleInput = (setGlobalError, value, cb) => {
   if (!value) {
-    setGlobalError(true)
+    setGlobalError(true);
   } else {
-    setGlobalError(false)
+    setGlobalError(false);
   }
-  return (...args) => cb(...args)
-}
+  return (...args) => cb(...args);
+};

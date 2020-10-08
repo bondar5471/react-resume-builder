@@ -1,3 +1,3 @@
-import UploadResumeComponent from "./UploadResumeComponent"
+import UploadResumeComponent from './UploadResumeComponent';
 
-export default UploadResumeComponent
+export default UploadResumeComponent;

@@ -1,3 +1,3 @@
-import AddProjModal from "./AddProjModal"
+import AddProjModal from './AddProjModal';
 
-export default AddProjModal
+export default AddProjModal;

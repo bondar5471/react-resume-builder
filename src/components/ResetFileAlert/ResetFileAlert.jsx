@@ -1,18 +1,8 @@
-import React from "react"
-import PropTypes from "prop-types"
-import {
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  Button,
-} from "@material-ui/core"
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Dialog, DialogActions, DialogContent, DialogContentText, Button } from '@material-ui/core';
 
-export default function ResetFileAlert({
-  cancelEditFile,
-  closeCancelEditFile,
-  deleteResume,
-}) {
+export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, deleteResume }) {
   return (
     <Dialog
       open={cancelEditFile}
@@ -32,11 +22,11 @@ export default function ResetFileAlert({
         <Button onClick={() => deleteResume()}>Agree</Button>
       </DialogActions>
     </Dialog>
-  )
+  );
 }
 
 ResetFileAlert.propTypes = {
-  cancelEditFile: PropTypes.func,
+  cancelEditFile: PropTypes.bool,
   closeCancelEditFile: PropTypes.func,
   deleteResume: PropTypes.func,
-}
+};

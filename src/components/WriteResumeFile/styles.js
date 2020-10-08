@@ -1,11 +1,11 @@
-import { makeStyles } from "@material-ui/core/styles"
+import { makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(() => ({
   card: {
-    padding: "16px",
-    marginTop: "15px",
+    padding: '16px',
+    marginTop: '15px',
   },
   inputFileName: {
-    marginTop: "8px",
+    marginTop: '8px',
   },
-}))
+}));

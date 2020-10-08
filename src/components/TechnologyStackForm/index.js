@@ -1,3 +1,3 @@
-import TechnologyStackForm from "./TechnologyStackForm"
+import TechnologyStackForm from './TechnologyStackForm';
 
-export default TechnologyStackForm
+export default TechnologyStackForm;

@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-import PropTypes from "prop-types"
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Button,
   Fab,
@@ -9,26 +9,26 @@ import {
   DialogTitle,
   TextField,
   Typography,
-} from "@material-ui/core"
-import omit from "lodash/omit"
-import AddIcon from "@material-ui/icons/Add"
+} from '@material-ui/core';
+import omit from 'lodash/omit';
+import AddIcon from '@material-ui/icons/Add';
 
-import { useStyles } from "./styles"
+import { useStyles } from './styles';
 
 export default function AddProjModal({ handleClose, open, createProject }) {
-  const classes = useStyles()
-  const [name, setName] = useState("")
-  const [description, setDescription] = useState("")
-  const [responsibilities, setResponsibilities] = useState([""])
-  const [role, setRole] = useState("")
-  const [skills, setSkills] = useState("")
-  const [team, setTeam] = useState(0)
+  const classes = useStyles();
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [responsibilities, setResponsibilities] = useState(['']);
+  const [role, setRole] = useState('');
+  const [skills, setSkills] = useState('');
+  const [team, setTeam] = useState(0);
 
   const handleChangeRes = (value, index) => {
-    const updatedData = responsibilities
-    updatedData[index] = value
-    setResponsibilities(updatedData)
-  }
+    const updatedData = responsibilities;
+    updatedData[index] = value;
+    setResponsibilities(updatedData);
+  };
 
   const newProject = () => {
     let project = {
@@ -39,16 +39,16 @@ export default function AddProjModal({ handleClose, open, createProject }) {
         Skills: skills,
         Responsibilities: responsibilities,
       },
-    }
-    if (team === 0 || team === "") {
-      const projectInfo = omit(project[name], ["Team"])
-      createProject({ [name]: projectInfo })
-      handleClose()
+    };
+    if (team === 0 || team === '') {
+      const projectInfo = omit(project[name], ['Team']);
+      createProject({ [name]: projectInfo });
+      handleClose();
     } else {
-      createProject(project)
-      handleClose()
+      createProject(project);
+      handleClose();
     }
-  }
+  };
   return (
     <div>
       <Dialog
@@ -57,15 +57,13 @@ export default function AddProjModal({ handleClose, open, createProject }) {
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Add project information"}
-        </DialogTitle>
+        <DialogTitle id="alert-dialog-title">{'Add project information'}</DialogTitle>
         <DialogContent>
           <form
             className={classes.form}
-            onSubmit={(e) => {
-              e.preventDefault()
-              newProject()
+            onSubmit={e => {
+              e.preventDefault();
+              newProject();
             }}
           >
             <TextField
@@ -73,7 +71,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Project name"
               required
-              onBlur={(e) => setName(e.target.value)}
+              onBlur={e => setName(e.target.value)}
             />
 
             <TextField
@@ -83,7 +81,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               rows={3}
               label="Description"
               required
-              onBlur={(e) => setDescription(e.target.value)}
+              onBlur={e => setDescription(e.target.value)}
             />
             <Typography align="center">Responsibilities:</Typography>
             {responsibilities.map((res, index) => (
@@ -93,13 +91,13 @@ export default function AddProjModal({ handleClose, open, createProject }) {
                 variant="filled"
                 defaultValue={res}
                 required
-                onBlur={(e) => handleChangeRes(e.target.value, index)}
+                onBlur={e => handleChangeRes(e.target.value, index)}
               />
             ))}
             <Fab
               color="primary"
               aria-label="add"
-              onClick={() => setResponsibilities([...responsibilities, ""])}
+              onClick={() => setResponsibilities([...responsibilities, ''])}
             >
               <AddIcon />
             </Fab>
@@ -108,21 +106,21 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Role"
               required
-              onBlur={(e) => setRole(e.target.value)}
+              onBlur={e => setRole(e.target.value)}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Skills"
               required
-              onBlur={(e) => setSkills(e.target.value)}
+              onBlur={e => setSkills(e.target.value)}
             />
             <TextField
               fullWidth
               variant="filled"
               label="Team info"
               type="number"
-              onBlur={(e) => setTeam(+e.target.value)}
+              onBlur={e => setTeam(+e.target.value)}
             />
             <DialogActions>
               <Button onClick={handleClose} variant="contained">
@@ -136,11 +134,11 @@ export default function AddProjModal({ handleClose, open, createProject }) {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }
 
 AddProjModal.propTypes = {
   createProject: PropTypes.func,
   handleClose: PropTypes.func,
   open: PropTypes.bool,
-}
+};
