@@ -7,13 +7,8 @@ import {
   TextField,
   Tooltip,
   Typography,
-  Dialog,
-  DialogActions,
-  DialogTitle,
   List,
   ListItem,
-  DialogContent,
-  Button,
   ListItemSecondaryAction,
   ListItemText,
 } from '@material-ui/core';
@@ -25,6 +20,8 @@ import { PropTypes } from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 
 import { disablebAddField } from '../../services/validationAddField';
+import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
+import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -40,10 +37,10 @@ export default function MainSectionPartForm({
   const [openEducationForm, setOpenEducationForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [editedField, setEditedFied] = useState([]);
-  const [institution, setInstitution] = useState('');
-  const [degree, setDegree] = useState('');
   const [updatedIndex, setUpdatedIndex] = useState(null);
   const [educationArray, setEducationArray] = useState([]);
+  const [institution, setInstitution] = useState('');
+  const [degree, setDegree] = useState('');
   const classes = useStyles();
 
   const handleCloseCreate = () => {
@@ -198,87 +195,23 @@ export default function MainSectionPartForm({
                 />
               </Card>
             ) : null}
-            <Dialog
-              open={openEducationForm}
-              onClose={handleCloseCreate}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  addFieldToEducation([institution, degree]);
-                  handleCloseCreate();
-                }}
-              >
-                <DialogContent>
-                  <TextField
-                    required
-                    className={classes.marginBottom}
-                    fullWidth
-                    variant="outlined"
-                    id="filled-basic"
-                    label="Educational institution"
-                    onBlur={e => setInstitution(e.target.value)}
-                  />
-                  <TextField
-                    required
-                    className={classes.marginBottom}
-                    fullWidth
-                    variant="outlined"
-                    id="filled-basic"
-                    label="Degree"
-                    onBlur={e => setDegree(e.target.value)}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseCreate}>Cancel</Button>
-                  <Button type="submit">Add</Button>
-                </DialogActions>
-              </form>
-            </Dialog>
-            <Dialog
-              open={openEditForm}
-              onClose={handleCloseEdit}
-              aria-labelledby="alert-dialog-title"
-              aria-describedby="alert-dialog-description"
-            >
-              <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
-              <form
-                onSubmit={e => {
-                  e.preventDefault();
-                  handleUpdate();
-                }}
-              >
-                <DialogContent>
-                  <TextField
-                    required
-                    className={classes.marginBottom}
-                    fullWidth
-                    variant="outlined"
-                    id="filled-basic"
-                    label="Educational institution"
-                    defaultValue={editedField[0]}
-                    onBlur={e => setInstitution(e.target.value)}
-                  />
-                  <TextField
-                    required
-                    className={classes.marginBottom}
-                    fullWidth
-                    variant="outlined"
-                    id="filled-basic"
-                    label="Degree"
-                    defaultValue={editedField[1]}
-                    onBlur={e => setDegree(e.target.value)}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <Button onClick={handleCloseEdit}>Cancel</Button>
-                  <Button type="submit">Edit</Button>
-                </DialogActions>
-              </form>
-            </Dialog>
+            <AddEducationInfo
+              openEducationForm={openEducationForm}
+              handleCloseCreate={handleCloseCreate}
+              addFieldToEducation={addFieldToEducation}
+              institution={institution}
+              degree={degree}
+              setInstitution={setInstitution}
+              setDegree={setDegree}
+            />
+            <EditEducationInfo
+              openEditForm={openEditForm}
+              handleCloseEdit={handleCloseEdit}
+              editedField={editedField}
+              handleUpdate={handleUpdate}
+              setInstitution={setInstitution}
+              setDegree={setDegree}
+            />
           </>
         ),
       )}
