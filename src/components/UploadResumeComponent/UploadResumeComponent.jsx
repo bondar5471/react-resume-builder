@@ -8,25 +8,15 @@ import {
   Avatar,
   FormLabel,
   FormHelperText,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  List,
-  ListItem,
-  Collapse,
-  ListItemText,
-  CircularProgress,
-  Paper,
 } from '@material-ui/core';
 import yaml from 'js-yaml';
 import GitHubIcon from '@material-ui/icons/GitHub';
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
 import { decode } from 'js-base64';
 
 import { useStyles } from './styles';
 import ResumeForm from '../ResumeForm';
 import { getFileFromFolderRepo, getListFolderRepo } from '../../services/HandlerGit';
+import GitUploadModal from '../GitUploadModal/GitUploadModal';
 
 export default function UploadResumeComponent() {
   const classes = useStyles();
@@ -78,6 +68,8 @@ export default function UploadResumeComponent() {
       setResumeFields(field);
     } catch (e) {
       setError(e);
+    } finally {
+      setIsOpenGitModal(false);
     }
   }
   useEffect(() => {
@@ -191,63 +183,18 @@ export default function UploadResumeComponent() {
               </Button>
             </FormControl>
           </form>
-          <Dialog
-            fullWidth
-            maxWidth="md"
-            onClose={() => setIsOpenGitModal(false)}
-            aria-labelledby="simple-dialog-title"
-            open={isOpenGitModal}
-          >
-            <DialogTitle id="simple-dialog-title">Choose file</DialogTitle>
-            <DialogContent>
-              <Paper className={classes.dialogContent}>
-                <Typography>Select file from current ones in git repository</Typography>
-              </Paper>
-              {error ? <Typography color="error">{error.message}</Typography> : null}
-            </DialogContent>
-            {loadingFolder ? (
-              <CircularProgress color="secondary" className={classes.spin} />
-            ) : (
-              <List
-                component="nav"
-                aria-labelledby="nested-list-subheader"
-                className={classes.list}
-              >
-                {repoFolders &&
-                  repoFolders.map(item => (
-                    <>
-                      <ListItem
-                        className={classes.listItem}
-                        button
-                        onClick={() => openDir(item.path)}
-                        key={item.name}
-                      >
-                        <ListItemText primary={item.name} />
-                        {isOpenListFiles ? <ExpandLess /> : <ExpandMore />}
-                      </ListItem>
-                      <Collapse in={isOpenListFiles} timeout="auto" unmountOnExit>
-                        {loadingFiles ? (
-                          <CircularProgress color="secondary" className={classes.spin} />
-                        ) : (
-                          <List component="div" disablePadding>
-                            {listFiles &&
-                              listFiles.map(file => (
-                                <ListItem
-                                  button
-                                  key={file.name}
-                                  onClick={() => setFileFromGit(file.path)}
-                                >
-                                  <ListItemText primary={file.name} />
-                                </ListItem>
-                              ))}
-                          </List>
-                        )}
-                      </Collapse>
-                    </>
-                  ))}
-              </List>
-            )}
-          </Dialog>
+          <GitUploadModal
+            setIsOpenGitModal={setIsOpenGitModal}
+            isOpenGitModal={isOpenGitModal}
+            error={error}
+            loadingFolder={loadingFolder}
+            repoFolders={repoFolders}
+            openDir={openDir}
+            isOpenListFiles={isOpenListFiles}
+            loadingFiles={loadingFiles}
+            listFiles={listFiles}
+            setFileFromGit={setFileFromGit}
+          />
         </Box>
       )}
     </div>

@@ -43,6 +43,7 @@ export const useStyles = makeStyles(theme => ({
   },
   listItem: {
     backgroundColor: '#e1f2fb',
+    color: '#000',
     marginTop: theme.spacing(1),
     border: '2px solid #838383',
   },
