@@ -10,10 +10,6 @@ export const useStyles = makeStyles(() => ({
     marginTop: '15px',
     padding: '16px',
   },
-  educationContainer: {
-    padding: '10px',
-    cursor: 'pointer',
-  },
   marginBottom: {
     marginBottom: '25px',
   },
