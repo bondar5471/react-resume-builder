@@ -7,12 +7,7 @@ import {
   TextField,
   Tooltip,
   Typography,
-  List,
-  ListItem,
-  ListItemSecondaryAction,
-  ListItemText,
 } from '@material-ui/core';
-import chunk from 'lodash/chunk';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './styles';
@@ -22,6 +17,7 @@ import { handleInput } from '../../services/HandleInput';
 import { disablebAddField } from '../../services/validationAddField';
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
+import EducationForm from '../EducationForm/EducationForm';
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -49,11 +45,6 @@ export default function MainSectionPartForm({
 
   const handleCloseEdit = () => {
     setOpenEditForm(false);
-  };
-
-  const splitArray = value => {
-    const splitedArray = chunk(value, 2);
-    return splitedArray;
   };
 
   const updateField = (pair, key, education) => {
@@ -103,40 +94,11 @@ export default function MainSectionPartForm({
             </Typography>
             <>
               {key === 'EDUCATION' ? (
-                <List component="nav">
-                  <Grid container spacing={2} justify="flex-start">
-                    {splitArray(value).map((pair, index) => (
-                      <Grid item xs={12} key={index} className={classes.educationContainer}>
-                        <ListItem
-                          button
-                          onClick={() => updateField(pair, index, splitArray(value))}
-                        >
-                          <ListItemText
-                            primary={
-                              <React.Fragment>
-                                <Typography key={`${pair[0]}-institution`}>
-                                  Educational institution: {pair[0]}
-                                </Typography>
-                                <Typography key={`${pair[1]}-degree`}>Degree: {pair[1]}</Typography>
-                              </React.Fragment>
-                            }
-                          />
-                          <ListItemSecondaryAction>
-                            <InputAdornment position="end">
-                              <IconButton
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => removeFieldFromEducation(pair[0], pair[1])}
-                              >
-                                <RemoveCircleOutlineIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          </ListItemSecondaryAction>
-                        </ListItem>
-                      </Grid>
-                    ))}
-                  </Grid>
-                </List>
+                <EducationForm
+                  value={value}
+                  updateField={updateField}
+                  removeFieldFromEducation={removeFieldFromEducation}
+                />
               ) : (
                 <Grid container spacing={2} justify="flex-start">
                   {value.map((field, index) => (
