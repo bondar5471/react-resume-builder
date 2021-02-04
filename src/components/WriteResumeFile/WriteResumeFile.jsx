@@ -32,6 +32,11 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     setUrlFile(downloadUrl);
   };
 
+  const handleSave = () => {
+    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
+    localStorage.setItem('resumeFields', JSON.stringify(updatedCv));
+  };
+
   async function updateResume() {
     try {
       setLoading(true);
@@ -41,6 +46,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       const responce = await updateOrCreateFile(encodeContent);
       setOpenAlert(responce.status === 200);
       localStorage.setItem('currentSha', responce.data.content.sha);
+      handleSave();
     } catch (e) {
       setError(e);
     } finally {
@@ -55,7 +61,16 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const fileNameValidation = () => {
     return fileName.indexOf(' ') >= 0 || fileName === '';
   };
+
+  const handleChangeGitFile = () => {
+    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
+    const currentCv = localStorage.getItem('resumeFields');
+    const changed = JSON.stringify(updatedCv) !== currentCv;
+    return changed;
+  };
+
   const classes = useStyles();
+
   return (
     <div>
       {urlFile ? (
@@ -67,22 +82,40 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
             id="download_link"
             download={`${fileName}.yaml`}
             href={urlFile}
-            onClick={() => setUrlFile(null)}
+            onClick={() => {
+              handleSave();
+              setUrlFile(null);
+            }}
             startIcon={<SaveIcon />}
           >
             Download Resume File
           </Button>
           {localStorage.getItem('currentPath') ? (
-            <Button
-              disabled={globalError || fileNameValidation() || loading}
-              variant="contained"
-              color="secondary"
-              fullWidth
-              startIcon={<GitHubIcon />}
-              onClick={() => updateFileOnRepo()}
+            <Tooltip
+              element={'span'}
+              title={() =>
+                handleChangeGitFile() ? (
+                  <span style={{ fontSize: '22px' }}>
+                    On branch nothing to commit, working tree clean
+                  </span>
+                ) : (
+                  ''
+                )
+              }
             >
-              {`Update on repo `}
-            </Button>
+              <span>
+                <Button
+                  disabled={globalError || !handleChangeGitFile() || loading}
+                  variant="contained"
+                  color="secondary"
+                  fullWidth
+                  startIcon={<GitHubIcon />}
+                  onClick={() => updateFileOnRepo()}
+                >
+                  {`Update on repo `}
+                </Button>
+              </span>
+            </Tooltip>
           ) : null}
         </Card>
       ) : (
