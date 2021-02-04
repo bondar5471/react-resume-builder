@@ -66,7 +66,7 @@ export default function EditEducationInfo({
 }
 
 EditEducationInfo.propTypes = {
-  editedField: PropTypes.object,
+  editedField: PropTypes.array,
   setDegree: PropTypes.func,
   setInstitution: PropTypes.func,
   handleUpdate: PropTypes.func,
