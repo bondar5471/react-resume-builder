@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { debounce, set, assign } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { Button, ButtonGroup, Card } from '@material-ui/core';
@@ -16,6 +16,18 @@ import ResetFileAlert from '../ResetFileAlert';
 import { useStickyState } from '../../services/StickyState';
 
 export default function ResumeForm({ setResumeFields }) {
+  useEffect(() => {
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = 'Close without saving?';
+      window.onunload = function () {
+        localStorage.clear();
+      };
+      return () => {
+        window.removeEventListener('beforeunload');
+      };
+    });
+  }, []);
   const classes = useStyles();
 
   const [userDataField, setUserDataField] = useStickyState(

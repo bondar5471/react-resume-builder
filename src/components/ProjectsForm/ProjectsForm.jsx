@@ -5,7 +5,6 @@ import {
   TextField,
   Tooltip,
   IconButton,
-  Button,
   OutlinedInput,
   InputAdornment,
 } from '@material-ui/core';
@@ -41,19 +40,29 @@ export default function ProjectsForm({
   return (
     <React.Fragment key={`${defaultValue}-grid`}>
       {sectionsField['SIGNIFICANT PROJECTS'].$projects.map((proj, indexProj) => (
-        <React.Fragment key={`${Object.keys(proj)}-rpoj-fragment`}>
-          <Grid item sm={12} xs={12} key={`${Object.keys(proj)}-grid`}>
-            <Typography
-              key={Object.keys(proj)}
-              fontStyle="italic"
-              className={classes.projTitle}
-              variant="subtitle2"
-              gutterBottom
-            >
-              {Object.keys(proj)}
-            </Typography>
-          </Grid>
-          <Grid item sm={12} xs={12}>
+        <Grid
+          item
+          key={`${Object.keys(proj)}-rpoj-fragment`}
+          xs={12}
+          className={classes.projContainer}
+        >
+          <Typography
+            key={Object.keys(proj)}
+            fontStyle="italic"
+            className={classes.projTitle}
+            gutterBottom
+          >
+            {Object.keys(proj)}
+          </Typography>
+          <IconButton
+            className={classes.removeButton}
+            title={`Remove project ${Object.keys(proj)}`}
+            variant="contained"
+            onClick={() => removeProject(indexProj)}
+          >
+            <DeleteIcon />
+          </IconButton>
+          <Grid item sm={12} xs={12} className={classes.formItem}>
             <TextField
               className={classes.input}
               key={`${Object.keys(proj)}-name`}
@@ -64,7 +73,7 @@ export default function ProjectsForm({
               onBlur={e => changeProjectName(e.target.value, indexProj, Object.keys(proj))}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.formItem}>
             <TextField
               className={classes.input}
               fullWidth
@@ -85,7 +94,7 @@ export default function ProjectsForm({
           </Grid>
           <>
             {proj[Object.keys(proj)]['Team'] ? (
-              <Grid item sm={6} xs={12}>
+              <Grid item sm={6} xs={12} className={classes.formItem}>
                 <TextField
                   type="number"
                   fullWidth
@@ -99,7 +108,12 @@ export default function ProjectsForm({
               </Grid>
             ) : null}
           </>
-          <Grid item sm={proj[Object.keys(proj)]['Team'] ? 6 : 12} xs={12}>
+          <Grid
+            item
+            sm={proj[Object.keys(proj)]['Team'] ? 6 : 12}
+            xs={12}
+            className={classes.formItem}
+          >
             <TextField
               className={classes.input}
               key={proj[Object.keys(proj)]['Skills']}
@@ -116,7 +130,7 @@ export default function ProjectsForm({
               }
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} className={classes.formItem}>
             <TextField
               className={classes.input}
               fullWidth
@@ -133,7 +147,7 @@ export default function ProjectsForm({
               }
             />
           </Grid>
-          <Grid item sm={12} xs={12}>
+          <Grid item sm={12} xs={12} className={classes.formItem}>
             <Typography>
               Responsibilities
               <Tooltip
@@ -160,7 +174,7 @@ export default function ProjectsForm({
             </Typography>
           </Grid>
           {proj[Object.keys(proj)]['Responsibilities'].map((res, index) => (
-            <Grid item sm={12} xs={12} key={res}>
+            <Grid item sm={12} xs={12} key={res} className={classes.formItem}>
               <OutlinedInput
                 className={classes.input}
                 fullWidth
@@ -186,17 +200,7 @@ export default function ProjectsForm({
               />
             </Grid>
           ))}
-          <Button
-            className={classes.removeButton}
-            title={`Remove project ${Object.keys(proj)}`}
-            variant="contained"
-            color="secondary"
-            onClick={() => removeProject(indexProj)}
-            endIcon={<DeleteIcon />}
-          >
-            <Typography noWrap>{`${Object.keys(proj)}`}</Typography>
-          </Button>
-        </React.Fragment>
+        </Grid>
       ))}
     </React.Fragment>
   );

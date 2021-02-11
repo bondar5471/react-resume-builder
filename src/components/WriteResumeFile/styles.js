@@ -8,4 +8,12 @@ export const useStyles = makeStyles(() => ({
   inputFileName: {
     marginTop: '8px',
   },
+  gitButton: {
+    marginTop: '15px',
+    backgroundColor: '#989898',
+  },
+  saveAsButton: {
+    marginTop: '15px',
+    backgroundColor: '#989898',
+  },
 }));
