@@ -5,15 +5,16 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { TextField } from '@material-ui/core';
+import { TextField, Chip } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
+import { stackSelector } from './helpers';
 import { useStyles } from './styles';
 
 export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, addTools }) {
   const classes = useStyles();
-  const [category, setCategory] = useState('');
-  const [stack, setStack] = useState('');
+  const [category, setCategory] = useState('Programming Languages');
+  const [stack, setStack] = useState([]);
 
   const addFieldTs = () => {
     const tools = { [category]: stack };
@@ -35,33 +36,50 @@ export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, add
     'Cloud Platforms',
     'Tools',
   ];
+
+  const setStackList = (event, value) => {
+    event.preventDefault();
+    const stackList = value.join(', ');
+    setStack(stackList);
+  };
+
   return (
     <div>
       <Dialog
         open={openTsForm}
         onClose={handleCloseTsForm}
-        fullWidth
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        fullWidth
+        maxWidth={'lg'}
       >
-        <DialogTitle id="alert-dialog-title">{'Add new category'}</DialogTitle>
+        <DialogTitle id="alert-dialog-title">Add new category</DialogTitle>
         <DialogContent>
           <Autocomplete
-            freeSolo
             className={classes.textField}
+            freeSolo
+            value={category}
             options={options.map(option => option)}
             onInputChange={(event, newValue) => {
               setCategory(newValue);
             }}
-            style={{ width: '100%' }}
             renderInput={params => <TextField {...params} label="Category" variant="outlined" />}
           />
-          <TextField
-            fullWidth
+          <Autocomplete
+            disabled={category === ''}
             className={classes.textField}
-            variant="filled"
-            label="Stack"
-            onBlur={e => setStack(e.target.value)}
+            multiple
+            options={stackSelector(category)}
+            freeSolo
+            renderTags={(value, getTagProps) =>
+              value.map((option, index) => (
+                <Chip key={option} variant="outlined" label={option} {...getTagProps({ index })} />
+              ))
+            }
+            onChange={(event, value) => {
+              setStackList(event, value);
+            }}
+            renderInput={params => <TextField {...params} variant="filled" label="Stack" />}
           />
         </DialogContent>
         <DialogActions>

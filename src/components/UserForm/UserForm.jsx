@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, TextField, Typography } from '@material-ui/core';
+import { Grid, TextField, Typography, Tooltip } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 
@@ -12,18 +12,23 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
       <Grid container spacing={2}>
         {Object.entries(userDataField).map(([key, value]) => (
           <Grid key={value} item sm={key === '$photo' ? 12 : 6} xs={12}>
-            <TextField
-              error={!value}
-              fullWidth
-              variant="outlined"
-              key={value}
-              label={key.substring(1)}
-              defaultValue={value}
-              onBlur={e =>
-                handleInput(setGlobalError, e.target.value, setUserFieldValue(e.target.value, key))
-              }
-              helperText={!value ? 'This field is required' : null}
-            />
+            <Tooltip title={key === '$photo' ? 'Specify the path to the file or upload file.' : ''}>
+              <TextField
+                error={!value}
+                fullWidth
+                key={value}
+                label={key.substring(1)}
+                defaultValue={value}
+                onBlur={e =>
+                  handleInput(
+                    setGlobalError,
+                    e.target.value,
+                    setUserFieldValue(e.target.value, key),
+                  )
+                }
+                helperText={!value ? 'This field is required' : null}
+              />
+            </Tooltip>
           </Grid>
         ))}
       </Grid>

@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Button, Card, TextField, Snackbar } from '@material-ui/core';
+import { Button, Card, TextField, Snackbar, Paper, Typography } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import { PropTypes } from 'prop-types';
 import yaml from 'js-yaml';
-import Tooltip from '@material-ui/core/Tooltip';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import MuiAlert from '@material-ui/lab/Alert';
 import { encode } from 'js-base64';
@@ -14,7 +13,6 @@ import { updateOrCreateFile } from '../../services/HandlerGit';
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null);
   const [fileName, setFileName] = useState('resume');
@@ -62,13 +60,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     return fileName.indexOf(' ') >= 0 || fileName === '';
   };
 
-  const handleChangeGitFile = () => {
-    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
-    const currentCv = localStorage.getItem('resumeFields');
-    const changed = JSON.stringify(updatedCv) !== currentCv;
-    return changed;
-  };
-
   const classes = useStyles();
 
   return (
@@ -76,6 +67,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       {urlFile ? (
         <Card className={classes.card}>
           <Button
+            className={classes.downloadButton}
             fullWidth
             variant="contained"
             color="secondary"
@@ -90,79 +82,47 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           >
             Download Resume File
           </Button>
-          {localStorage.getItem('currentPath') ? (
-            <Tooltip
-              element={'span'}
-              title={() =>
-                handleChangeGitFile() ? (
-                  <span style={{ fontSize: '22px' }}>
-                    On branch nothing to commit, working tree clean
-                  </span>
-                ) : (
-                  ''
-                )
-              }
-            >
-              <span>
-                <Button
-                  disabled={globalError || !handleChangeGitFile() || loading}
-                  variant="contained"
-                  color="secondary"
-                  fullWidth
-                  startIcon={<GitHubIcon />}
-                  onClick={() => updateFileOnRepo()}
-                >
-                  {`Update on repo `}
-                </Button>
-              </span>
-            </Tooltip>
-          ) : null}
         </Card>
       ) : (
         <Card className={classes.card}>
-          <TextField
-            className={classes.inputFileName}
-            fullWidth
-            error={fileNameValidation()}
-            helperText={fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''}
-            label="File name"
-            defaultValue={fileName}
-            onChange={e => setFileName(e.target.value)}
-          />
-          <Tooltip
-            element={'span'}
-            title={
-              globalError ? (
-                <span style={{ fontSize: '22px' }}>On of the inputs are blank</span>
-              ) : (
-                ''
-              )
-            }
-          >
-            <span>
+          <Paper className={classes.saveAsFileContainer}>
+            <Typography>Save to file:</Typography>
+            <TextField
+              className={classes.inputFileName}
+              fullWidth
+              error={fileNameValidation()}
+              helperText={
+                fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''
+              }
+              label="File name"
+              defaultValue={fileName}
+              onChange={e => setFileName(e.target.value)}
+            />
+            <Button
+              className={classes.saveAsButton}
+              disabled={globalError || fileNameValidation()}
+              variant="contained"
+              fullWidth
+              onClick={() => createFile()}
+            >
+              {`Save as file ${fileName}.yaml`}
+            </Button>
+          </Paper>
+          {localStorage.getItem('currentPath') ? (
+            <Paper className={classes.gitUploadContainer}>
+              <Typography>Upload file to git:</Typography>
               <Button
-                className={classes.saveAsButton}
-                disabled={globalError || fileNameValidation()}
+                className={classes.gitButton}
+                disabled={globalError || loading}
                 variant="contained"
                 fullWidth
-                onClick={() => createFile()}
+                startIcon={<GitHubIcon />}
+                onClick={() => updateFileOnRepo()}
               >
-                {`Save as file ${fileName}.yaml`}
+                Push to github
               </Button>
-              {localStorage.getItem('currentPath') ? (
-                <Button
-                  className={classes.gitButton}
-                  disabled={globalError || fileNameValidation() || loading}
-                  variant="contained"
-                  fullWidth
-                  startIcon={<GitHubIcon />}
-                  onClick={() => updateFileOnRepo()}
-                >
-                  Update on repo
-                </Button>
-              ) : null}
-            </span>
-          </Tooltip>
+            </Paper>
+          ) : null}
         </Card>
       )}
       <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>

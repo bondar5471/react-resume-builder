@@ -50,7 +50,7 @@ export default function GitUploadModal({
         <List component="nav" aria-labelledby="nested-list-subheader" className={classes.list}>
           {repoFolders &&
             repoFolders.map(item => (
-              <>
+              <span key={item.name}>
                 <ListItem
                   className={classes.listItem}
                   button
@@ -78,7 +78,7 @@ export default function GitUploadModal({
                     </List>
                   )}
                 </Collapse>
-              </>
+              </span>
             ))}
         </List>
       )}

@@ -6,6 +6,7 @@ import {
   DialogContent,
   TextField,
   Button,
+  Tooltip,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
@@ -28,7 +29,7 @@ export default function AddEducationInfo({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Add education information</DialogTitle>
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -37,24 +38,28 @@ export default function AddEducationInfo({
         }}
       >
         <DialogContent>
-          <TextField
-            required
-            className={classes.marginBottom}
-            fullWidth
-            variant="outlined"
-            id="filled-basic"
-            label="Educational institution"
-            onBlur={e => setInstitution(e.target.value)}
-          />
-          <TextField
-            required
-            className={classes.marginBottom}
-            fullWidth
-            variant="outlined"
-            id="filled-basic"
-            label="Degree"
-            onBlur={e => setDegree(e.target.value)}
-          />
+          <Tooltip title="ex.: KARAZIN KHARKIV NATIONAL UNIVERSITY">
+            <TextField
+              required
+              className={classes.marginBottom}
+              fullWidth
+              variant="outlined"
+              id="filled-basic"
+              label="Educational institution"
+              onBlur={e => setInstitution(e.target.value)}
+            />
+          </Tooltip>
+          <Tooltip title="ex.: Master's degree in System engineering">
+            <TextField
+              required
+              className={classes.marginBottom}
+              fullWidth
+              variant="outlined"
+              id="filled-basic"
+              label="Degree"
+              onBlur={e => setDegree(e.target.value)}
+            />
+          </Tooltip>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseCreate}>Cancel</Button>

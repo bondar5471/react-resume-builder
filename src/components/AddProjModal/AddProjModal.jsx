@@ -9,6 +9,7 @@ import {
   DialogTitle,
   TextField,
   Typography,
+  Tooltip,
 } from '@material-ui/core';
 import omit from 'lodash/omit';
 import AddIcon from '@material-ui/icons/Add';
@@ -73,48 +74,60 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               required
               onBlur={e => setName(e.target.value)}
             />
-
-            <TextField
-              fullWidth
-              variant="filled"
-              multiline
-              rows={3}
-              label="Description"
-              required
-              onBlur={e => setDescription(e.target.value)}
-            />
-            <Typography align="center">Responsibilities:</Typography>
-            {responsibilities.map((res, index) => (
+            <Tooltip title="Shortly describe a project. Include product category, target users, and primary features.">
               <TextField
-                key={index}
                 fullWidth
                 variant="filled"
-                defaultValue={res}
+                multiline
+                rows={3}
+                label="Description"
                 required
-                onBlur={e => handleChangeRes(e.target.value, index)}
+                onBlur={e => setDescription(e.target.value)}
               />
+            </Tooltip>
+            <Typography align="center">Responsibilities:</Typography>
+            {responsibilities.map((res, index) => (
+              <Tooltip
+                key={res}
+                title="Add all activities on this project, ex.: Backend development, Code review and optimization."
+              >
+                <TextField
+                  key={index}
+                  fullWidth
+                  variant="filled"
+                  defaultValue={res}
+                  required
+                  onBlur={e => handleChangeRes(e.target.value, index)}
+                />
+              </Tooltip>
             ))}
-            <Fab
-              color="primary"
-              aria-label="add"
-              onClick={() => setResponsibilities([...responsibilities, ''])}
-            >
-              <AddIcon />
-            </Fab>
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Role"
-              required
-              onBlur={e => setRole(e.target.value)}
-            />
-            <TextField
-              fullWidth
-              variant="filled"
-              label="Skills"
-              required
-              onBlur={e => setSkills(e.target.value)}
-            />
+            <Tooltip title="Add new field">
+              <Fab
+                color="primary"
+                aria-label="add"
+                onClick={() => setResponsibilities([...responsibilities, ''])}
+              >
+                <AddIcon />
+              </Fab>
+            </Tooltip>
+            <Tooltip title="Ex.: Full-stack Developer">
+              <TextField
+                fullWidth
+                variant="filled"
+                label="Role"
+                required
+                onBlur={e => setRole(e.target.value)}
+              />
+            </Tooltip>
+            <Tooltip title="Add all skills on technologies used in this project, such as programming language, database, and others.">
+              <TextField
+                fullWidth
+                variant="filled"
+                label="Skills"
+                required
+                onBlur={e => setSkills(e.target.value)}
+              />
+            </Tooltip>
             <TextField
               fullWidth
               variant="filled"
