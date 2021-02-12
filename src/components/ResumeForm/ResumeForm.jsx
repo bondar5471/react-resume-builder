@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { debounce, set, assign } from 'lodash';
 import { PropTypes } from 'prop-types';
-import { Button, ButtonGroup, Card } from '@material-ui/core';
+import { Button, ButtonGroup, Card, Fab } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import DescriptionIcon from '@material-ui/icons/Description';
+import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import { useStyles } from './styles';
 import WriteResumeFile from '../WriteResumeFile';
@@ -17,19 +18,21 @@ import { useStickyState } from '../../services/StickyState';
 
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
+    window.addEventListener('scroll', checkScrollTop);
     window.addEventListener('beforeunload', function (e) {
       e.preventDefault();
       e.returnValue = 'Close without saving?';
       window.onunload = function () {
         localStorage.clear();
       };
-      return () => {
-        window.removeEventListener('beforeunload');
-      };
     });
+    return () => {
+      window.removeEventListener('beforeunload');
+      window.removeEventListener('scroll');
+    };
   }, []);
   const classes = useStyles();
-
+  const [showScroll, setShowScroll] = useState(false);
   const [userDataField, setUserDataField] = useStickyState(
     JSON.parse(localStorage.getItem('resumeFields')).cv.$person,
     'udpdatedUserState',
@@ -38,23 +41,27 @@ export default function ResumeForm({ setResumeFields }) {
     JSON.parse(localStorage.getItem('resumeFields')).cv.$sections,
     'updatedSectionState',
   );
-
   const [globalError, setGlobalError] = useState(false);
-
   const [cancelEditFile, setCancelEditFile] = useState(false);
-
+  const [openTsForm, setOpenTsForm] = useState(false);
+  const [open, setOpen] = useState(false);
   const debounceSetUserDataField = React.useRef(debounce(state => setUserDataField(state), 100))
     .current;
-
   const debounceSetSectionField = React.useRef(debounce(state => setSectionField(state), 100))
     .current;
-
   const projectSectionField = sectionsField['SIGNIFICANT PROJECTS'];
 
-  const [open, setOpen] = useState(false);
+  const checkScrollTop = () => {
+    if (!showScroll && window.pageYOffset > 200) {
+      setShowScroll(true);
+    } else if (showScroll && window.pageYOffset <= 200) {
+      setShowScroll(false);
+    }
+  };
 
-  const [openTsForm, setOpenTsForm] = useState(false);
-
+  const scrollTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const handleOpen = () => {
     setOpen(true);
   };
@@ -333,6 +340,16 @@ export default function ResumeForm({ setResumeFields }) {
         closeCancelEditFile={closeCancelEditFile}
         deleteResume={deleteResume}
       />
+      {showScroll ? (
+        <Fab
+          color="primary"
+          aria-label="Top"
+          className={classes.scroll}
+          onClick={() => scrollTop()}
+        >
+          <ArrowUpwardIcon />
+        </Fab>
+      ) : null}
     </div>
   );
 }

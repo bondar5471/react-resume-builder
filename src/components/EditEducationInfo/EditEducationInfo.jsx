@@ -6,6 +6,7 @@ import {
   DialogContent,
   TextField,
   Button,
+  Tooltip,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
 
@@ -35,26 +36,30 @@ export default function EditEducationInfo({
         }}
       >
         <DialogContent>
-          <TextField
-            required
-            className={classes.marginBottom}
-            fullWidth
-            variant="outlined"
-            id="filled-basic"
-            label="Educational institution"
-            defaultValue={editedField[0]}
-            onBlur={e => setInstitution(e.target.value)}
-          />
-          <TextField
-            required
-            className={classes.marginBottom}
-            fullWidth
-            variant="outlined"
-            id="filled-basic"
-            label="Degree"
-            defaultValue={editedField[1]}
-            onBlur={e => setDegree(e.target.value)}
-          />
+          <Tooltip title="ex.: KARAZIN KHARKIV NATIONAL UNIVERSITY">
+            <TextField
+              required
+              className={classes.marginBottom}
+              fullWidth
+              variant="outlined"
+              id="filled-basic"
+              label="ex.: Educational institution"
+              defaultValue={editedField[0]}
+              onBlur={e => setInstitution(e.target.value)}
+            />
+          </Tooltip>
+          <Tooltip title="ex.: Master's degree in System engineering">
+            <TextField
+              required
+              className={classes.marginBottom}
+              fullWidth
+              variant="outlined"
+              id="filled-basic"
+              label="Degree"
+              defaultValue={editedField[1]}
+              onBlur={e => setDegree(e.target.value)}
+            />
+          </Tooltip>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseEdit}>Cancel</Button>

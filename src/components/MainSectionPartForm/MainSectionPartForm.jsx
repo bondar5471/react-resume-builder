@@ -62,6 +62,17 @@ export default function MainSectionPartForm({
     setOpenEditForm(false);
   };
 
+  const setTooltips = field => {
+    switch (field) {
+      case 'TECHNICAL EXPERTISE':
+        return 'Write about your experience (years, knowledge domains, technologies)';
+      case 'COMMUNICATION':
+        return 'Do not write categories such as upper-intermediate or elementary for describing English level.';
+      default:
+        return '';
+    }
+  };
+
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -103,33 +114,35 @@ export default function MainSectionPartForm({
                 <Grid container spacing={2} justify="flex-start">
                   {value.map((field, index) => (
                     <Grid item xs={12} key={`${field}-section`}>
-                      <TextField
-                        fullWidth
-                        key={`${field}-field`}
-                        defaultValue={field}
-                        multiline
-                        variant="outlined"
-                        onBlur={e =>
-                          handleInput(
-                            setGlobalError,
-                            e.target.value,
-                            setSectionFieldMultiValue(e.target.value, key, index),
-                          )
-                        }
-                        InputProps={{
-                          endAdornment: (
-                            <InputAdornment position="end">
-                              <IconButton
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => removeField(index, key)}
-                              >
-                                <RemoveCircleOutlineIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          ),
-                        }}
-                      />
+                      <Tooltip title={setTooltips(key)}>
+                        <TextField
+                          fullWidth
+                          key={`${field}-field`}
+                          defaultValue={field}
+                          multiline
+                          variant="outlined"
+                          onBlur={e =>
+                            handleInput(
+                              setGlobalError,
+                              e.target.value,
+                              setSectionFieldMultiValue(e.target.value, key, index),
+                            )
+                          }
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => removeField(index, key)}
+                                >
+                                  <RemoveCircleOutlineIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </Tooltip>
                     </Grid>
                   ))}
                 </Grid>
@@ -140,21 +153,23 @@ export default function MainSectionPartForm({
           <>
             {typeof value === 'string' ? (
               <Card className={classes.section} key={value}>
-                <TextField
-                  className={classes.marginBottom}
-                  fullWidth
-                  variant="outlined"
-                  id="filled-basic"
-                  label={key}
-                  defaultValue={value}
-                  onBlur={e =>
-                    handleInput(
-                      setGlobalError,
-                      e.target.value,
-                      setSectionFieldSingleValue(e.target.value, key),
-                    )
-                  }
-                />
+                <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
+                  <TextField
+                    className={classes.marginBottom}
+                    fullWidth
+                    variant="outlined"
+                    id="filled-basic"
+                    label={key}
+                    defaultValue={value}
+                    onBlur={e =>
+                      handleInput(
+                        setGlobalError,
+                        e.target.value,
+                        setSectionFieldSingleValue(e.target.value, key),
+                      )
+                    }
+                  />
+                </Tooltip>
               </Card>
             ) : null}
             <AddEducationInfo

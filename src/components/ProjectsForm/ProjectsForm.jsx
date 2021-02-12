@@ -74,23 +74,25 @@ export default function ProjectsForm({
             />
           </Grid>
           <Grid item xs={12} className={classes.formItem}>
-            <TextField
-              className={classes.input}
-              fullWidth
-              key={proj[Object.keys(proj)]['$description']}
-              label="Description"
-              variant="outlined"
-              multiline
-              rows={4}
-              defaultValue={proj[Object.keys(proj)]['$description']}
-              onBlur={e =>
-                handleInput(
-                  setGlobalError,
-                  e.target.value,
-                  setSingleFieldProject(e.target.value, proj, '$description', indexProj),
-                )
-              }
-            />
+            <Tooltip title="Shortly describe a project. Include product category, target users, and primary features.">
+              <TextField
+                className={classes.input}
+                fullWidth
+                key={proj[Object.keys(proj)]['$description']}
+                label="Description"
+                variant="outlined"
+                multiline
+                rows={4}
+                defaultValue={proj[Object.keys(proj)]['$description']}
+                onBlur={e =>
+                  handleInput(
+                    setGlobalError,
+                    e.target.value,
+                    setSingleFieldProject(e.target.value, proj, '$description', indexProj),
+                  )
+                }
+              />
+            </Tooltip>
           </Grid>
           <>
             {proj[Object.keys(proj)]['Team'] ? (
@@ -114,38 +116,42 @@ export default function ProjectsForm({
             xs={12}
             className={classes.formItem}
           >
-            <TextField
-              className={classes.input}
-              key={proj[Object.keys(proj)]['Skills']}
-              fullWidth
-              variant="outlined"
-              label="Skills"
-              defaultValue={proj[Object.keys(proj)]['Skills']}
-              onBlur={e =>
-                handleInput(
-                  setGlobalError,
-                  e.target.value,
-                  setSingleFieldProject(e.target.value, proj, 'Skills', indexProj),
-                )
-              }
-            />
+            <Tooltip title="Add all skills on technologies used in this project, such as programming language, database, and others.">
+              <TextField
+                className={classes.input}
+                key={proj[Object.keys(proj)]['Skills']}
+                fullWidth
+                variant="outlined"
+                label="Skills"
+                defaultValue={proj[Object.keys(proj)]['Skills']}
+                onBlur={e =>
+                  handleInput(
+                    setGlobalError,
+                    e.target.value,
+                    setSingleFieldProject(e.target.value, proj, 'Skills', indexProj),
+                  )
+                }
+              />
+            </Tooltip>
           </Grid>
           <Grid item xs={12} className={classes.formItem}>
-            <TextField
-              className={classes.input}
-              fullWidth
-              key={proj[Object.keys(proj)]['Role']}
-              label="Role"
-              variant="outlined"
-              defaultValue={proj[Object.keys(proj)]['Role']}
-              onBlur={e =>
-                handleInput(
-                  setGlobalError,
-                  e.target.value,
-                  setSingleFieldProject(e.target.value, proj, 'Role', indexProj),
-                )
-              }
-            />
+            <Tooltip title="Ex.: Full-stack Developer">
+              <TextField
+                className={classes.input}
+                fullWidth
+                key={proj[Object.keys(proj)]['Role']}
+                label="Role"
+                variant="outlined"
+                defaultValue={proj[Object.keys(proj)]['Role']}
+                onBlur={e =>
+                  handleInput(
+                    setGlobalError,
+                    e.target.value,
+                    setSingleFieldProject(e.target.value, proj, 'Role', indexProj),
+                  )
+                }
+              />
+            </Tooltip>
           </Grid>
           <Grid item sm={12} xs={12} className={classes.formItem}>
             <Typography>
@@ -175,29 +181,31 @@ export default function ProjectsForm({
           </Grid>
           {proj[Object.keys(proj)]['Responsibilities'].map((res, index) => (
             <Grid item sm={12} xs={12} key={res} className={classes.formItem}>
-              <OutlinedInput
-                className={classes.input}
-                fullWidth
-                defaultValue={res}
-                onBlur={e =>
-                  handleInput(
-                    setGlobalError,
-                    e.target.value,
-                    setValueResponsibility(e.target.value, proj, index, indexProj),
-                  )
-                }
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      variant="contained"
-                      color="secondary"
-                      onClick={() => removeFieldResponsibility(proj, index, indexProj)}
-                    >
-                      <RemoveCircleOutlineIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-              />
+              <Tooltip title="Add all activities on this project, ex.: Backend development, Code review and optimization.">
+                <OutlinedInput
+                  className={classes.input}
+                  fullWidth
+                  defaultValue={res}
+                  onBlur={e =>
+                    handleInput(
+                      setGlobalError,
+                      e.target.value,
+                      setValueResponsibility(e.target.value, proj, index, indexProj),
+                    )
+                  }
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        variant="contained"
+                        color="secondary"
+                        onClick={() => removeFieldResponsibility(proj, index, indexProj)}
+                      >
+                        <RemoveCircleOutlineIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </Tooltip>
             </Grid>
           ))}
         </Grid>

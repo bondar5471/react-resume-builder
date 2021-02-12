@@ -1,6 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Typography, InputAdornment, IconButton, Grid, InputLabel } from '@material-ui/core';
+import {
+  Typography,
+  InputAdornment,
+  IconButton,
+  Grid,
+  InputLabel,
+  Tooltip,
+} from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './styles';
@@ -60,31 +67,33 @@ export default function SecondarySectionPartForm({
                       <InputLabel htmlFor={`${label}-component-outlined`}>
                         <Typography variant="subtitle2">{label}</Typography>
                       </InputLabel>
-                      <OutlinedInput
-                        id={`${label}-component-outlined`}
-                        className={classes.input}
-                        key={`${defaultValue}-input`}
-                        variant="outlined"
-                        defaultValue={defaultValue}
-                        onBlur={e =>
-                          handleInput(
-                            setGlobalError,
-                            e.target.value,
-                            setSingleObjectField(e.target.value, key, label),
-                          )
-                        }
-                        endAdornment={
-                          <InputAdornment position="end">
-                            <IconButton
-                              variant="contained"
-                              color="secondary"
-                              onClick={() => removeTools(label)}
-                            >
-                              <RemoveCircleOutlineIcon />
-                            </IconButton>
-                          </InputAdornment>
-                        }
-                      />
+                      <Tooltip title="Add tools separated by commas">
+                        <OutlinedInput
+                          id={`${label}-component-outlined`}
+                          className={classes.input}
+                          key={`${defaultValue}-input`}
+                          variant="outlined"
+                          defaultValue={defaultValue}
+                          onBlur={e =>
+                            handleInput(
+                              setGlobalError,
+                              e.target.value,
+                              setSingleObjectField(e.target.value, key, label),
+                            )
+                          }
+                          endAdornment={
+                            <InputAdornment position="end">
+                              <IconButton
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => removeTools(label)}
+                              >
+                                <RemoveCircleOutlineIcon />
+                              </IconButton>
+                            </InputAdornment>
+                          }
+                        />
+                      </Tooltip>
                     </Grid>
                   )}
                 </React.Fragment>

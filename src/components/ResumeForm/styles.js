@@ -27,4 +27,17 @@ export const useStyles = makeStyles(theme => ({
     },
     color: '#393b44',
   },
+  scroll: {
+    position: 'fixed',
+    width: '56px',
+    bottom: '20px',
+    right: '6%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: '1000',
+    cursor: 'pointer',
+    animation: 'fadeIn 0.3s',
+    transition: 'opacity 0.4s',
+    opacity: '0.5',
+  },
 }));

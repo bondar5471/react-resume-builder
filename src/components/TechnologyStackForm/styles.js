@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(theme => ({
+export const useStyles = makeStyles(() => ({
   textField: {
-    marginTop: theme.spacing(2),
+    marginTop: '15px',
     alignItems: 'center',
+    width: '100%',
   },
 }));
