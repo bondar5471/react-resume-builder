@@ -19,18 +19,19 @@ import { useStickyState } from '../../services/StickyState';
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    window.addEventListener('beforeunload', function (e) {
-      e.preventDefault();
-      e.returnValue = 'Close without saving?';
-      window.onunload = function () {
-        localStorage.clear();
-      };
-    });
+    window.addEventListener('beforeunload', e => beroreUnloadHandler(e));
     return () => {
-      window.removeEventListener('beforeunload');
-      window.removeEventListener('scroll');
+      window.removeEventListener('beforeunload', beroreUnloadHandler);
+      window.removeEventListener('scroll', checkScrollTop);
     };
   }, []);
+  const beroreUnloadHandler = e => {
+    e.preventDefault();
+    e.returnValue = 'Close without saving?';
+    window.onunload = function () {
+      deleteResume();
+    };
+  };
   const classes = useStyles();
   const [showScroll, setShowScroll] = useState(false);
   const [userDataField, setUserDataField] = useStickyState(
@@ -247,7 +248,9 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   const deleteResume = () => {
-    localStorage.clear();
+    localStorage.removeItem('udpdatedUserState');
+    localStorage.removeItem('resumeFields');
+    localStorage.removeItem('updatedSectionState');
     setResumeFields(null);
   };
 

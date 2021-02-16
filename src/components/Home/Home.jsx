@@ -11,6 +11,7 @@ import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import { deepOrange } from '@material-ui/core/colors';
 import { IconButton } from '@material-ui/core';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import UploadResumeComponent from '../UploadResumeComponent';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -56,6 +57,11 @@ export default function HideAppBar(props) {
     setDarkState(!darkState);
     localStorage.setItem('darkTheme', !JSON.parse(darkState));
   };
+
+  const handleLogOut = () => {
+    localStorage.removeItem('token');
+    props.history.push('/');
+  };
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -64,15 +70,12 @@ export default function HideAppBar(props) {
           <AppBar>
             <Toolbar className={classes.toolBar}>
               <img alt="logo" src={logo} className={classes.logo} />
-              {darkState ? (
-                <IconButton onClick={handleThemeChange}>
-                  <Brightness7Icon />
-                </IconButton>
-              ) : (
-                <IconButton onClick={handleThemeChange}>
-                  <Brightness4Icon />
-                </IconButton>
-              )}
+              <IconButton onClick={handleThemeChange} className={classes.globalStyleButton}>
+                {darkState ? <Brightness7Icon /> : <Brightness4Icon />}
+              </IconButton>
+              <IconButton onClick={handleLogOut}>
+                <ExitToAppIcon />
+              </IconButton>
             </Toolbar>
           </AppBar>
         </div>
@@ -90,4 +93,9 @@ export default function HideAppBar(props) {
 HideOnScroll.propTypes = {
   children: PropTypes.element.isRequired,
   window: PropTypes.func,
+};
+
+HideAppBar.propTypes = {
+  props: PropTypes.object,
+  history: PropTypes.func,
 };
