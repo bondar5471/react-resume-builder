@@ -11,4 +11,7 @@ export const useStyles = makeStyles(() => ({
   toolBar: {
     justifyContent: 'space-between',
   },
+  globalStyleButton: {
+    marginLeft: '75%',
+  },
 }));
