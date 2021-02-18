@@ -29,6 +29,7 @@ export const useStyles = makeStyles(theme => ({
   },
   editButton: {
     marginTop: theme.spacing(2),
+    textTransform: 'unset !important',
   },
   spin: {
     marginLeft: '47%',

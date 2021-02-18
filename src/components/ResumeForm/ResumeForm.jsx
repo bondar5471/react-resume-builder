@@ -251,6 +251,8 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem('udpdatedUserState');
     localStorage.removeItem('resumeFields');
     localStorage.removeItem('updatedSectionState');
+    localStorage.removeItem('currentSha');
+    localStorage.removeItem('currentPath');
     setResumeFields(null);
   };
 

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {
   Button,
@@ -10,7 +11,6 @@ import {
   FormHelperText,
 } from '@material-ui/core';
 import yaml from 'js-yaml';
-import GitHubIcon from '@material-ui/icons/GitHub';
 import { decode } from 'js-base64';
 
 import { useStyles } from './styles';
@@ -20,6 +20,11 @@ import GitUploadModal from '../GitUploadModal/GitUploadModal';
 
 export default function UploadResumeComponent() {
   const classes = useStyles();
+
+  useEffect(() => {
+    getRepoFolders();
+  }, []);
+
   const [repoFolders, setRepoFolders] = useState(null);
   const [listFiles, setListFiles] = useState(null);
   const [error, setError] = useState(null);
@@ -72,9 +77,6 @@ export default function UploadResumeComponent() {
       setIsOpenGitModal(false);
     }
   }
-  useEffect(() => {
-    getRepoFolders();
-  }, []);
 
   const hiddenFileInput = React.useRef(null);
 
@@ -171,16 +173,11 @@ export default function UploadResumeComponent() {
               >
                 Edit
               </Button>
-              <Button
-                onClick={() => setIsOpenGitModal(true)}
-                className={classes.editButton}
-                variant="contained"
-                color="primary"
-                fullWidth
-                startIcon={<GitHubIcon />}
-              >
-                Upload from repo git
-              </Button>
+              <Link to="/git_explorer">
+                <Button variant="outlined" fullWidth className={classes.editButton}>
+                  GitLab Explorer
+                </Button>
+              </Link>
             </FormControl>
           </form>
           <GitUploadModal
