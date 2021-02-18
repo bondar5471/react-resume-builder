@@ -4,6 +4,7 @@ import SignIn from '../SignIn';
 import Home from '../Home';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
+import GitLabExplorer from '../GitLabExplorer';
 
 function AppRouter() {
   const [user, setUser] = useState(null);
@@ -17,6 +18,7 @@ function AppRouter() {
           <PublicRoute restricted={true} component={SignIn} path="/" exact />
 
           <PrivateRoute component={Home} path="/home" exact />
+          <PrivateRoute component={GitLabExplorer} path="/git_explorer/:path?" exact />
         </Switch>
       </UserContext.Provider>
     </BrowserRouter>

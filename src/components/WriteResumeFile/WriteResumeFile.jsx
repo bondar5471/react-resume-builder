@@ -3,12 +3,10 @@ import { Button, Card, TextField, Snackbar, Paper, Typography } from '@material-
 import SaveIcon from '@material-ui/icons/Save';
 import { PropTypes } from 'prop-types';
 import yaml from 'js-yaml';
-import GitHubIcon from '@material-ui/icons/GitHub';
 import MuiAlert from '@material-ui/lab/Alert';
-import { encode } from 'js-base64';
+import { Gitlab } from '@gitbeaker/browser';
 
 import { useStyles } from './styles';
-import { updateOrCreateFile } from '../../services/HandlerGit';
 
 function Alert(props) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -35,25 +33,31 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     localStorage.setItem('resumeFields', JSON.stringify(updatedCv));
   };
 
-  async function updateResume() {
+  const updateFileOnGitLab = async () => {
     try {
       setLoading(true);
       const cv = { cv: { $person: userData, $sections: sectionData } };
       const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 });
-      const encodeContent = encode(yamlStr);
-      const responce = await updateOrCreateFile(encodeContent);
-      setOpenAlert(responce.status === 200);
-      localStorage.setItem('currentSha', responce.data.content.sha);
+      const api = new Gitlab({
+        host: process.env.REACT_APP_GITLAB_URL,
+        token: process.env.REACT_APP_GITLAB_TOKEN,
+      });
+      const path = localStorage.getItem('currentPath');
+      const id = process.env.REACT_APP_GITLAB_PROJ_ID;
+      const responce = await api.RepositoryFiles.edit(
+        id,
+        path,
+        'master',
+        yamlStr,
+        `Updated ${path}`,
+      );
+      setOpenAlert(responce.file_path === path);
       handleSave();
     } catch (e) {
       setError(e);
     } finally {
       setLoading(false);
     }
-  }
-
-  const updateFileOnRepo = async () => {
-    await updateResume();
   };
 
   const fileNameValidation = () => {
@@ -110,16 +114,15 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           </Paper>
           {localStorage.getItem('currentPath') ? (
             <Paper className={classes.gitUploadContainer}>
-              <Typography>Upload file to git:</Typography>
+              <Typography>Upload file to GitLab :</Typography>
               <Button
                 className={classes.gitButton}
                 disabled={globalError || loading}
                 variant="contained"
                 fullWidth
-                startIcon={<GitHubIcon />}
-                onClick={() => updateFileOnRepo()}
+                onClick={() => updateFileOnGitLab()}
               >
-                Push to github
+                Push to gitlab
               </Button>
             </Paper>
           ) : null}
