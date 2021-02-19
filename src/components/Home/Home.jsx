@@ -10,7 +10,7 @@ import Slide from '@material-ui/core/Slide';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
 import { deepOrange } from '@material-ui/core/colors';
-import { IconButton } from '@material-ui/core';
+import { IconButton, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 import UploadResumeComponent from '../UploadResumeComponent';
@@ -62,6 +62,8 @@ export default function HideAppBar(props) {
     localStorage.clear();
     props.history.push('/');
   };
+
+  const userName = localStorage.getItem('user');
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
@@ -73,6 +75,7 @@ export default function HideAppBar(props) {
               <IconButton onClick={handleThemeChange} className={classes.globalStyleButton}>
                 {darkState ? <Brightness7Icon /> : <Brightness4Icon />}
               </IconButton>
+              <Typography>{userName}</Typography>
               <IconButton onClick={handleLogOut}>
                 <ExitToAppIcon />
               </IconButton>

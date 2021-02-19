@@ -28,4 +28,10 @@ export const useStyles = makeStyles(() => ({
     paddingRight: '30px',
     paddingBottom: '10px',
   },
+  saveMenu: {
+    display: 'block',
+  },
+  saveMenuHeader: {
+    backgroundColor: '#bf360c',
+  },
 }));
