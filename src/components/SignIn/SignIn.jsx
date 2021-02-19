@@ -8,6 +8,7 @@ import Container from '@material-ui/core/Container';
 import { useStyles } from './styles';
 import PropTypes from 'prop-types';
 import axios from 'axios';
+import jwt_decode from 'jwt-decode';
 export default function SignIn({ history }) {
   const classes = useStyles();
   const [nickname, setNickname] = useState('');
@@ -20,7 +21,9 @@ export default function SignIn({ history }) {
       .post(process.env.REACT_APP_AUTH_URL, { nickname, password })
       .then(response => {
         const { token } = response.data;
+        const decodeToken = jwt_decode(token);
         localStorage.setItem('token', token);
+        localStorage.setItem('user', decodeToken.user_nickname);
         history.push('/');
       })
       .catch(error => {
@@ -54,8 +57,8 @@ export default function SignIn({ history }) {
             margin="normal"
             required
             fullWidth
-            id="email"
-            label="Email Address/Login"
+            id="login"
+            label="Login"
             name="email"
             variant="outlined"
             autoFocus
