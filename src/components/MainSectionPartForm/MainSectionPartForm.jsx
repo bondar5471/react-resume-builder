@@ -14,7 +14,7 @@ import { useStyles } from './styles';
 import { PropTypes } from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 
-import { disablebAddField } from '../../services/validationAddField';
+import { disabledAddField } from '../../services/validationAddField';
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
 import EducationForm from '../EducationForm/EducationForm';
@@ -32,7 +32,7 @@ export default function MainSectionPartForm({
 }) {
   const [openEducationForm, setOpenEducationForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
-  const [editedField, setEditedFied] = useState([]);
+  const [editedField, setEditedField] = useState([]);
   const [updatedIndex, setUpdatedIndex] = useState(null);
   const [educationArray, setEducationArray] = useState([]);
   const [institution, setInstitution] = useState('');
@@ -48,7 +48,7 @@ export default function MainSectionPartForm({
   };
 
   const updateField = (pair, key, education) => {
-    setEditedFied(pair);
+    setEditedField(pair);
     setUpdatedIndex(key);
     setEducationArray(education);
     setOpenEditForm(true);
@@ -75,123 +75,124 @@ export default function MainSectionPartForm({
 
   return (
     <>
-      {Object.entries(sectionsField).map(([key, value]) =>
-        Array.isArray(value) ? (
-          <Card className={classes.section} key={key}>
-            <Typography variant="h6" color="textSecondary" gutterBottom>
-              {key}
-              <Tooltip
-                element={'span'}
-                title={
-                  disablebAddField(value) ? (
-                    <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
-                  ) : (
-                    ''
-                  )
-                }
-              >
-                <span>
-                  <IconButton
-                    disabled={disablebAddField(value)}
-                    variant="contained"
-                    onClick={() =>
-                      key === 'EDUCATION' ? setOpenEducationForm(true) : addField(key)
-                    }
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </span>
-              </Tooltip>
-            </Typography>
-            <>
-              {key === 'EDUCATION' ? (
-                <EducationForm
-                  value={value}
-                  updateField={updateField}
-                  removeFieldFromEducation={removeFieldFromEducation}
-                />
-              ) : (
-                <Grid container spacing={2} justify="flex-start">
-                  {value.map((field, index) => (
-                    <Grid item xs={12} key={`${field}-section`}>
-                      <Tooltip title={setTooltips(key)}>
-                        <TextField
-                          fullWidth
-                          key={`${field}-field`}
-                          defaultValue={field}
-                          multiline
-                          variant="outlined"
-                          onBlur={e =>
-                            handleInput(
-                              setGlobalError,
-                              e.target.value,
-                              setSectionFieldMultiValue(e.target.value, key, index),
-                            )
-                          }
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton
-                                  variant="contained"
-                                  color="secondary"
-                                  onClick={() => removeField(index, key)}
-                                >
-                                  <RemoveCircleOutlineIcon />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
-                      </Tooltip>
-                    </Grid>
-                  ))}
-                </Grid>
-              )}
-            </>
-          </Card>
-        ) : (
-          <>
-            {typeof value === 'string' ? (
-              <Card className={classes.section} key={value}>
-                <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
-                  <TextField
-                    className={classes.marginBottom}
-                    fullWidth
-                    variant="outlined"
-                    id="filled-basic"
-                    label={key}
-                    defaultValue={value}
-                    onBlur={e =>
-                      handleInput(
-                        setGlobalError,
-                        e.target.value,
-                        setSectionFieldSingleValue(e.target.value, key),
-                      )
-                    }
-                  />
+      {Object.entries(sectionsField).map(([key, value]) => (
+        <React.Fragment key={key}>
+          {Array.isArray(value) ? (
+            <Card className={classes.section}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                {key}
+                <Tooltip
+                  element={'span'}
+                  title={
+                    disabledAddField(value) ? (
+                      <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
+                    ) : (
+                      ''
+                    )
+                  }
+                >
+                  <span>
+                    <IconButton
+                      disabled={disabledAddField(value)}
+                      variant="contained"
+                      onClick={() =>
+                        key === 'EDUCATION' ? setOpenEducationForm(true) : addField(key)
+                      }
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </span>
                 </Tooltip>
-              </Card>
-            ) : null}
-            <AddEducationInfo
-              openEducationForm={openEducationForm}
-              handleCloseCreate={handleCloseCreate}
-              addFieldToEducation={addFieldToEducation}
-              institution={institution}
-              degree={degree}
-              setInstitution={setInstitution}
-              setDegree={setDegree}
-            />
-            <EditEducationInfo
-              openEditForm={openEditForm}
-              handleCloseEdit={handleCloseEdit}
-              editedField={editedField}
-              handleUpdate={handleUpdate}
-              setInstitution={setInstitution}
-              setDegree={setDegree}
-            />
-          </>
-        ),
-      )}
+              </Typography>
+              <>
+                {key === 'EDUCATION' ? (
+                  <EducationForm
+                    value={value}
+                    updateField={updateField}
+                    removeFieldFromEducation={removeFieldFromEducation}
+                  />
+                ) : (
+                  <Grid container spacing={2} justify="flex-start">
+                    {value.map((field, index) => (
+                      <Grid item xs={12} key={field}>
+                        <Tooltip title={setTooltips(key)}>
+                          <TextField
+                            fullWidth
+                            key={`${field}-field`}
+                            defaultValue={field}
+                            multiline
+                            variant="outlined"
+                            onBlur={e =>
+                              handleInput(
+                                setGlobalError,
+                                e.target.value,
+                                setSectionFieldMultiValue(e.target.value, key, index),
+                              )
+                            }
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() => removeField(index, key)}
+                                  >
+                                    <RemoveCircleOutlineIcon />
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                        </Tooltip>
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </>
+            </Card>
+          ) : (
+            <>
+              {typeof value === 'string' ? (
+                <Card className={classes.section} key={value}>
+                  <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
+                    <TextField
+                      className={classes.marginBottom}
+                      fullWidth
+                      variant="outlined"
+                      label={key}
+                      defaultValue={value}
+                      onBlur={e =>
+                        handleInput(
+                          setGlobalError,
+                          e.target.value,
+                          setSectionFieldSingleValue(e.target.value, key),
+                        )
+                      }
+                    />
+                  </Tooltip>
+                </Card>
+              ) : null}
+              <AddEducationInfo
+                openEducationForm={openEducationForm}
+                handleCloseCreate={handleCloseCreate}
+                addFieldToEducation={addFieldToEducation}
+                institution={institution}
+                degree={degree}
+                setInstitution={setInstitution}
+                setDegree={setDegree}
+              />
+              <EditEducationInfo
+                openEditForm={openEditForm}
+                handleCloseEdit={handleCloseEdit}
+                editedField={editedField}
+                handleUpdate={handleUpdate}
+                setInstitution={setInstitution}
+                setDegree={setDegree}
+              />
+            </>
+          )}
+        </React.Fragment>
+      ))}
     </>
   );
 }

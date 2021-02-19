@@ -59,7 +59,7 @@ export default function HideAppBar(props) {
   };
 
   const handleLogOut = () => {
-    localStorage.removeItem('token');
+    localStorage.clear();
     props.history.push('/');
   };
   return (

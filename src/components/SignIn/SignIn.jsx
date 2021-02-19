@@ -57,7 +57,7 @@ export default function SignIn({ history }) {
             id="email"
             label="Email Address/Login"
             name="email"
-            autoComplete="email"
+            variant="outlined"
             autoFocus
             onChange={e => setNickname(e.target.value)}
           />
@@ -72,6 +72,7 @@ export default function SignIn({ history }) {
             label="Password"
             type="password"
             id="password"
+            variant="outlined"
             autoComplete="current-password"
             onChange={e => setPassword(e.target.value)}
           />

@@ -22,6 +22,6 @@ export const useStyles = makeStyles(theme => ({
     textTransform: 'capitalize',
   },
   floatingLabelFocusStyle: {
-    color: '#2C2C2C !important',
+    color: 'silver !important',
   },
 }));

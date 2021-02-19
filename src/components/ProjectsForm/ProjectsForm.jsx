@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 
-import { disablebAddField } from '../../services/validationAddField';
+import { disabledAddField } from '../../services/validationAddField';
 import { handleInput } from '../../services/HandleInput';
 import { useStyles } from './styles';
 
@@ -160,7 +160,7 @@ export default function ProjectsForm({
                 element={'span'}
                 placement="right"
                 title={
-                  disablebAddField(proj[Object.keys(proj)]['Responsibilities']) ? (
+                  disabledAddField(proj[Object.keys(proj)]['Responsibilities']) ? (
                     <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
                   ) : (
                     ''
@@ -169,7 +169,7 @@ export default function ProjectsForm({
               >
                 <span>
                   <IconButton
-                    disabled={disablebAddField(proj[Object.keys(proj)]['Responsibilities'])}
+                    disabled={disabledAddField(proj[Object.keys(proj)]['Responsibilities'])}
                     variant="contained"
                     onClick={() => addFieldResponsibility(proj, indexProj)}
                   >
