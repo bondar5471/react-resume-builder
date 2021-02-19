@@ -44,7 +44,6 @@ export default function AddEducationInfo({
               className={classes.marginBottom}
               fullWidth
               variant="outlined"
-              id="filled-basic"
               label="Educational institution"
               onBlur={e => setInstitution(e.target.value)}
             />
@@ -55,7 +54,6 @@ export default function AddEducationInfo({
               className={classes.marginBottom}
               fullWidth
               variant="outlined"
-              id="filled-basic"
               label="Degree"
               onBlur={e => setDegree(e.target.value)}
             />

@@ -69,6 +69,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
           >
             <TextField
               fullWidth
+              className={classes.textField}
               variant="filled"
               label="Project name"
               required
@@ -77,6 +78,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             <Tooltip title="Shortly describe a project. Include product category, target users, and primary features.">
               <TextField
                 fullWidth
+                className={classes.textField}
                 variant="filled"
                 multiline
                 rows={3}
@@ -93,6 +95,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               >
                 <TextField
                   key={index}
+                  className={classes.textField}
                   fullWidth
                   variant="filled"
                   defaultValue={res}
@@ -112,6 +115,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             </Tooltip>
             <Tooltip title="Ex.: Full-stack Developer">
               <TextField
+                className={classes.textField}
                 fullWidth
                 variant="filled"
                 label="Role"
@@ -122,6 +126,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             <Tooltip title="Add all skills on technologies used in this project, such as programming language, database, and others.">
               <TextField
                 fullWidth
+                className={classes.textField}
                 variant="filled"
                 label="Skills"
                 required
@@ -130,6 +135,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
             </Tooltip>
             <TextField
               fullWidth
+              className={classes.textField}
               variant="filled"
               label="Team info"
               type="number"

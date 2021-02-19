@@ -42,7 +42,6 @@ export default function EditEducationInfo({
               className={classes.marginBottom}
               fullWidth
               variant="outlined"
-              id="filled-basic"
               label="ex.: Educational institution"
               defaultValue={editedField[0]}
               onBlur={e => setInstitution(e.target.value)}
@@ -54,7 +53,6 @@ export default function EditEducationInfo({
               className={classes.marginBottom}
               fullWidth
               variant="outlined"
-              id="filled-basic"
               label="Degree"
               defaultValue={editedField[1]}
               onBlur={e => setDegree(e.target.value)}
