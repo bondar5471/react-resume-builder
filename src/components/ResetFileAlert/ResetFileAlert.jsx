@@ -12,7 +12,7 @@ export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, de
     >
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          Do you want to choose another file and cancel your current changes?
+          Do you want leave this page ?
         </DialogContentText>
       </DialogContent>
       <DialogActions>

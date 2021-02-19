@@ -97,5 +97,5 @@ HideOnScroll.propTypes = {
 
 HideAppBar.propTypes = {
   props: PropTypes.object,
-  history: PropTypes.func,
+  history: PropTypes.object,
 };

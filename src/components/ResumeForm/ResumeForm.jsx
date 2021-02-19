@@ -5,6 +5,8 @@ import { Button, ButtonGroup, Card, Fab } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
 import DescriptionIcon from '@material-ui/icons/Description';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
+import { Accordion, AccordionSummary, Typography, AccordionDetails } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 import { useStyles } from './styles';
 import WriteResumeFile from '../WriteResumeFile';
@@ -19,13 +21,13 @@ import { useStickyState } from '../../services/StickyState';
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    window.addEventListener('beforeunload', e => beroreUnloadHandler(e));
+    window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
     return () => {
-      window.removeEventListener('beforeunload', beroreUnloadHandler);
+      window.removeEventListener('beforeunload', beforeUnloadHandler);
       window.removeEventListener('scroll', checkScrollTop);
     };
   }, []);
-  const beroreUnloadHandler = e => {
+  const beforeUnloadHandler = e => {
     e.preventDefault();
     e.returnValue = 'Close without saving?';
     window.onunload = function () {
@@ -36,13 +38,15 @@ export default function ResumeForm({ setResumeFields }) {
   const [showScroll, setShowScroll] = useState(false);
   const [userDataField, setUserDataField] = useStickyState(
     JSON.parse(localStorage.getItem('resumeFields')).cv.$person,
-    'udpdatedUserState',
+    'updatedUserState',
   );
   const [sectionsField, setSectionField] = useStickyState(
     JSON.parse(localStorage.getItem('resumeFields')).cv.$sections,
     'updatedSectionState',
   );
   const [globalError, setGlobalError] = useState(false);
+
+  const [expanded, setExpanded] = useState(null);
   const [cancelEditFile, setCancelEditFile] = useState(false);
   const [openTsForm, setOpenTsForm] = useState(false);
   const [open, setOpen] = useState(false);
@@ -95,10 +99,10 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   const setSingleObjectField = (value, sectionKey, key) => {
-    const updatetSection = set(sectionsField[sectionKey], `${key}`, value);
+    const updatedSection = set(sectionsField[sectionKey], `${key}`, value);
     debounceSetSectionField({
       ...sectionsField,
-      [sectionKey]: updatetSection,
+      [sectionKey]: updatedSection,
     });
   };
 
@@ -248,7 +252,7 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   const deleteResume = () => {
-    localStorage.removeItem('udpdatedUserState');
+    localStorage.removeItem('updatedUserState');
     localStorage.removeItem('resumeFields');
     localStorage.removeItem('updatedSectionState');
     localStorage.removeItem('currentSha');
@@ -259,7 +263,7 @@ export default function ResumeForm({ setResumeFields }) {
   const resetChange = () => {
     const userData = JSON.parse(localStorage.getItem('resumeFields')).cv.$person;
     const sectionData = JSON.parse(localStorage.getItem('resumeFields')).cv.$sections;
-    localStorage.setItem('udpdatedUserState', JSON.stringify(userData));
+    localStorage.setItem('updatedUserState', JSON.stringify(userData));
     localStorage.setItem('updatedSectionState', JSON.stringify(sectionData));
     setGlobalError(false);
     setUserDataField(userData);
@@ -281,6 +285,10 @@ export default function ResumeForm({ setResumeFields }) {
 
   const updateFieldToEducation = fields => {
     debounceSetSectionField({ ...sectionsField, ['EDUCATION']: fields });
+  };
+
+  const handleChangeExpanded = () => {
+    setExpanded('save');
   };
 
   return (
@@ -329,11 +337,28 @@ export default function ResumeForm({ setResumeFields }) {
           changeProjectName={changeProjectName}
         />
       </form>
-      <WriteResumeFile
-        userData={userDataField}
-        sectionData={sectionsField}
-        globalError={globalError}
-      />
+      <Accordion
+        square
+        expanded={expanded === 'save'}
+        onChange={() => handleChangeExpanded()}
+        onBlur={() => setExpanded(null)}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          className={classes.saveMenuHeader}
+        >
+          <Typography>Save...</Typography>
+        </AccordionSummary>
+        <AccordionDetails className={classes.saveMenu}>
+          <WriteResumeFile
+            userData={userDataField}
+            sectionData={sectionsField}
+            globalError={globalError}
+          />
+        </AccordionDetails>
+      </Accordion>
       <AddProjModal handleClose={handleClose} open={open} createProject={createProject} />
       <TechnologyStackForm
         handleCloseTsForm={handleCloseTsForm}

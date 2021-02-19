@@ -40,4 +40,10 @@ export const useStyles = makeStyles(theme => ({
     transition: 'opacity 0.4s',
     opacity: '0.5',
   },
+  saveMenu: {
+    display: 'block',
+  },
+  saveMenuHeader: {
+    backgroundColor: '#bf360c',
+  },
 }));

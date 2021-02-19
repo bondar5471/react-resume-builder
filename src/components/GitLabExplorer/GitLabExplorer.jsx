@@ -10,6 +10,7 @@ import {
   ListItemText,
   Typography,
   Paper,
+  CircularProgress,
 } from '@material-ui/core';
 import { Description, Folder, ArrowBack } from '@material-ui/icons';
 import PropTypes from 'prop-types';
@@ -23,8 +24,10 @@ export default function GitLabExplorer({ history }) {
   const [currentPath, setCurrentPath] = useState(null);
   const [files, setFiles] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const openGitLabRepo = path => {
+    setLoading(true);
     const api = new Gitlab({
       host: process.env.REACT_APP_GITLAB_URL,
       token: process.env.REACT_APP_GITLAB_TOKEN,
@@ -32,6 +35,7 @@ export default function GitLabExplorer({ history }) {
     const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     api.Repositories.tree(id, { path }).then(files => {
       setFiles(files);
+      setLoading(false);
     });
   };
 
@@ -48,13 +52,13 @@ export default function GitLabExplorer({ history }) {
       token: process.env.REACT_APP_GITLAB_TOKEN,
     });
     const id = process.env.REACT_APP_GITLAB_PROJ_ID;
-    const responce = await api.RepositoryFiles.show(id, path, 'master');
-    const fileExtension = responce.file_path.split('.').pop();
+    const response = await api.RepositoryFiles.show(id, path, 'master');
+    const fileExtension = response.file_path.split('.').pop();
     if (fileExtension === 'yaml') {
-      const decodeContext = decode(responce.content);
+      const decodeContext = decode(response.content);
       const field = yaml.safeLoad(decodeContext);
-      localStorage.setItem('currentSha', responce.content_sha256);
-      localStorage.setItem('currentPath', responce.file_path);
+      localStorage.setItem('currentSha', response.content_sha256);
+      localStorage.setItem('currentPath', response.file_path);
       localStorage.setItem('resumeFields', JSON.stringify(field));
       history.push('/');
     } else {
@@ -85,25 +89,31 @@ export default function GitLabExplorer({ history }) {
     <Paper>
       <Paper className={classes.head}>
         <Typography variant="h6">Select file for editing...</Typography>
-        {error ? <Typography color="error">{error}</Typography> : null}
+        {error ? <Typography color="secondary">{error}</Typography> : null}
       </Paper>
-      <Typography>
-        {currentPath ? (
-          <IconButton aria-label="back" onClick={() => backStep()}>
-            <ArrowBack />
-          </IconButton>
-        ) : null}
-        {currentPath}
-      </Typography>
-      <List component="nav" aria-label="main mailbox folders">
-        {files &&
-          files.map(file => (
-            <ListItem button key={file.id} onClick={() => recognizeType(file)}>
-              <ListItemIcon>{file.type === 'tree' ? <Folder /> : <Description />}</ListItemIcon>
-              <ListItemText primary={file.name} />
-            </ListItem>
-          ))}
-      </List>
+      {loading ? (
+        <CircularProgress size="50px" className={classes.spinner} />
+      ) : (
+        <>
+          <Typography>
+            {currentPath ? (
+              <IconButton aria-label="back" onClick={() => backStep()}>
+                <ArrowBack />
+              </IconButton>
+            ) : null}
+            {currentPath}
+          </Typography>
+          <List component="nav" aria-label="main mailbox folders">
+            {files &&
+              files.map(file => (
+                <ListItem button key={file.id} onClick={() => recognizeType(file)}>
+                  <ListItemIcon>{file.type === 'tree' ? <Folder /> : <Description />}</ListItemIcon>
+                  <ListItemText primary={file.name} />
+                </ListItem>
+              ))}
+          </List>
+        </>
+      )}
     </Paper>
   );
 }
