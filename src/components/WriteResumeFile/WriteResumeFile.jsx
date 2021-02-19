@@ -33,6 +33,13 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     localStorage.setItem('resumeFields', JSON.stringify(updatedCv));
   };
 
+  const handleChangeResume = () => {
+    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
+    const currentCv = localStorage.getItem('resumeFields');
+    const notChanged = JSON.stringify(updatedCv) === currentCv;
+    return notChanged;
+  };
+
   const updateFileOnGitLab = async () => {
     try {
       setLoading(true);
@@ -44,14 +51,14 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       });
       const path = localStorage.getItem('currentPath');
       const id = process.env.REACT_APP_GITLAB_PROJ_ID;
-      const responce = await api.RepositoryFiles.edit(
+      const response = await api.RepositoryFiles.edit(
         id,
         path,
         'master',
         yamlStr,
         `Updated ${path}`,
       );
-      setOpenAlert(responce.file_path === path);
+      setOpenAlert(response.file_path === path);
       handleSave();
     } catch (e) {
       setError(e);
@@ -104,7 +111,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
             />
             <Button
               className={classes.saveAsButton}
-              disabled={globalError || fileNameValidation()}
+              disabled={handleChangeResume() || globalError || fileNameValidation()}
               variant="contained"
               fullWidth
               onClick={() => createFile()}
@@ -117,7 +124,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
               <Typography>Upload file to GitLab :</Typography>
               <Button
                 className={classes.gitButton}
-                disabled={globalError || loading}
+                disabled={handleChangeResume() || globalError || loading}
                 variant="contained"
                 fullWidth
                 onClick={() => updateFileOnGitLab()}
