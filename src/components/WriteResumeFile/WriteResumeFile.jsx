@@ -30,10 +30,15 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const [openAlert, setOpenAlert] = useState(false);
   const [expanded, setExpanded] = useState(null);
 
-  const createFile = () => {
+  const createYamlData = () => {
     const cv = { cv: { $person: userData, $sections: sectionData } };
     const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 });
-    const yamlWrite = new Blob([yamlStr], {
+    return yamlStr;
+  };
+
+  const createFile = () => {
+    const yamlData = createYamlData();
+    const yamlWrite = new Blob([yamlData], {
       type: 'text/yaml',
     });
     setExpanded('save');
@@ -57,8 +62,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     try {
       setLoading(true);
       setExpanded('save');
-      const cv = { cv: { $person: userData, $sections: sectionData } };
-      const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 });
+      const yamlData = createYamlData();
       const api = new Gitlab({
         host: process.env.REACT_APP_GITLAB_URL,
         token: process.env.REACT_APP_GITLAB_TOKEN,
@@ -70,7 +74,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
         id,
         path,
         'master',
-        yamlStr,
+        yamlData,
         `User ${userName} updated ${path}`,
       );
       setOpenAlert(response.file_path === path);
@@ -79,15 +83,20 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       setError(e);
     } finally {
       setLoading(false);
+      setExpanded(null);
     }
   };
 
   const fileNameValidation = () => {
     return fileName.indexOf(' ') >= 0 || fileName === '';
   };
-
-  const handleChangeExpanded = () => {
-    setExpanded('save');
+  const handleChange = panel => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
+  const handleBlurAccordion = () => event => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setExpanded(null);
+    }
   };
 
   const classes = useStyles();
@@ -97,8 +106,8 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       <Accordion
         square
         expanded={expanded === 'save'}
-        onChange={() => handleChangeExpanded()}
-        onBlur={() => setExpanded(null)}
+        onChange={handleChange('save')}
+        onBlur={handleBlurAccordion()}
       >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -122,6 +131,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                 onClick={() => {
                   handleSave();
                   setUrlFile(null);
+                  setExpanded(null);
                 }}
                 startIcon={<SaveIcon />}
               >
