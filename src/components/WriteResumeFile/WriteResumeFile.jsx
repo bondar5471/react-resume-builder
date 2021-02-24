@@ -14,14 +14,12 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SaveIcon from '@material-ui/icons/Save';
 import { PropTypes } from 'prop-types';
 import yaml from 'js-yaml';
-import MuiAlert from '@material-ui/lab/Alert';
 import { Gitlab } from '@gitbeaker/browser';
 
+import GitLabDirModal from '../GitLabDirModal';
+import Alert from '../Alert';
 import { useStyles } from './styles';
 
-function Alert(props) {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-}
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null);
   const [fileName, setFileName] = useState('resume');
@@ -29,6 +27,8 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const [error, setError] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [expanded, setExpanded] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
+  const [openAlertNewPush, setOpenAlertNewPush] = useState(false);
 
   const createYamlData = () => {
     const cv = { cv: { $person: userData, $sections: sectionData } };
@@ -162,10 +162,21 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                 >
                   {`Save as file ${fileName}.yaml`}
                 </Button>
+                {localStorage.getItem('currentPath') ? null : (
+                  <Button
+                    className={classes.saveAsButton}
+                    disabled={globalError || fileNameValidation()}
+                    variant="contained"
+                    fullWidth
+                    onClick={() => setOpenModal(true)}
+                  >
+                    {`Push new file ${fileName}.yaml gitlab`}
+                  </Button>
+                )}
               </Paper>
               {localStorage.getItem('currentPath') ? (
                 <Paper className={classes.gitUploadContainer}>
-                  <Typography>Upload file to GitLab :</Typography>
+                  <Typography>Update file on GitLab :</Typography>
                   <Button
                     className={classes.gitButton}
                     disabled={handleChangeResume() || globalError || loading}
@@ -191,6 +202,23 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           Sorry, something went wrong.
         </Alert>
       </Snackbar>
+      <Snackbar
+        open={openAlertNewPush}
+        autoHideDuration={6000}
+        onClose={() => setOpenAlertNewPush(false)}
+      >
+        <Alert onClose={() => setOpenAlertNewPush(false)} severity="success">
+          New file pushed successfully!
+        </Alert>
+      </Snackbar>
+      <GitLabDirModal
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        handleSave={handleSave}
+        setOpenAlertNewPush={setOpenAlertNewPush}
+        createYamlData={createYamlData}
+        fileName={fileName}
+      />
     </div>
   );
 }
