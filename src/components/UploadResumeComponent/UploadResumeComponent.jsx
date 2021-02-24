@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import {
   Button,
@@ -9,6 +10,7 @@ import {
   Avatar,
   FormLabel,
   FormHelperText,
+  Card,
 } from '@material-ui/core';
 import yaml from 'js-yaml';
 import { decode } from 'js-base64';
@@ -17,6 +19,7 @@ import { useStyles } from './styles';
 import ResumeForm from '../ResumeForm';
 import { getFileFromFolderRepo, getListFolderRepo } from '../../services/HandlerGit';
 import GitUploadModal from '../GitUploadModal/GitUploadModal';
+import { webExample } from '../../template/example.js';
 
 export default function UploadResumeComponent() {
   const classes = useStyles();
@@ -119,6 +122,13 @@ export default function UploadResumeComponent() {
     await getFile(path);
   };
 
+  const setTemplate = event => {
+    event.preventDefault();
+    const field = yaml.safeLoad(webExample.web);
+    localStorage.setItem('resumeFields', JSON.stringify(field));
+    setResumeFields(field);
+  };
+
   return (
     <div>
       {resumeFields ? (
@@ -131,53 +141,68 @@ export default function UploadResumeComponent() {
               className={classes.avatar}
               src="https://image.flaticon.com/icons/svg/893/893505.svg"
             />
-            <Typography component="h1" variant="h5">
-              Resume Editor
-            </Typography>
+            <Typography variant="h4">Resume builder</Typography>
           </div>
           <form className={classes.form} noValidate onSubmit={readFile}>
             <FormControl component="fieldset">
-              <FormLabel component="legend">Please upload a resume file</FormLabel>
-              <input
-                style={{ display: 'none' }}
-                accept=".yaml, .yml"
-                ref={hiddenFileInput}
-                id="upload-file"
-                name="upload-file"
-                type="file"
-                onChange={handleChange}
-              />
-              <Button
-                color="secondary"
-                variant="contained"
-                component="span"
-                className={classes.button}
-                startIcon={<CloudUploadIcon />}
-                onClick={handleClick}
-              >
-                {fileName}
-              </Button>
-              <FormHelperText> Support only .yml, .yaml files</FormHelperText>
-              {errors.map(e => (
-                <Typography color="error" key={e.message}>
-                  {e.message}
-                </Typography>
-              ))}
-              <Button
-                className={classes.editButton}
-                type="submit"
-                variant="contained"
-                color="default"
-                fullWidth
-                disabled={!resumeFile}
-              >
-                Edit
-              </Button>
-              <Link to="/git_explorer">
-                <Button variant="outlined" fullWidth className={classes.editButton}>
-                  GitLab Explorer
+              <Card className={classes.cardBox}>
+                <FormLabel component="legend">Upload resume file from GitLab:</FormLabel>
+                <Link to="/git_explorer">
+                  <Button variant="outlined" fullWidth className={classes.editButton}>
+                    GitLab Explorer
+                  </Button>
+                </Link>
+                <FormLabel component="legend">Use template:</FormLabel>
+                <Button
+                  color="secondary"
+                  fullWidth
+                  variant="contained"
+                  component="span"
+                  className={classes.button}
+                  startIcon={<InsertDriveFileIcon />}
+                  onClick={e => setTemplate(e)}
+                >
+                  Edit template
                 </Button>
-              </Link>
+              </Card>
+              <Card className={classes.cardBox}>
+                <FormLabel component="legend">Upload resume file:</FormLabel>
+                <input
+                  style={{ display: 'none' }}
+                  accept=".yaml, .yml"
+                  ref={hiddenFileInput}
+                  id="upload-file"
+                  name="upload-file"
+                  type="file"
+                  onChange={handleChange}
+                />
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  fullWidth
+                  className={classes.button}
+                  startIcon={<CloudUploadIcon />}
+                  onClick={handleClick}
+                >
+                  {fileName}
+                </Button>
+                <FormHelperText> Support only .yml, .yaml files</FormHelperText>
+                {errors.map(e => (
+                  <Typography color="error" key={e.message}>
+                    {e.message}
+                  </Typography>
+                ))}
+                <Button
+                  className={classes.editButton}
+                  type="submit"
+                  variant="contained"
+                  color="default"
+                  fullWidth
+                  disabled={!resumeFile}
+                >
+                  Edit file
+                </Button>
+              </Card>
             </FormControl>
           </form>
           <GitUploadModal

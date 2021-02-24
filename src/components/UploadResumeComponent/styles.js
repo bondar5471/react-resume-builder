@@ -25,7 +25,7 @@ export const useStyles = makeStyles(theme => ({
     margin: theme.spacing(3),
   },
   button: {
-    margin: theme.spacing(1, 1, 0, 0),
+    margin: theme.spacing(2, 0, 0, 0),
   },
   editButton: {
     marginTop: theme.spacing(2),
@@ -47,5 +47,9 @@ export const useStyles = makeStyles(theme => ({
     color: '#000',
     marginTop: theme.spacing(1),
     border: '2px solid #838383',
+  },
+  cardBox: {
+    padding: '5px',
+    marginTop: '25px',
   },
 }));
