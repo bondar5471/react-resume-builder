@@ -15,6 +15,7 @@ import {
 import { Description, Folder, ArrowBack } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 
+import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 
 export default function GitLabExplorer({ history }) {
@@ -78,9 +79,7 @@ export default function GitLabExplorer({ history }) {
   };
 
   const backStep = () => {
-    const splitUrl = currentPath.split('/');
-    splitUrl.pop();
-    const backUrl = splitUrl.join('/');
+    const backUrl = backStepPath(currentPath);
     setCurrentPath(backUrl);
     openGitLabRepo(backUrl);
   };
