@@ -104,38 +104,38 @@ export default function GitLabDirModal({
         <Paper className={classes.dialogContent}>
           <Typography>Sect folder for upload file:</Typography>
           <hr />
-          <Typography className={classes.pathBar}>
-            {path ? (
+          {path ? (
+            <Typography className={classes.pathBar}>
               <IconButton aria-label="back" onClick={() => backStep()}>
                 <ArrowBack />
               </IconButton>
-            ) : null}
-            {path}
-          </Typography>
+              {path}
+            </Typography>
+          ) : null}
         </Paper>
+        {loading ? (
+          <CircularProgress color="secondary" className={classes.spin} />
+        ) : (
+          <Paper>
+            <List component="nav" aria-label="main mailbox folders">
+              {folders &&
+                folders.map(folder =>
+                  folder.type === 'tree' ? (
+                    <ListItem button key={folder.id} onClick={() => openFolder(folder)}>
+                      <ListItemIcon>
+                        <Folder />
+                      </ListItemIcon>
+                      <ListItemText primary={folder.name} />
+                    </ListItem>
+                  ) : null,
+                )}
+            </List>
+            <Button fullWidth variant="contained" onClick={() => uploadNewFile()}>
+              Upload new file
+            </Button>
+          </Paper>
+        )}
       </DialogContent>
-      {loading ? (
-        <CircularProgress color="secondary" className={classes.spin} />
-      ) : (
-        <Paper>
-          <List component="nav" aria-label="main mailbox folders">
-            {folders &&
-              folders.map(folder =>
-                folder.type === 'tree' ? (
-                  <ListItem button key={folder.id} onClick={() => openFolder(folder)}>
-                    <ListItemIcon>
-                      <Folder />
-                    </ListItemIcon>
-                    <ListItemText primary={folder.name} />
-                  </ListItem>
-                ) : null,
-              )}
-          </List>
-          <Button fullWidth variant="contained" onClick={() => uploadNewFile()}>
-            Upload new file
-          </Button>
-        </Paper>
-      )}
       <Snackbar
         open={openErrorAlert}
         autoHideDuration={6000}
