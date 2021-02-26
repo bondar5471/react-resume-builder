@@ -65,22 +65,26 @@ export default function UploadResumeComponent() {
       setLoadingFiles(false);
     }
   }
-  async function getFile(path) {
+
+  const getFile = path => {
     try {
-      const responce = await getFileFromFolderRepo(path);
-      const decodeContext = decode(responce.content);
-      const field = yaml.safeLoad(decodeContext);
-      localStorage.setItem('currentSha', responce.sha);
-      localStorage.setItem('currentPath', path);
-      localStorage.setItem('resumeFields', JSON.stringify(field));
-      setResumeFields(field);
+      writeFile(path);
     } catch (e) {
       setError(e);
     } finally {
       setIsOpenGitModal(false);
     }
-  }
+  };
 
+  const writeFile = async path => {
+    const responce = await getFileFromFolderRepo(path);
+    const decodeContext = decode(responce.content);
+    const field = yaml.safeLoad(decodeContext);
+    localStorage.setItem('currentSha', responce.sha);
+    localStorage.setItem('currentPath', path);
+    localStorage.setItem('resumeFields', JSON.stringify(field));
+    setResumeFields(field);
+  };
   const hiddenFileInput = React.useRef(null);
 
   const handleClick = event => {
