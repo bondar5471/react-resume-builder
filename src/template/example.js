@@ -2,9 +2,9 @@ const webExample = {
   web: `
   cv:
     $person:
-      $firstname: ''
-      $lastname: ''
-      $photo: ''
+      $firstname: 'FirstName'
+      $lastname: 'LastName'
+      $photo: '/photo/url'
     $sections:
       ROLE: ''
       TECHNICAL EXPERTISE:

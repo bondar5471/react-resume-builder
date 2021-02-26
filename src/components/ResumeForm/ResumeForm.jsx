@@ -24,7 +24,7 @@ export default function ResumeForm({ setResumeFields }) {
       window.removeEventListener('beforeunload', beforeUnloadHandler);
       window.removeEventListener('scroll', checkScrollTop);
     };
-  }, []);
+  });
   const beforeUnloadHandler = e => {
     e.preventDefault();
     e.returnValue = 'Close without saving?';
@@ -46,8 +46,7 @@ export default function ResumeForm({ setResumeFields }) {
   const [cancelEditFile, setCancelEditFile] = useState(false);
   const [openTsForm, setOpenTsForm] = useState(false);
   const [open, setOpen] = useState(false);
-  const debounceSetUserDataField = React.useRef(debounce(state => setUserDataField(state), 100))
-    .current;
+
   const debounceSetSectionField = React.useRef(debounce(state => setSectionField(state), 100))
     .current;
   const projectSectionField = sectionsField['SIGNIFICANT PROJECTS'];
@@ -244,7 +243,7 @@ export default function ResumeForm({ setResumeFields }) {
   const setUserFieldValue = (value, key) => {
     const updatedState = userDataField;
     const newState = { ...updatedState, [key]: value };
-    debounceSetUserDataField(newState);
+    setUserDataField(newState);
   };
 
   const deleteResume = () => {
@@ -313,6 +312,7 @@ export default function ResumeForm({ setResumeFields }) {
           removeFieldFromEducation={removeFieldFromEducation}
           updateFieldToEducation={updateFieldToEducation}
           setGlobalError={setGlobalError}
+          setSectionField={setSectionField}
         />
         <SecondarySectionPartForm
           handleOpen={handleOpen}
@@ -327,6 +327,7 @@ export default function ResumeForm({ setResumeFields }) {
           removeProject={removeProject}
           setGlobalError={setGlobalError}
           changeProjectName={changeProjectName}
+          setSectionField={setSectionField}
         />
       </form>
       <WriteResumeFile

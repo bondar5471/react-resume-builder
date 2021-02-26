@@ -46,7 +46,6 @@ export default function HideAppBar(props) {
       },
     },
     typography: {
-      fontFamily: 'Lato',
       fontWeightLight: 300,
       fontWeightRegular: 400,
       fontWeightMedium: 500,

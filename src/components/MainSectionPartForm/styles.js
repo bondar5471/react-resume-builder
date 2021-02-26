@@ -13,4 +13,7 @@ export const useStyles = makeStyles(() => ({
   marginBottom: {
     marginBottom: '25px',
   },
+  removeSectionButton: {
+    float: 'right',
+  },
 }));

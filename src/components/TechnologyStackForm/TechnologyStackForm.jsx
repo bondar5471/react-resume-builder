@@ -76,6 +76,7 @@ export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, add
                 <Chip key={option} variant="outlined" label={option} {...getTagProps({ index })} />
               ))
             }
+            onInputChange={e => setStack(e.target.value)}
             onChange={(event, value) => {
               setStackList(event, value);
             }}

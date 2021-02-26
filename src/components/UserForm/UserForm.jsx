@@ -16,7 +16,7 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
               <TextField
                 error={!value}
                 fullWidth
-                key={value}
+                key={key}
                 label={key.substring(1)}
                 defaultValue={value}
                 onBlur={e =>

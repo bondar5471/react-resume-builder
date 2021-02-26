@@ -64,27 +64,31 @@ export default function GitLabDirModal({
     getDirTree(backUrl);
   };
 
-  const uploadNewFile = async () => {
+  const createNewPushRequest = async () => {
+    const yamlData = createYamlData();
+    const api = new Gitlab({
+      host: process.env.REACT_APP_GITLAB_URL,
+      token: process.env.REACT_APP_GITLAB_TOKEN,
+    });
+    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
+    const userName = localStorage.getItem('user');
+    const resumePath = path + '/' + fileName + '.yaml';
+    const response = await api.RepositoryFiles.create(
+      id,
+      resumePath,
+      'master',
+      yamlData,
+      `User ${userName} add file ${fileName}`,
+    );
+    localStorage.setItem('currentPath', response.file_path);
+    handleSave();
+    setOpenAlertNewPush(true);
+    setOpenModal(false);
+  };
+
+  const uploadFile = () => {
     try {
-      const yamlData = createYamlData();
-      const api = new Gitlab({
-        host: process.env.REACT_APP_GITLAB_URL,
-        token: process.env.REACT_APP_GITLAB_TOKEN,
-      });
-      const id = process.env.REACT_APP_GITLAB_PROJ_ID;
-      const userName = localStorage.getItem('user');
-      const resumePath = path + '/' + fileName + '.yaml';
-      const response = await api.RepositoryFiles.create(
-        id,
-        resumePath,
-        'master',
-        yamlData,
-        `User ${userName} add file ${fileName}`,
-      );
-      localStorage.setItem('currentPath', response.file_path);
-      handleSave();
-      setOpenAlertNewPush(true);
-      setOpenModal(false);
+      createNewPushRequest();
     } catch (e) {
       if (e.response.status === 400) {
         setOpenErrorAlert(true);
@@ -104,38 +108,38 @@ export default function GitLabDirModal({
         <Paper className={classes.dialogContent}>
           <Typography>Sect folder for upload file:</Typography>
           <hr />
-          {path ? (
-            <Typography className={classes.pathBar}>
+          <Typography className={classes.pathBar}>
+            {path ? (
               <IconButton aria-label="back" onClick={() => backStep()}>
                 <ArrowBack />
               </IconButton>
-              {path}
-            </Typography>
-          ) : null}
+            ) : null}
+            {path}
+          </Typography>
         </Paper>
-        {loading ? (
-          <CircularProgress color="secondary" className={classes.spin} />
-        ) : (
-          <Paper>
-            <List component="nav" aria-label="main mailbox folders">
-              {folders &&
-                folders.map(folder =>
-                  folder.type === 'tree' ? (
-                    <ListItem button key={folder.id} onClick={() => openFolder(folder)}>
-                      <ListItemIcon>
-                        <Folder />
-                      </ListItemIcon>
-                      <ListItemText primary={folder.name} />
-                    </ListItem>
-                  ) : null,
-                )}
-            </List>
-            <Button fullWidth variant="contained" onClick={() => uploadNewFile()}>
-              Upload new file
-            </Button>
-          </Paper>
-        )}
       </DialogContent>
+      {loading ? (
+        <CircularProgress color="secondary" className={classes.spin} />
+      ) : (
+        <Paper>
+          <List component="nav" aria-label="main mailbox folders">
+            {folders &&
+              folders.map(folder =>
+                folder.type === 'tree' ? (
+                  <ListItem button key={folder.id} onClick={() => openFolder(folder)}>
+                    <ListItemIcon>
+                      <Folder />
+                    </ListItemIcon>
+                    <ListItemText primary={folder.name} />
+                  </ListItem>
+                ) : null,
+              )}
+          </List>
+          <Button fullWidth variant="contained" onClick={() => uploadFile()}>
+            Upload new file
+          </Button>
+        </Paper>
+      )}
       <Snackbar
         open={openErrorAlert}
         autoHideDuration={6000}

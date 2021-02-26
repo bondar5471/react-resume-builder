@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Typography,
@@ -7,7 +7,14 @@ import {
   Grid,
   InputLabel,
   Tooltip,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Button,
+  TextField,
+  Snackbar,
 } from '@material-ui/core';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './styles';
@@ -15,6 +22,7 @@ import Card from '@material-ui/core/Card';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { handleInput } from '../../services/HandleInput';
 
+import Alert from '../Alert';
 import ProjectsForm from '../ProjectsForm/ProjectsForm';
 
 export default function SecondarySectionPartForm({
@@ -30,10 +38,20 @@ export default function SecondarySectionPartForm({
   setGlobalError,
   changeProjectName,
   handleOpen,
+  setSectionField,
 }) {
+  const [openAlert, setOpenAlert] = useState(false);
+  const [sectionArrayName, setSectionArrayName] = useState('');
   const classes = useStyles();
   const isObject = arg => {
     return !!arg && arg.constructor === Object;
+  };
+
+  const addNewSectionList = () => {
+    const oldState = JSON.parse(localStorage.getItem('updatedSectionState'));
+    const newSections = { [sectionArrayName]: [''] };
+    setSectionField({ ...oldState, ...newSections });
+    setOpenAlert(true);
   };
 
   return (
@@ -102,6 +120,41 @@ export default function SecondarySectionPartForm({
           </Card>
         ) : null,
       )}
+      <Card className={classes.section}>
+        <Typography align="center" variant="h6">
+          ADD NEW SECTION:
+        </Typography>
+        <Accordion>
+          <AccordionSummary
+            className={classes.accordionTitle}
+            expandIcon={<ExpandMoreIcon />}
+            aria-controls="add-sections-content"
+          >
+            <Typography>Add</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <TextField
+              fullWidth
+              label="Section name"
+              variant="outlined"
+              onBlur={e => setSectionArrayName(e.target.value)}
+            />
+            <Button
+              size="small"
+              defaultValue={sectionArrayName}
+              color="secondary"
+              onClick={() => addNewSectionList()}
+            >
+              Create
+            </Button>
+          </AccordionDetails>
+        </Accordion>
+        <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
+          <Alert onClose={() => setOpenAlert(false)} severity="success">
+            Updated successfully!
+          </Alert>
+        </Snackbar>
+      </Card>
     </>
   );
 }
@@ -119,4 +172,5 @@ SecondarySectionPartForm.propTypes = {
   changeProjectName: PropTypes.func.isRequired,
   handleOpen: PropTypes.func.isRequired,
   setGlobalError: PropTypes.func,
+  setSectionField: PropTypes.func,
 };

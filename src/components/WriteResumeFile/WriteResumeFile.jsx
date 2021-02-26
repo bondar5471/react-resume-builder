@@ -58,27 +58,31 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     return notChanged;
   };
 
-  const updateFileOnGitLab = async () => {
+  const handleUpdate = async () => {
+    setLoading(true);
+    setExpanded('save');
+    const yamlData = createYamlData();
+    const api = new Gitlab({
+      host: process.env.REACT_APP_GITLAB_URL,
+      token: process.env.REACT_APP_GITLAB_TOKEN,
+    });
+    const path = localStorage.getItem('currentPath');
+    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
+    const userName = localStorage.getItem('user');
+    const response = await api.RepositoryFiles.edit(
+      id,
+      path,
+      'master',
+      yamlData,
+      `User ${userName} updated ${path}`,
+    );
+    setOpenAlert(response.file_path === path);
+    handleSave();
+  };
+
+  const updateFileOnGitLab = () => {
     try {
-      setLoading(true);
-      setExpanded('save');
-      const yamlData = createYamlData();
-      const api = new Gitlab({
-        host: process.env.REACT_APP_GITLAB_URL,
-        token: process.env.REACT_APP_GITLAB_TOKEN,
-      });
-      const path = localStorage.getItem('currentPath');
-      const id = process.env.REACT_APP_GITLAB_PROJ_ID;
-      const userName = localStorage.getItem('user');
-      const response = await api.RepositoryFiles.edit(
-        id,
-        path,
-        'master',
-        yamlData,
-        `User ${userName} updated ${path}`,
-      );
-      setOpenAlert(response.file_path === path);
-      handleSave();
+      handleUpdate();
     } catch (e) {
       setError(e);
     } finally {

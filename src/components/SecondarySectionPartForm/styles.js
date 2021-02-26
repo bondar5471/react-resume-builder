@@ -29,4 +29,16 @@ export const useStyles = makeStyles(theme => ({
     fontStyle: 'italic',
     fontWeight: 'bold',
   },
+  accordionTitle: {
+    backgroundColor: '#878686',
+  },
+  cardContainer: {
+    height: 370,
+    width: 535,
+    margin: 5,
+  },
+  media: {
+    width: '100%',
+    height: 200,
+  },
 }));

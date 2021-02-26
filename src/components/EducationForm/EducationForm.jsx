@@ -25,7 +25,7 @@ export default function EducationForm({ value, updateField, removeFieldFromEduca
     <List component="nav">
       <Grid container spacing={2} justify="flex-start">
         {splitArray(value).map((pair, index) => (
-          <Grid item xs={12} key={index} className={classes.educationContainer}>
+          <Grid item xs={12} key={`${index}-box`} className={classes.educationContainer}>
             <ListItem button onClick={() => updateField(pair, index, splitArray(value))}>
               <ListItemText
                 primary={
