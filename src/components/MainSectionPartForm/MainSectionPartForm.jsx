@@ -130,21 +130,22 @@ export default function MainSectionPartForm({
                 ) : (
                   <Grid container spacing={2} justify="flex-start">
                     {value.map((field, index) => (
-                      <Grid item xs={12} key={field}>
+                      <Grid item xs={12} key={`${index}-box`}>
                         <Tooltip title={setTooltips(key)}>
                           <TextField
                             fullWidth
-                            key={`${field}-field`}
+                            key={`${index}-field`}
                             defaultValue={field}
                             multiline
                             variant="outlined"
-                            onBlur={e =>
+                            onChange={e => {
+                              e.preventDefault();
                               handleInput(
                                 setGlobalError,
                                 e.target.value,
                                 setSectionFieldMultiValue(e.target.value, key, index),
-                              )
-                            }
+                              );
+                            }}
                             InputProps={{
                               endAdornment: (
                                 <InputAdornment position="end">
@@ -169,7 +170,7 @@ export default function MainSectionPartForm({
           ) : (
             <>
               {typeof value === 'string' ? (
-                <Card className={classes.section} key={value}>
+                <Card className={classes.section} key={key}>
                   <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
                     <TextField
                       className={classes.marginBottom}
