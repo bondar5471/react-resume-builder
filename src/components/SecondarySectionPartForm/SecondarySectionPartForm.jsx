@@ -42,6 +42,7 @@ export default function SecondarySectionPartForm({
 }) {
   const [openAlert, setOpenAlert] = useState(false);
   const [sectionArrayName, setSectionArrayName] = useState('');
+  const [openErrorAlert, setOpenErrorAlert] = useState(false);
   const classes = useStyles();
   const isObject = arg => {
     return !!arg && arg.constructor === Object;
@@ -50,8 +51,15 @@ export default function SecondarySectionPartForm({
   const addNewSectionList = () => {
     const oldState = JSON.parse(localStorage.getItem('updatedSectionState'));
     const newSections = { [sectionArrayName]: [''] };
-    setSectionField({ ...oldState, ...newSections });
-    setOpenAlert(true);
+    const emptyName = /^ *$/.test(sectionArrayName);
+    const alreadyExist = Object.keys(oldState).indexOf(sectionArrayName) > -1;
+    if (emptyName || alreadyExist) {
+      setOpenErrorAlert(true);
+    } else {
+      setSectionField({ ...oldState, ...newSections });
+      setOpenAlert(true);
+      setSectionArrayName('');
+    }
   };
 
   return (
@@ -137,21 +145,26 @@ export default function SecondarySectionPartForm({
               fullWidth
               label="Section name"
               variant="outlined"
+              defaultValue={sectionArrayName}
               onBlur={e => setSectionArrayName(e.target.value)}
             />
-            <Button
-              size="small"
-              defaultValue={sectionArrayName}
-              color="secondary"
-              onClick={() => addNewSectionList()}
-            >
+            <Button size="small" color="secondary" onClick={() => addNewSectionList()}>
               Create
             </Button>
           </AccordionDetails>
         </Accordion>
         <Snackbar open={openAlert} autoHideDuration={6000} onClose={() => setOpenAlert(false)}>
           <Alert onClose={() => setOpenAlert(false)} severity="success">
-            Updated successfully!
+            Created successfully!
+          </Alert>
+        </Snackbar>
+        <Snackbar
+          open={openErrorAlert}
+          autoHideDuration={6000}
+          onClose={() => setOpenErrorAlert(false)}
+        >
+          <Alert onClose={() => setOpenErrorAlert(false)} severity="error">
+            Section already exists!
           </Alert>
         </Snackbar>
       </Card>

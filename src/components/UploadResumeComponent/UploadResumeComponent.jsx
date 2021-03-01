@@ -151,11 +151,15 @@ export default function UploadResumeComponent() {
             <FormControl component="fieldset">
               <Card className={classes.cardBox}>
                 <FormLabel component="legend">Upload resume file from GitLab:</FormLabel>
-                <Link to="/git_explorer">
-                  <Button variant="outlined" fullWidth className={classes.editButton}>
-                    GitLab Explorer
-                  </Button>
-                </Link>
+                <Button
+                  variant="outlined"
+                  component={Link}
+                  to="/git_explorer"
+                  fullWidth
+                  className={classes.editButton}
+                >
+                  GitLab Explorer
+                </Button>
                 <FormLabel component="legend">Use template:</FormLabel>
                 <Button
                   color="secondary"
