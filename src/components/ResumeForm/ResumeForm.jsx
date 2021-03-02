@@ -15,6 +15,9 @@ import MainSectionPartForm from '../MainSectionPartForm';
 import UserForm from '../UserForm';
 import ResetFileAlert from '../ResetFileAlert';
 import { useStickyState } from '../../services/StickyState';
+import MainSectionContext from '../../context/MainSections/MainSectionContext';
+import mainSectionState from '../../context/MainSections/MainSectionState';
+import MainSectionReduser from '../../context/MainSections/MainSectionReducer';
 
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
@@ -25,6 +28,7 @@ export default function ResumeForm({ setResumeFields }) {
       window.removeEventListener('scroll', checkScrollTop);
     };
   });
+
   const beforeUnloadHandler = e => {
     e.preventDefault();
     e.returnValue = 'Close without saving?';
@@ -282,6 +286,8 @@ export default function ResumeForm({ setResumeFields }) {
     debounceSetSectionField({ ...sectionsField, ['EDUCATION']: fields });
   };
 
+  const [state, dispatch] = React.useReducer(MainSectionReduser, sectionsField);
+
   return (
     <div className={classes.main}>
       <form>
@@ -307,33 +313,35 @@ export default function ResumeForm({ setResumeFields }) {
             setGlobalError={setGlobalError}
           />
         </Card>
-        <MainSectionPartForm
-          sectionsField={sectionsField}
-          setSectionFieldMultiValue={setSectionFieldMultiValue}
-          setSectionFieldSingleValue={setSectionFieldSingleValue}
-          addField={addField}
-          removeField={removeField}
-          addFieldToEducation={addFieldToEducation}
-          removeFieldFromEducation={removeFieldFromEducation}
-          updateFieldToEducation={updateFieldToEducation}
-          setGlobalError={setGlobalError}
-          setSectionField={setSectionField}
-        />
-        <SecondarySectionPartForm
-          handleOpen={handleOpen}
-          sectionsField={sectionsField}
-          setValueResponsibility={setValueResponsibility}
-          removeFieldResponsibility={removeFieldResponsibility}
-          addFieldResponsibility={addFieldResponsibility}
-          setSingleObjectField={setSingleObjectField}
-          removeTools={removeTools}
-          handleOpenTsForm={handleOpenTsForm}
-          setSingleFieldProject={setSingleFieldProject}
-          removeProject={removeProject}
-          setGlobalError={setGlobalError}
-          changeProjectName={changeProjectName}
-          setSectionField={setSectionField}
-        />
+        <MainSectionContext.Provider value={{ state, dispatch }}>
+          <MainSectionPartForm
+            sectionsField={sectionsField}
+            setSectionFieldMultiValue={setSectionFieldMultiValue}
+            setSectionFieldSingleValue={setSectionFieldSingleValue}
+            addField={addField}
+            removeField={removeField}
+            addFieldToEducation={addFieldToEducation}
+            removeFieldFromEducation={removeFieldFromEducation}
+            updateFieldToEducation={updateFieldToEducation}
+            setGlobalError={setGlobalError}
+            setSectionField={setSectionField}
+          />
+          <SecondarySectionPartForm
+            handleOpen={handleOpen}
+            sectionsField={sectionsField}
+            setValueResponsibility={setValueResponsibility}
+            removeFieldResponsibility={removeFieldResponsibility}
+            addFieldResponsibility={addFieldResponsibility}
+            setSingleObjectField={setSingleObjectField}
+            removeTools={removeTools}
+            handleOpenTsForm={handleOpenTsForm}
+            setSingleFieldProject={setSingleFieldProject}
+            removeProject={removeProject}
+            setGlobalError={setGlobalError}
+            changeProjectName={changeProjectName}
+            setSectionField={setSectionField}
+          />
+        </MainSectionContext.Provider>
       </form>
       <WriteResumeFile
         userData={userDataField}

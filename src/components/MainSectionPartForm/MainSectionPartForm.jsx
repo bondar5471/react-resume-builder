@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Card,
   Grid,
@@ -19,6 +19,7 @@ import { disabledAddField } from '../../services/validationAddField';
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
 import EducationForm from '../EducationForm/EducationForm';
+import MainSectionContext from '../../context/MainSections/MainSectionContext';
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -41,6 +42,8 @@ export default function MainSectionPartForm({
   const [degree, setDegree] = useState('');
   const classes = useStyles();
 
+  const { dispatch, ...context } = useContext(MainSectionContext);
+  console.log('context', context);
   const handleCloseCreate = () => {
     setOpenEducationForm(false);
   };
@@ -140,11 +143,15 @@ export default function MainSectionPartForm({
                             variant="outlined"
                             onChange={e => {
                               e.preventDefault();
-                              handleInput(
-                                setGlobalError,
-                                e.target.value,
-                                setSectionFieldMultiValue(e.target.value, key, index),
-                              );
+                              // handleInput(
+                              //   setGlobalError,
+                              //   e.target.value,
+                              //   setSectionFieldMultiValue(e.target.value, key, index),
+                              // );
+                              dispatch({
+                                type: 'SET_MULTIVALUE_SECTIONS_INPUT',
+                                payload: { value: e.target.value, key, index },
+                              });
                             }}
                             InputProps={{
                               endAdornment: (
