@@ -286,7 +286,12 @@ export default function ResumeForm({ setResumeFields }) {
     <div className={classes.main}>
       <form>
         <ButtonGroup fullWidth disableElevation>
-          <Button color="secondary" variant="contained" onClick={() => setCancelEditFile(true)}>
+          <Button
+            className={classes.button}
+            color="secondary"
+            variant="contained"
+            onClick={() => setCancelEditFile(true)}
+          >
             Choose another file
             <DescriptionIcon />
           </Button>

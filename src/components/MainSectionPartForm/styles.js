@@ -14,6 +14,14 @@ export const useStyles = makeStyles(() => ({
     marginBottom: '25px',
   },
   removeSectionButton: {
+    display: 'inline',
     float: 'right',
+    marginBottom: '10px',
+    backgroundColor: '#BA2D0B',
+    color: '#e9ecef',
+    '&:hover': {
+      backgroundColor: '#1e212d',
+      color: '#aaaaaa',
+    },
   },
 }));

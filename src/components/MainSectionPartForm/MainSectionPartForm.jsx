@@ -8,11 +8,11 @@ import {
   Tooltip,
   Typography,
 } from '@material-ui/core';
+import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './styles';
 import { PropTypes } from 'prop-types';
-import RemoveIcon from '@material-ui/icons/Remove';
 import { handleInput } from '../../services/HandleInput';
 
 import { disabledAddField } from '../../services/validationAddField';
@@ -117,7 +117,7 @@ export default function MainSectionPartForm({
                   className={classes.removeSectionButton}
                   onClick={() => removeSection(key)}
                 >
-                  <RemoveIcon />
+                  <DeleteSweepIcon />
                 </IconButton>
               </Typography>
               <>

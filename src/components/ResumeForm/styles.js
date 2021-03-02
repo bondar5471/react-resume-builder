@@ -40,4 +40,7 @@ export const useStyles = makeStyles(theme => ({
     transition: 'opacity 0.4s',
     opacity: '0.5',
   },
+  button: {
+    marginRight: 180,
+  },
 }));
