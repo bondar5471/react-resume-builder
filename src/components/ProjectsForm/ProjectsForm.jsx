@@ -46,13 +46,8 @@ export default function ProjectsForm({
           xs={12}
           className={classes.projContainer}
         >
-          <Typography
-            key={Object.keys(proj)}
-            fontStyle="italic"
-            className={classes.projTitle}
-            gutterBottom
-          >
-            {Object.keys(proj)}
+          <Typography key={Object.keys(proj)} className={classes.projTitle} gutterBottom>
+            {`Project: ${Object.keys(proj)}`}
           </Typography>
           <IconButton
             className={classes.removeButton}
@@ -110,12 +105,7 @@ export default function ProjectsForm({
               </Grid>
             ) : null}
           </>
-          <Grid
-            item
-            sm={proj[Object.keys(proj)]['Team'] ? 6 : 12}
-            xs={12}
-            className={classes.formItem}
-          >
+          <Grid item xs={12} className={classes.formItem}>
             <Tooltip title="Add all skills on technologies used in this project, such as programming language, database, and others.">
               <TextField
                 className={classes.input}

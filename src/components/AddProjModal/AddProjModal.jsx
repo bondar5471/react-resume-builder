@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
-  Fab,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,6 +9,8 @@ import {
   TextField,
   Typography,
   Tooltip,
+  Paper,
+  IconButton,
 } from '@material-ui/core';
 import omit from 'lodash/omit';
 import AddIcon from '@material-ui/icons/Add';
@@ -87,32 +88,34 @@ export default function AddProjModal({ handleClose, open, createProject }) {
                 onBlur={e => setDescription(e.target.value)}
               />
             </Tooltip>
-            <Typography align="center">Responsibilities:</Typography>
-            {responsibilities.map((res, index) => (
-              <Tooltip
-                key={res}
-                title="Add all activities on this project, ex.: Backend development, Code review and optimization."
-              >
-                <TextField
-                  key={index}
-                  className={classes.textField}
-                  fullWidth
-                  variant="filled"
-                  defaultValue={res}
-                  required
-                  onBlur={e => handleChangeRes(e.target.value, index)}
-                />
+            <Paper className={classes.responsibilitiesBlock}>
+              <Typography className={classes.label}>Responsibilities</Typography>
+              <Tooltip title="Add new field">
+                <IconButton
+                  color="default"
+                  aria-label="add"
+                  onClick={() => setResponsibilities([...responsibilities, ''])}
+                >
+                  <AddIcon />
+                </IconButton>
               </Tooltip>
-            ))}
-            <Tooltip title="Add new field">
-              <Fab
-                color="primary"
-                aria-label="add"
-                onClick={() => setResponsibilities([...responsibilities, ''])}
-              >
-                <AddIcon />
-              </Fab>
-            </Tooltip>
+              {responsibilities.map((res, index) => (
+                <Tooltip
+                  key={res}
+                  title="Add all activities on this project, ex.: Backend development, Code review and optimization."
+                >
+                  <TextField
+                    key={index}
+                    className={classes.textField}
+                    fullWidth
+                    variant="filled"
+                    defaultValue={res}
+                    required
+                    onBlur={e => handleChangeRes(e.target.value, index)}
+                  />
+                </Tooltip>
+              ))}
+            </Paper>
             <Tooltip title="Ex.: Full-stack Developer">
               <TextField
                 className={classes.textField}
@@ -142,11 +145,11 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               onBlur={e => setTeam(+e.target.value)}
             />
             <DialogActions>
-              <Button onClick={handleClose} variant="contained">
-                Cancel
-              </Button>
-              <Button variant="contained" autoFocus type="submit">
+              <Button color="default" variant="contained" autoFocus type="submit">
                 Add
+              </Button>
+              <Button onClick={handleClose} color="secondary" variant="contained">
+                Cancel
               </Button>
             </DialogActions>
           </form>

@@ -7,4 +7,10 @@ export const useStyles = makeStyles(() => ({
   textField: {
     marginTop: '5px',
   },
+  label: {
+    display: 'inline',
+  },
+  responsibilitiesBlock: {
+    padding: 10,
+  },
 }));

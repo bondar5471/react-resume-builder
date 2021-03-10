@@ -41,4 +41,11 @@ export const useStyles = makeStyles(theme => ({
     width: '100%',
     height: 200,
   },
+  addSectionAccordion: {
+    marginTop: 15,
+  },
+  createButton: {
+    textTransform: 'capitalize',
+    marginLeft: 10,
+  },
 }));

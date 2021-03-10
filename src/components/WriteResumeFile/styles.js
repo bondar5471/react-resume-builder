@@ -32,6 +32,9 @@ export const useStyles = makeStyles(() => ({
     display: 'block',
   },
   saveMenuHeader: {
-    backgroundColor: '#bf360c',
+    backgroundColor: '#ca3e47',
+  },
+  saveAccordion: {
+    marginTop: 20,
   },
 }));

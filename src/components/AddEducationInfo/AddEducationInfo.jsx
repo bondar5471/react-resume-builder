@@ -60,8 +60,12 @@ export default function AddEducationInfo({
           </Tooltip>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseCreate}>Cancel</Button>
-          <Button type="submit">Add</Button>
+          <Button variant="contained" color="default" type="submit">
+            Add
+          </Button>
+          <Button variant="contained" color="secondary" onClick={handleCloseCreate}>
+            Cancel
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

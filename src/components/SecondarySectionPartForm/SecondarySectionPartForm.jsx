@@ -128,17 +128,15 @@ export default function SecondarySectionPartForm({
           </Card>
         ) : null,
       )}
-      <Card className={classes.section}>
-        <Typography align="center" variant="h6">
-          ADD NEW SECTION:
-        </Typography>
+      <Card className={classes.addSectionAccordion}>
         <Accordion>
           <AccordionSummary
+            color="secondary"
             className={classes.accordionTitle}
             expandIcon={<ExpandMoreIcon />}
             aria-controls="add-sections-content"
           >
-            <Typography>Add</Typography>
+            <Typography>Custom Section</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <TextField
@@ -148,7 +146,13 @@ export default function SecondarySectionPartForm({
               defaultValue={sectionArrayName}
               onBlur={e => setSectionArrayName(e.target.value)}
             />
-            <Button size="small" color="secondary" onClick={() => addNewSectionList()}>
+            <Button
+              className={classes.createButton}
+              variant="contained"
+              size="small"
+              color="secondary"
+              onClick={() => addNewSectionList()}
+            >
               Create
             </Button>
           </AccordionDetails>

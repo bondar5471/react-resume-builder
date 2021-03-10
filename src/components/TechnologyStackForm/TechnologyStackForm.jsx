@@ -84,11 +84,11 @@ export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, add
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseTsForm} variant="contained">
-            Cancel
-          </Button>
           <Button onClick={() => addFieldTs()} variant="contained" autoFocus>
             Add
+          </Button>
+          <Button onClick={handleCloseTsForm} variant="contained" color="secondary">
+            Cancel
           </Button>
         </DialogActions>
       </Dialog>

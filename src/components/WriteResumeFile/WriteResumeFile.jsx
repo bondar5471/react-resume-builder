@@ -106,7 +106,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const classes = useStyles();
 
   return (
-    <div>
+    <div className={classes.saveAccordion}>
       <Accordion
         square
         expanded={expanded === 'save'}
@@ -119,7 +119,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           id="panel1a-header"
           className={classes.saveMenuHeader}
         >
-          <Typography>Save...</Typography>
+          <Typography>Save resume</Typography>
         </AccordionSummary>
         <AccordionDetails className={classes.saveMenu}>
           {urlFile ? (
@@ -143,7 +143,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
               </Button>
             </Card>
           ) : (
-            <Card className={classes.card}>
+            <div>
               <Paper className={classes.saveAsFileContainer}>
                 <Typography>Save to file:</Typography>
                 <TextField
@@ -192,7 +192,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                   </Button>
                 </Paper>
               ) : null}
-            </Card>
+            </div>
           )}
         </AccordionDetails>
       </Accordion>
