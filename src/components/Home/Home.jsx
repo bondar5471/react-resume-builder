@@ -9,7 +9,6 @@ import Container from '@material-ui/core/Container';
 import Slide from '@material-ui/core/Slide';
 import Brightness7Icon from '@material-ui/icons/Brightness7';
 import Brightness4Icon from '@material-ui/icons/Brightness4';
-import { deepOrange } from '@material-ui/core/colors';
 import { IconButton, Typography } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
@@ -33,8 +32,8 @@ export default function HideAppBar(props) {
   const classes = useStyles();
   const [darkState, setDarkState] = useState(JSON.parse(localStorage.getItem('darkTheme')));
   const palletType = darkState ? 'dark' : 'light';
-  const mainPrimaryColor = darkState ? '#424242' : '#f1f3f8';
-  const mainSecondaryColor = darkState ? '#ee6f57' : deepOrange[900];
+  const mainPrimaryColor = darkState ? '#724b4b' : '#39C3FC';
+  const mainSecondaryColor = darkState ? '#ca3e47' : '#ee4540';
   const darkTheme = createMuiTheme({
     palette: {
       type: palletType,
@@ -44,12 +43,6 @@ export default function HideAppBar(props) {
       secondary: {
         main: mainSecondaryColor,
       },
-    },
-    typography: {
-      fontWeightLight: 300,
-      fontWeightRegular: 400,
-      fontWeightMedium: 500,
-      fontSize: 15,
     },
   });
   const handleThemeChange = () => {

@@ -28,7 +28,7 @@ export default function EditEducationInfo({
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
-      <DialogTitle id="alert-dialog-title">{'Add education information'}</DialogTitle>
+      <DialogTitle id="alert-dialog-title">Edit education info</DialogTitle>
       <form
         onSubmit={e => {
           e.preventDefault();
@@ -60,8 +60,12 @@ export default function EditEducationInfo({
           </Tooltip>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseEdit}>Cancel</Button>
-          <Button type="submit">Edit</Button>
+          <Button type="submit" variant="contained">
+            Edit
+          </Button>
+          <Button onClick={handleCloseEdit} variant="contained" color="secondary">
+            Cancel
+          </Button>
         </DialogActions>
       </form>
     </Dialog>

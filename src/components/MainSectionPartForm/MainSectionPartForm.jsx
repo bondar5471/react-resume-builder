@@ -117,7 +117,7 @@ export default function MainSectionPartForm({
                   className={classes.removeSectionButton}
                   onClick={() => removeSection(key)}
                 >
-                  <DeleteSweepIcon />
+                  <DeleteSweepIcon color="secondary" />
                 </IconButton>
               </Typography>
               <>

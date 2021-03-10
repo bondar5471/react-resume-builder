@@ -6,7 +6,6 @@ export const useStyles = makeStyles(() => ({
   },
   projTitle: {
     display: 'inline',
-    fontStyle: 'italic',
     fontWeight: 'bold',
   },
   removeButton: {

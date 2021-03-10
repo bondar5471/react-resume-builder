@@ -19,7 +19,7 @@ import { useStickyState } from '../../services/StickyState';
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
+    //window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadHandler);
       window.removeEventListener('scroll', checkScrollTop);
@@ -285,19 +285,23 @@ export default function ResumeForm({ setResumeFields }) {
   return (
     <div className={classes.main}>
       <form>
-        <ButtonGroup fullWidth disableElevation>
+        <ButtonGroup fullWidth>
           <Button
             className={classes.button}
-            color="secondary"
+            color="primary"
             variant="contained"
+            startIcon={<DescriptionIcon />}
             onClick={() => setCancelEditFile(true)}
           >
             Choose another file
-            <DescriptionIcon />
           </Button>
-          <Button variant="contained" color="default" onClick={() => resetChange()}>
+          <Button
+            startIcon={<ReplayIcon />}
+            variant="contained"
+            color="primary"
+            onClick={() => resetChange()}
+          >
             Reset change
-            <ReplayIcon />
           </Button>
         </ButtonGroup>
         <Card className={classes.section}>
