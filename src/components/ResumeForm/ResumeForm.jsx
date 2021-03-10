@@ -19,7 +19,7 @@ import { useStickyState } from '../../services/StickyState';
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    //window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
+    window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadHandler);
       window.removeEventListener('scroll', checkScrollTop);
