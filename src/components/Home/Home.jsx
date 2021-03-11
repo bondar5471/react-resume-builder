@@ -64,13 +64,15 @@ export default function HideAppBar(props) {
           <AppBar>
             <Toolbar className={classes.toolBar}>
               <img alt="logo" src={logo} className={classes.logo} />
-              <IconButton onClick={handleThemeChange} className={classes.globalStyleButton}>
-                {darkState ? <Brightness7Icon /> : <Brightness4Icon />}
-              </IconButton>
-              <Typography>{userName}</Typography>
-              <IconButton onClick={handleLogOut}>
-                <ExitToAppIcon />
-              </IconButton>
+              <span className={classes.buttonGroup}>
+                <IconButton onClick={handleThemeChange}>
+                  {darkState ? <Brightness7Icon /> : <Brightness4Icon />}
+                </IconButton>
+                <Typography className={classes.userName}>{userName}</Typography>
+                <IconButton onClick={handleLogOut}>
+                  <ExitToAppIcon />
+                </IconButton>
+              </span>
             </Toolbar>
           </AppBar>
         </div>
