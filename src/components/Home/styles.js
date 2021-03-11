@@ -14,4 +14,10 @@ export const useStyles = makeStyles(() => ({
   globalStyleButton: {
     marginLeft: '75%',
   },
+  buttonGroup: {
+    display: 'flex',
+  },
+  userName: {
+    marginTop: 11,
+  },
 }));
