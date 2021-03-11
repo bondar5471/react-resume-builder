@@ -10,6 +10,7 @@ import {
 } from '@material-ui/core';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import { useStyles } from './styles';
 import { PropTypes } from 'prop-types';
@@ -19,6 +20,7 @@ import { disabledAddField } from '../../services/validationAddField';
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
 import EducationForm from '../EducationForm/EducationForm';
+import UpdateSectionName from '../UpdateSectionName';
 
 export default function MainSectionPartForm({
   sectionsField,
@@ -39,6 +41,8 @@ export default function MainSectionPartForm({
   const [educationArray, setEducationArray] = useState([]);
   const [institution, setInstitution] = useState('');
   const [degree, setDegree] = useState('');
+  const [updateSectionNameModal, setUpdateSectionNameModal] = useState(false);
+  const [oldSectionName, setOldSectionName] = useState('');
   const classes = useStyles();
 
   const handleCloseCreate = () => {
@@ -81,6 +85,24 @@ export default function MainSectionPartForm({
     }
   };
 
+  const editSection = key => {
+    setUpdateSectionNameModal(true);
+    setOldSectionName(key);
+  };
+
+  const changeSectionName = newSectionName => {
+    let updatedObject = sectionsField;
+    updatedObject = Object.keys(updatedObject).reduce(
+      (keys, key) => ({
+        ...keys,
+        [key === oldSectionName ? newSectionName : key]: updatedObject[key],
+      }),
+      {},
+    );
+    setSectionField(updatedObject);
+    setUpdateSectionNameModal(false);
+  };
+
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) => (
@@ -88,6 +110,11 @@ export default function MainSectionPartForm({
           {Array.isArray(value) ? (
             <Card className={classes.section}>
               <Typography variant="h6" color="textSecondary" gutterBottom>
+                {key !== 'EDUCATION' ? (
+                  <IconButton variant="contained" onClick={() => editSection(key)}>
+                    <EditIcon />
+                  </IconButton>
+                ) : null}
                 {key}
                 <Tooltip
                   element={'span'}
@@ -210,6 +237,12 @@ export default function MainSectionPartForm({
           )}
         </React.Fragment>
       ))}
+      <UpdateSectionName
+        changeSectionName={changeSectionName}
+        open={updateSectionNameModal}
+        setUpdateSectionNameModal={setUpdateSectionNameModal}
+        oldSectionName={oldSectionName}
+      />
     </>
   );
 }
