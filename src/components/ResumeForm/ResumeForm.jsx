@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { debounce, set, assign } from 'lodash';
 import { PropTypes } from 'prop-types';
-import { Button, ButtonGroup, Card, Fab } from '@material-ui/core';
+import { Button, Card, Fab } from '@material-ui/core';
 import ReplayIcon from '@material-ui/icons/Replay';
-import DescriptionIcon from '@material-ui/icons/Description';
+import HomeIcon from '@material-ui/icons/Home';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 
 import { useStyles } from './styles';
@@ -19,7 +19,7 @@ import { useStickyState } from '../../services/StickyState';
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     window.addEventListener('scroll', checkScrollTop);
-    window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
+    //window.addEventListener('beforeunload', e => beforeUnloadHandler(e));
     return () => {
       window.removeEventListener('beforeunload', beforeUnloadHandler);
       window.removeEventListener('scroll', checkScrollTop);
@@ -283,27 +283,18 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   return (
-    <div className={classes.main}>
+    <div>
       <form>
-        <ButtonGroup fullWidth>
-          <Button
-            className={classes.button}
-            color="primary"
-            variant="contained"
-            startIcon={<DescriptionIcon />}
-            onClick={() => setCancelEditFile(true)}
-          >
-            Choose another file
-          </Button>
-          <Button
-            startIcon={<ReplayIcon />}
-            variant="contained"
-            color="primary"
-            onClick={() => resetChange()}
-          >
-            Reset change
-          </Button>
-        </ButtonGroup>
+        <Button
+          fullWidth
+          className={classes.button}
+          color="primary"
+          variant="contained"
+          startIcon={<HomeIcon />}
+          onClick={() => setCancelEditFile(true)}
+        >
+          Home
+        </Button>
         <Card className={classes.section}>
           <UserForm
             setUserFieldValue={setUserFieldValue}
@@ -355,6 +346,16 @@ export default function ResumeForm({ setResumeFields }) {
         closeCancelEditFile={closeCancelEditFile}
         deleteResume={deleteResume}
       />
+      <Button
+        fullWidth
+        startIcon={<ReplayIcon />}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+        onClick={() => resetChange()}
+      >
+        Reset change
+      </Button>
       {showScroll ? (
         <Fab
           color="primary"

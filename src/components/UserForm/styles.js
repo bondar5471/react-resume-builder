@@ -5,4 +5,10 @@ export const useStyles = makeStyles(() => ({
     marginTop: 12,
     textTransform: 'none',
   },
+  avatar: {
+    width: '15%',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+  },
 }));

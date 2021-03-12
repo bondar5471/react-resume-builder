@@ -8,6 +8,7 @@ import UploadAvatarModal from '../UploadAvatarModal';
 import { useStyles } from './styles';
 export default function UserForm({ setUserFieldValue, userDataField, setGlobalError }) {
   const [openUploadAvatarModal, setOpenUploadAvatarModal] = useState(false);
+  const [preview, setPreview] = useState(null);
 
   const capitalizeLabel = label => {
     if (typeof label !== 'string') return '';
@@ -43,6 +44,12 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
                     helperText={!value ? 'This field is required' : null}
                   />
                 </Tooltip>
+                {preview ? (
+                  <>
+                    <Typography>Preview</Typography>
+                    <img src={preview} className={classes.avatar} />
+                  </>
+                ) : null}
                 <Button
                   variant="contained"
                   color="primary"
@@ -79,6 +86,7 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
         setOpenUploadAvatarModal={setOpenUploadAvatarModal}
         setUserFieldValue={setUserFieldValue}
         setGlobalError={setGlobalError}
+        setPreview={setPreview}
       />
     </React.Fragment>
   );

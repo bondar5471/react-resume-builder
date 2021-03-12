@@ -22,11 +22,12 @@ import { useStyles } from './styles';
 import Alert from '../Alert';
 import { handleInput } from '../../services/HandleInput';
 
-export default function GitLabDirModal({
+export default function UploadAvatarModal({
   openUploadAvatarModal,
   setOpenUploadAvatarModal,
   setUserFieldValue,
   setGlobalError,
+  setPreview,
 }) {
   const classes = useStyles();
   useEffect(() => {
@@ -60,11 +61,14 @@ export default function GitLabDirModal({
     const backUrl = backStepPath(path);
     setPath(backUrl);
     getDirTree(backUrl);
+    setPreview(null);
   };
 
   const setAvatarFile = file => {
     if (checkFileFormatJpg) {
       const avatarPath = `dep1/${file.path}`;
+      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/dep1/-/raw/master/${file.path}`;
+      setPreview(previewAvatarUrl);
       handleInput(setGlobalError, avatarPath, setUserFieldValue(avatarPath, '$photo'));
       setOpenUploadAvatarModal(false);
     } else {
@@ -137,8 +141,9 @@ export default function GitLabDirModal({
   );
 }
 
-GitLabDirModal.propTypes = {
+UploadAvatarModal.propTypes = {
   setOpenUploadAvatarModal: PropTypes.func,
+  setPreview: PropTypes.func,
   setUserFieldValue: PropTypes.func,
   setGlobalError: PropTypes.func,
   openUploadAvatarModal: PropTypes.bool,
