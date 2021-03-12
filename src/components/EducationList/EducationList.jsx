@@ -15,7 +15,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 
 import { useStyles } from './styles';
 
-export default function EducationForm({ value, updateField, removeFieldFromEducation }) {
+export default function EducationList({ value, updateField, removeFieldFromEducation }) {
   const classes = useStyles();
   const splitArray = value => {
     const splitedArray = chunk(value, 2);
@@ -56,7 +56,7 @@ export default function EducationForm({ value, updateField, removeFieldFromEduca
   );
 }
 
-EducationForm.propTypes = {
+EducationList.propTypes = {
   value: PropTypes.array,
   updateField: PropTypes.func,
   removeFieldFromEducation: PropTypes.func,

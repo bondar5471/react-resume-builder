@@ -99,6 +99,7 @@ export default function ProjectsForm({
                   className={classes.input}
                   label="Team"
                   variant="outlined"
+                  InputProps={{ inputProps: { min: 0 } }}
                   defaultValue={splitValue(proj)}
                   onBlur={e => setSingleFieldProject(+e.target.value, proj, 'Team', indexProj)}
                 />
