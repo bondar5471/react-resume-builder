@@ -142,6 +142,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               variant="filled"
               label="Team info"
               type="number"
+              InputProps={{ inputProps: { min: 0 } }}
               onBlur={e => setTeam(+e.target.value)}
             />
             <DialogActions>

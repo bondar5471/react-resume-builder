@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -17,10 +17,25 @@ export default function EditEducationInfo({
   handleCloseEdit,
   editedField,
   handleUpdate,
-  setInstitution,
-  setDegree,
 }) {
+  useEffect(() => {
+    setInitialState();
+  }, [editedField]);
+
+  const [university, setUniversity] = useState('');
+  const [degree, setDegree] = useState('');
   const classes = useStyles();
+
+  const setInitialState = () => {
+    setUniversity(editedField[0]);
+    setDegree(editedField[1]);
+  };
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    handleUpdate(university, degree);
+  };
+
   return (
     <Dialog
       open={openEditForm}
@@ -31,8 +46,7 @@ export default function EditEducationInfo({
       <DialogTitle id="alert-dialog-title">Edit education info</DialogTitle>
       <form
         onSubmit={e => {
-          e.preventDefault();
-          handleUpdate();
+          handleSubmit(e);
         }}
       >
         <DialogContent>
@@ -44,7 +58,7 @@ export default function EditEducationInfo({
               variant="outlined"
               label="ex.: Educational institution"
               defaultValue={editedField[0]}
-              onBlur={e => setInstitution(e.target.value)}
+              onChange={e => setUniversity(e.target.value)}
             />
           </Tooltip>
           <Tooltip title="ex.: Master's degree in System engineering">
@@ -55,7 +69,7 @@ export default function EditEducationInfo({
               variant="outlined"
               label="Degree"
               defaultValue={editedField[1]}
-              onBlur={e => setDegree(e.target.value)}
+              onChange={e => setDegree(e.target.value)}
             />
           </Tooltip>
         </DialogContent>

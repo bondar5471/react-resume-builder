@@ -19,7 +19,7 @@ import { handleInput } from '../../services/HandleInput';
 import { disabledAddField } from '../../services/validationAddField';
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
-import EducationForm from '../EducationForm/EducationForm';
+import EducationList from '../EducationList';
 import UpdateSectionName from '../UpdateSectionName';
 
 export default function MainSectionPartForm({
@@ -47,10 +47,12 @@ export default function MainSectionPartForm({
 
   const handleCloseCreate = () => {
     setOpenEducationForm(false);
+    setEditedField([]);
   };
 
   const handleCloseEdit = () => {
     setOpenEditForm(false);
+    setEditedField([]);
   };
 
   const updateField = (pair, key, education) => {
@@ -60,12 +62,13 @@ export default function MainSectionPartForm({
     setOpenEditForm(true);
   };
 
-  const handleUpdate = () => {
+  const handleUpdate = (university, status) => {
     let updatedEducationArray = educationArray;
-    updatedEducationArray[updatedIndex] = [institution, degree];
+    updatedEducationArray[updatedIndex] = [university, status];
     const fields = [].concat.apply([], updatedEducationArray);
     updateFieldToEducation(fields);
     setOpenEditForm(false);
+    setEditedField([]);
   };
 
   const removeSection = key => {
@@ -149,7 +152,7 @@ export default function MainSectionPartForm({
               </Typography>
               <>
                 {key === 'EDUCATION' ? (
-                  <EducationForm
+                  <EducationList
                     value={value}
                     updateField={updateField}
                     removeFieldFromEducation={removeFieldFromEducation}

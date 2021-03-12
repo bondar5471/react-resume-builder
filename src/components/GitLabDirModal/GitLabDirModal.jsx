@@ -73,17 +73,24 @@ export default function GitLabDirModal({
     const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     const userName = localStorage.getItem('user');
     const resumePath = path + '/' + fileName + '.yaml';
-    const response = await api.RepositoryFiles.create(
+    api.RepositoryFiles.create(
       id,
       resumePath,
       'master',
       yamlData,
       `User ${userName} add file ${fileName}`,
-    );
-    localStorage.setItem('currentPath', response.file_path);
-    handleSave();
-    setOpenAlertNewPush(true);
-    setOpenModal(false);
+    )
+      .then(response => {
+        localStorage.setItem('currentPath', response.file_path);
+        handleSave();
+        setOpenAlertNewPush(true);
+        setOpenModal(false);
+      })
+      .catch(error => {
+        if (error.response.status === 400) {
+          setOpenErrorAlert(true);
+        }
+      });
   };
 
   const uploadFile = () => {
@@ -100,22 +107,22 @@ export default function GitLabDirModal({
       fullWidth
       maxWidth="md"
       onClose={() => setOpenModal(false)}
-      aria-labelledby="gitdir-dialog-title"
+      aria-labelledby="git-dir-dialog-title"
       open={openModal}
     >
-      <DialogTitle id="gitdir-dialog-title">Upload new file</DialogTitle>
+      <DialogTitle id="git-dir-dialog-title">Upload new file</DialogTitle>
       <DialogContent>
         <Paper className={classes.dialogContent}>
           <Typography>Sect folder for upload file:</Typography>
           <hr />
-          <Typography className={classes.pathBar}>
-            {path ? (
+          {path ? (
+            <Typography className={classes.pathBar}>
               <IconButton aria-label="back" onClick={() => backStep()}>
                 <ArrowBack />
               </IconButton>
-            ) : null}
-            {path}
-          </Typography>
+              {path}
+            </Typography>
+          ) : null}
         </Paper>
       </DialogContent>
       {loading ? (

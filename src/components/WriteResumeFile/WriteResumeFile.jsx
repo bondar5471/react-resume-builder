@@ -188,7 +188,17 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                     fullWidth
                     onClick={() => updateFileOnGitLab()}
                   >
-                    Push to gitlab
+                    Update
+                  </Button>
+                  <Typography>Add new version resume on GitLab :</Typography>
+                  <Button
+                    className={classes.saveAsButton}
+                    disabled={globalError || fileNameValidation()}
+                    variant="contained"
+                    fullWidth
+                    onClick={() => setOpenModal(true)}
+                  >
+                    {`Upload ${fileName}.yaml`}
                   </Button>
                 </Paper>
               ) : null}
