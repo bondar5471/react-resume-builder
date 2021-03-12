@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import useScrollTrigger from '@material-ui/core/useScrollTrigger';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
@@ -58,7 +57,6 @@ export default function HideAppBar(props) {
   const userName = localStorage.getItem('user');
   return (
     <ThemeProvider theme={darkTheme}>
-      <CssBaseline />
       <HideOnScroll {...props}>
         <div className={classes.root}>
           <AppBar>
@@ -77,7 +75,6 @@ export default function HideAppBar(props) {
           </AppBar>
         </div>
       </HideOnScroll>
-      <Toolbar />
       <Container>
         <Box my={2}>
           <UploadResumeComponent />

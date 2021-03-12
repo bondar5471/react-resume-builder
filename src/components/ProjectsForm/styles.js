@@ -4,9 +4,13 @@ export const useStyles = makeStyles(() => ({
   input: {
     width: '100%',
   },
+  root: {
+    width: '100%',
+  },
   projTitle: {
     display: 'inline',
-    fontWeight: 'bold',
+    marginLeft: 15,
+    marginTop: 22,
   },
   removeButton: {
     display: 'inline',
@@ -26,5 +30,6 @@ export const useStyles = makeStyles(() => ({
     border: '3px solid rgba(183,183,183,0.85)',
     borderRadius: '10px',
     marginTop: '12px',
+    padding: 10,
   },
 }));
