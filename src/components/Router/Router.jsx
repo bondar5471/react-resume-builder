@@ -1,5 +1,5 @@
 import React, { useState, useMemo, createContext } from 'react';
-import { BrowserRouter, Switch } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import SignIn from '../SignIn';
 import Home from '../Home';
 import PublicRoute from './PublicRoute';
@@ -12,16 +12,13 @@ function AppRouter() {
 
   const UserContext = createContext(null);
   return (
-    <BrowserRouter>
-      <UserContext.Provider value={value}>
-        <Switch>
-          <PublicRoute restricted={true} component={SignIn} path="/" exact />
-
-          <PrivateRoute component={Home} path="/home" exact />
-          <PrivateRoute component={GitLabExplorer} path="/git_explorer/:path?" exact />
-        </Switch>
-      </UserContext.Provider>
-    </BrowserRouter>
+    <UserContext.Provider value={value}>
+      <Switch>
+        <PublicRoute restricted={true} component={SignIn} path="/" exact />
+        <PrivateRoute component={Home} path="/home" exact />
+        <PrivateRoute component={GitLabExplorer} path="/git_explorer/:path?" exact />
+      </Switch>
+    </UserContext.Provider>
   );
 }
 

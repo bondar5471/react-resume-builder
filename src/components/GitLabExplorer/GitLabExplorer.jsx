@@ -11,12 +11,15 @@ import {
   Typography,
   Paper,
   CircularProgress,
+  Button,
 } from '@material-ui/core';
 import { Description, Folder, ArrowBack } from '@material-ui/icons';
+import HomeIcon from '@material-ui/icons/Home';
 import PropTypes from 'prop-types';
 
 import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
+import { Link } from 'react-router-dom';
 
 export default function GitLabExplorer({ history }) {
   useEffect(() => {
@@ -85,9 +88,12 @@ export default function GitLabExplorer({ history }) {
   };
   const classes = useStyles();
   return (
-    <Paper>
+    <Paper className={classes.gitContainer}>
+      <Button component={Link} startIcon={<HomeIcon />} to="/" variant="contained" fullWidth>
+        Home
+      </Button>
       <Paper className={classes.head}>
-        <Typography variant="h6">Select file for editing...</Typography>
+        <Typography variant="h6">Select file</Typography>
         {error ? <Typography color="secondary">{error}</Typography> : null}
       </Paper>
       {loading ? (

@@ -8,4 +8,7 @@ export const useStyles = makeStyles(() => ({
     padding: '40px',
     marginLeft: '44%',
   },
+  gitContainer: {
+    marginTop: 10,
+  },
 }));

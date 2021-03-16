@@ -15,4 +15,23 @@ export const useStyles = makeStyles(theme => ({
     marginTop: 'auto',
     backgroundColor: '#bbbbbb',
   },
+  appBar: {
+    flexGrow: 1,
+  },
+  logo: {
+    maxWidth: '100%',
+    height: 'auto',
+  },
+  toolBar: {
+    justifyContent: 'space-between',
+  },
+  globalStyleButton: {
+    marginLeft: '75%',
+  },
+  buttonGroup: {
+    display: 'flex',
+  },
+  userName: {
+    marginTop: 11,
+  },
 }));

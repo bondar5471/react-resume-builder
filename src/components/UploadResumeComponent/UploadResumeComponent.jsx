@@ -46,8 +46,8 @@ export default function UploadResumeComponent() {
   async function getRepoFolders() {
     try {
       setLoadingFolder(true);
-      const responce = await getListFolderRepo();
-      setRepoFolders(responce);
+      const response = await getListFolderRepo();
+      setRepoFolders(response);
     } catch (e) {
       setError(e);
     } finally {
@@ -57,8 +57,8 @@ export default function UploadResumeComponent() {
   async function getListFiles(path) {
     try {
       setLoadingFiles(true);
-      const responce = await getFileFromFolderRepo(path);
-      setListFiles(responce);
+      const response = await getFileFromFolderRepo(path);
+      setListFiles(response);
     } catch (e) {
       setError(e);
     } finally {
@@ -77,10 +77,10 @@ export default function UploadResumeComponent() {
   };
 
   const writeFile = async path => {
-    const responce = await getFileFromFolderRepo(path);
-    const decodeContext = decode(responce.content);
+    const response = await getFileFromFolderRepo(path);
+    const decodeContext = decode(response.content);
     const field = yaml.safeLoad(decodeContext);
-    localStorage.setItem('currentSha', responce.sha);
+    localStorage.setItem('currentSha', response.sha);
     localStorage.setItem('currentPath', path);
     localStorage.setItem('resumeFields', JSON.stringify(field));
     setResumeFields(field);
@@ -158,19 +158,7 @@ export default function UploadResumeComponent() {
                   fullWidth
                   className={classes.editButton}
                 >
-                  GitLab Explorer
-                </Button>
-                <FormLabel component="legend">Use template:</FormLabel>
-                <Button
-                  color="secondary"
-                  fullWidth
-                  variant="contained"
-                  component="span"
-                  className={classes.button}
-                  startIcon={<InsertDriveFileIcon />}
-                  onClick={e => setTemplate(e)}
-                >
-                  Edit template
+                  Open GitLab
                 </Button>
               </Card>
               <Card className={classes.cardBox}>
@@ -209,6 +197,20 @@ export default function UploadResumeComponent() {
                   disabled={!resumeFile}
                 >
                   Edit file
+                </Button>
+              </Card>
+              <Card className={classes.cardBox}>
+                <FormLabel component="legend">Use template:</FormLabel>
+                <Button
+                  color="secondary"
+                  fullWidth
+                  variant="contained"
+                  component="span"
+                  className={classes.button}
+                  startIcon={<InsertDriveFileIcon />}
+                  onClick={e => setTemplate(e)}
+                >
+                  Create new CV
                 </Button>
               </Card>
             </FormControl>
