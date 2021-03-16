@@ -95,5 +95,5 @@ export default function SignIn({ history }) {
 }
 
 SignIn.propTypes = {
-  history: PropTypes.func,
+  history: PropTypes.object,
 };

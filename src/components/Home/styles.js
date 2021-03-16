@@ -1,23 +1,3 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(() => ({
-  appBar: {
-    flexGrow: 1,
-  },
-  logo: {
-    maxWidth: '100%',
-    height: 'auto',
-  },
-  toolBar: {
-    justifyContent: 'space-between',
-  },
-  globalStyleButton: {
-    marginLeft: '75%',
-  },
-  buttonGroup: {
-    display: 'flex',
-  },
-  userName: {
-    marginTop: 11,
-  },
-}));
+export const useStyles = makeStyles(() => ({}));
