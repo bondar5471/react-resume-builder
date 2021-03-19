@@ -54,7 +54,7 @@ export default function UpdateSectionName({
 
 UpdateSectionName.propTypes = {
   open: PropTypes.bool,
-  setUpdateSectionNameModal: PropTypes.bool,
+  setUpdateSectionNameModal: PropTypes.func,
   changeSectionName: PropTypes.func,
   oldSectionName: PropTypes.string,
 };
