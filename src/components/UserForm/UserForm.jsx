@@ -24,7 +24,7 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
       </Typography>
       <Grid container spacing={2}>
         {Object.entries(userDataField).map(([key, value]) => (
-          <Grid key={value} item sm={key === '$photo' ? 12 : 6} xs={12}>
+          <Grid key={key} item sm={key === '$photo' ? 12 : 6} xs={12}>
             {key === '$photo' ? (
               <span>
                 <Tooltip title="Specify the path to the file or upload file.">

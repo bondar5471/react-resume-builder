@@ -136,7 +136,7 @@ export default function SecondarySectionPartForm({
             expandIcon={<ExpandMoreIcon />}
             aria-controls="add-sections-content"
           >
-            <Typography>Custom Section</Typography>
+            <Typography>Create custom section</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <TextField

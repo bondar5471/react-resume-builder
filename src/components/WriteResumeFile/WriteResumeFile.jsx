@@ -119,7 +119,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
           id="panel1a-header"
           className={classes.saveMenuHeader}
         >
-          <Typography>Save resume</Typography>
+          <Typography>Save/Upload cv</Typography>
         </AccordionSummary>
         <AccordionDetails className={classes.saveMenu}>
           {urlFile ? (
@@ -139,7 +139,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                 }}
                 startIcon={<SaveIcon />}
               >
-                Download Resume File
+                Download Cv
               </Button>
             </Card>
           ) : (
@@ -174,7 +174,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                     fullWidth
                     onClick={() => setOpenModal(true)}
                   >
-                    {`Push new file ${fileName}.yaml gitlab`}
+                    {`Upload new cv ${fileName}.yaml gitlab`}
                   </Button>
                 )}
               </Paper>
@@ -188,7 +188,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                     fullWidth
                     onClick={() => updateFileOnGitLab()}
                   >
-                    Update
+                    Update cv
                   </Button>
                   <Typography>Add new version resume on GitLab :</Typography>
                   <Button
@@ -198,7 +198,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                     fullWidth
                     onClick={() => setOpenModal(true)}
                   >
-                    {`Upload ${fileName}.yaml`}
+                    {`Upload new cv ${fileName}.yaml gitlab`}
                   </Button>
                 </Paper>
               ) : null}
