@@ -66,8 +66,8 @@ export default function UploadAvatarModal({
 
   const setAvatarFile = file => {
     if (checkFileFormatJpg) {
-      const avatarPath = `dep1/${file.path}`;
-      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/dep1/-/raw/master/${file.path}`;
+      const avatarPath = `main/${file.path}`;
+      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master/${file.path}`;
       setPreview(previewAvatarUrl);
       handleInput(setGlobalError, avatarPath, setUserFieldValue(avatarPath, '$photo'));
       setOpenUploadAvatarModal(false);
