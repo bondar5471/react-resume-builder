@@ -86,6 +86,9 @@ export default function GitLabExplorer({ history }) {
     setCurrentPath(backUrl);
     openGitLabRepo(backUrl);
   };
+
+  const checkFileFormatYaml = file => file.name.split('.').pop() === 'yaml';
+
   const classes = useStyles();
   return (
     <Paper className={classes.gitContainer}>
@@ -93,7 +96,7 @@ export default function GitLabExplorer({ history }) {
         Home
       </Button>
       <Paper className={classes.head}>
-        <Typography variant="h6">Select file</Typography>
+        <Typography variant="h6">Select file *.yaml:</Typography>
         {error ? <Typography color="secondary">{error}</Typography> : null}
       </Paper>
       {loading ? (
@@ -111,10 +114,27 @@ export default function GitLabExplorer({ history }) {
           <List component="nav" aria-label="main mailbox folders">
             {files &&
               files.map(file => (
-                <ListItem button key={file.id} onClick={() => recognizeType(file)}>
-                  <ListItemIcon>{file.type === 'tree' ? <Folder /> : <Description />}</ListItemIcon>
-                  <ListItemText primary={file.name} />
-                </ListItem>
+                <React.Fragment key={file.id}>
+                  {file.type === 'tree' ? (
+                    <ListItem button key={file.id} onClick={() => recognizeType(file)}>
+                      <ListItemIcon>
+                        <Folder />
+                      </ListItemIcon>
+                      <ListItemText primary={file.name} />
+                    </ListItem>
+                  ) : (
+                    <React.Fragment>
+                      {checkFileFormatYaml(file) ? (
+                        <ListItem button key={file.id} onClick={() => recognizeType(file)}>
+                          <ListItemIcon>
+                            <Description />
+                          </ListItemIcon>
+                          <ListItemText primary={file.name} />
+                        </ListItem>
+                      ) : null}
+                    </React.Fragment>
+                  )}
+                </React.Fragment>
               ))}
           </List>
         </>
