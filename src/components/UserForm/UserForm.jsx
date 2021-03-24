@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Grid, TextField, Typography, Tooltip, Button } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import PropTypes from 'prop-types';
@@ -7,8 +7,17 @@ import UploadAvatarModal from '../UploadAvatarModal';
 
 import { useStyles } from './styles';
 export default function UserForm({ setUserFieldValue, userDataField, setGlobalError }) {
+  useEffect(() => {
+    setAvatarPreview();
+  });
   const [openUploadAvatarModal, setOpenUploadAvatarModal] = useState(false);
   const [preview, setPreview] = useState(null);
+
+  const setAvatarPreview = () => {
+    const avatarUrl = userDataField.$photo.split('main')[1];
+    const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master${avatarUrl}`;
+    setPreview(previewAvatarUrl);
+  };
 
   const capitalizeLabel = label => {
     if (typeof label !== 'string') return '';
@@ -16,6 +25,7 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
     const changedLabel = cutLabel.charAt(0).toUpperCase() + cutLabel.slice(1);
     return changedLabel;
   };
+
   const classes = useStyles();
   return (
     <React.Fragment>
@@ -32,9 +42,10 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
                     error={!value}
                     variant="outlined"
                     fullWidth
+                    key="$photo"
                     label="Photo"
-                    defaultValue={value}
-                    onBlur={e =>
+                    value={value}
+                    onChange={e =>
                       handleInput(
                         setGlobalError,
                         e.target.value,
@@ -47,7 +58,7 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
                 {preview ? (
                   <>
                     <Typography>Preview</Typography>
-                    <img src={preview} className={classes.avatar} />
+                    <img src={preview} className={classes.avatar} alt="Photo not found in git" />
                   </>
                 ) : null}
                 <Button
