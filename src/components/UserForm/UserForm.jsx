@@ -9,7 +9,7 @@ import { useStyles } from './styles';
 export default function UserForm({ setUserFieldValue, userDataField, setGlobalError }) {
   useEffect(() => {
     setAvatarPreview();
-  });
+  }, [userDataField]);
   const [openUploadAvatarModal, setOpenUploadAvatarModal] = useState(false);
   const [preview, setPreview] = useState(null);
 
@@ -24,6 +24,10 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
     const cutLabel = label.substring(1);
     const changedLabel = cutLabel.charAt(0).toUpperCase() + cutLabel.slice(1);
     return changedLabel;
+  };
+
+  const handleErrorImg = () => {
+    setPreview(null);
   };
 
   const classes = useStyles();
@@ -58,9 +62,19 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
                 {preview ? (
                   <>
                     <Typography>Preview</Typography>
-                    <img src={preview} className={classes.avatar} alt="Photo not found in git" />
+                    <img
+                      onError={() => handleErrorImg()}
+                      src={preview}
+                      className={classes.avatar}
+                      alt="Photo not found in git"
+                    />
                   </>
-                ) : null}
+                ) : (
+                  <>
+                    <Typography>Preview</Typography>
+                    <Typography color="error">Invalid photo url</Typography>
+                  </>
+                )}
                 <Button
                   variant="contained"
                   color="primary"

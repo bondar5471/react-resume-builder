@@ -282,6 +282,11 @@ export default function ResumeForm({ setResumeFields }) {
     debounceSetSectionField({ ...sectionsField, ['EDUCATION']: fields });
   };
 
+  const redirectToGitlab = () => {
+    window.location.href = process.env.REACT_APP_GIT_REPO_URL;
+    return null;
+  };
+
   return (
     <div>
       <form>
@@ -366,6 +371,15 @@ export default function ResumeForm({ setResumeFields }) {
           <ArrowUpwardIcon />
         </Fab>
       ) : null}
+      <Button
+        fullWidth
+        onClick={() => redirectToGitlab()}
+        variant="contained"
+        color="primary"
+        className={classes.button}
+      >
+        Go to gitlab for create PDF
+      </Button>
     </div>
   );
 }
