@@ -378,7 +378,7 @@ export default function ResumeForm({ setResumeFields }) {
         color="primary"
         className={classes.button}
       >
-        Go to gitlab for create PDF
+        Go to nix gitlab
       </Button>
     </div>
   );
