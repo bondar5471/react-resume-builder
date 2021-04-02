@@ -14,9 +14,11 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
   const [preview, setPreview] = useState(null);
 
   const setAvatarPreview = () => {
-    const avatarUrl = userDataField.$photo.split('main')[1];
-    const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master${avatarUrl}`;
-    setPreview(previewAvatarUrl);
+    if (userDataField.$photo) {
+      const avatarUrl = userDataField.$photo.split('main')[1];
+      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master${avatarUrl}`;
+      setPreview(previewAvatarUrl);
+    }
   };
 
   const capitalizeLabel = label => {
