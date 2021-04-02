@@ -48,6 +48,7 @@ export default function ProjectsForm({
       return getNumber;
     }
   };
+
   return (
     <React.Fragment key={`${defaultValue}-grid`}>
       {sectionsField['SIGNIFICANT PROJECTS'].$projects.map((proj, indexProj) => (
@@ -165,61 +166,70 @@ export default function ProjectsForm({
                   />
                 </Tooltip>
               </Grid>
-              <Grid item sm={12} xs={12} className={classes.formItem}>
-                <Typography>
-                  Responsibilities
-                  <Tooltip
-                    element={'span'}
-                    placement="right"
-                    title={
-                      disabledAddField(proj[Object.keys(proj)]['Responsibilities']) ? (
-                        <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
-                      ) : (
-                        ''
-                      )
-                    }
-                  >
-                    <span>
-                      <IconButton
-                        disabled={disabledAddField(proj[Object.keys(proj)]['Responsibilities'])}
-                        variant="contained"
-                        onClick={() => addFieldResponsibility(proj, indexProj)}
+              {proj[Object.keys(proj)]['Responsibilities'] ? (
+                <React.Fragment>
+                  <Grid item sm={12} xs={12} className={classes.formItem}>
+                    <Typography>
+                      Responsibilities
+                      <Tooltip
+                        element={'span'}
+                        placement="right"
+                        title={
+                          disabledAddField(proj[Object.keys(proj)]['Responsibilities']) ? (
+                            <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
+                          ) : (
+                            ''
+                          )
+                        }
                       >
-                        <AddIcon />
-                      </IconButton>
-                    </span>
-                  </Tooltip>
-                </Typography>
-              </Grid>
-              {proj[Object.keys(proj)]['Responsibilities'].map((res, index) => (
-                <Grid item sm={12} xs={12} key={res} className={classes.formItem}>
-                  <Tooltip title="Add all activities on this project, ex.: Backend development, Code review and optimization.">
-                    <OutlinedInput
-                      className={classes.input}
-                      fullWidth
-                      defaultValue={res}
-                      onBlur={e =>
-                        handleInput(
-                          setGlobalError,
-                          e.target.value,
-                          setValueResponsibility(e.target.value, proj, index, indexProj),
-                        )
-                      }
-                      endAdornment={
-                        <InputAdornment position="end">
+                        <span>
                           <IconButton
+                            disabled={disabledAddField(proj[Object.keys(proj)]['Responsibilities'])}
                             variant="contained"
-                            color="secondary"
-                            onClick={() => removeFieldResponsibility(proj, index, indexProj)}
+                            onClick={() => addFieldResponsibility(proj, indexProj)}
                           >
-                            <RemoveCircleOutlineIcon />
+                            <AddIcon />
                           </IconButton>
-                        </InputAdornment>
-                      }
-                    />
-                  </Tooltip>
-                </Grid>
-              ))}
+                        </span>
+                      </Tooltip>
+                    </Typography>
+                  </Grid>
+                  <>
+                    {proj[Object.keys(proj)]['Responsibilities'] &&
+                      proj[Object.keys(proj)]['Responsibilities'].map((res, index) => (
+                        <Grid item sm={12} xs={12} key={res} className={classes.formItem}>
+                          <Tooltip title="Add all activities on this project, ex.: Backend development, Code review and optimization.">
+                            <OutlinedInput
+                              className={classes.input}
+                              fullWidth
+                              defaultValue={res}
+                              onBlur={e =>
+                                handleInput(
+                                  setGlobalError,
+                                  e.target.value,
+                                  setValueResponsibility(e.target.value, proj, index, indexProj),
+                                )
+                              }
+                              endAdornment={
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    variant="contained"
+                                    color="secondary"
+                                    onClick={() =>
+                                      removeFieldResponsibility(proj, index, indexProj)
+                                    }
+                                  >
+                                    <RemoveCircleOutlineIcon />
+                                  </IconButton>
+                                </InputAdornment>
+                              }
+                            />
+                          </Tooltip>
+                        </Grid>
+                      ))}
+                  </>
+                </React.Fragment>
+              ) : null}
             </Grid>
           </AccordionDetails>
         </Accordion>
