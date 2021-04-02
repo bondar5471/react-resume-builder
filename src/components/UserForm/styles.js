@@ -11,4 +11,7 @@ export const useStyles = makeStyles(() => ({
     marginLeft: 'auto',
     marginRight: 'auto',
   },
+  photoButton: {
+    marginTop: '10px',
+  },
 }));
