@@ -143,26 +143,6 @@ export default function ResumeForm({ setResumeFields }) {
     });
   };
 
-  const updateTeamInformation = (value, indexProj, proj, fieldKey) => {
-    let updatedProject;
-    if (value === 0) {
-      const updatedProjectList = projectSectionField.$projects;
-      updatedProject = projectSectionField.$projects[`${indexProj}`][Object.keys(proj)];
-
-      delete updatedProject[fieldKey];
-      updatedProjectList.splice(indexProj, 1, {
-        [Object.keys(proj)]: updatedProject,
-      });
-      debounceSetSectionField({
-        ...sectionsField,
-        ['SIGNIFICANT PROJECTS']: { $projects: updatedProjectList },
-      });
-    } else {
-      const team = `${value} people`;
-      updateProjectField(indexProj, proj, fieldKey, team);
-    }
-  };
-
   const updateProjectField = (indexProj, proj, fieldKey, value) => {
     const updatedProject = set(
       projectSectionField,
@@ -176,11 +156,7 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
-    if (typeof value === 'number') {
-      updateTeamInformation(value, indexProj, proj, fieldKey);
-    } else {
-      updateProjectField(indexProj, proj, fieldKey, value);
-    }
+    updateProjectField(indexProj, proj, fieldKey, value);
   };
 
   const createProject = project => {

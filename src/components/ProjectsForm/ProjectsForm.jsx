@@ -40,15 +40,6 @@ export default function ProjectsForm({
     setExpanded(isExpanded ? panel : false);
   };
 
-  const splitValue = proj => {
-    const keyProject = Object.keys(proj);
-    if (proj[keyProject]['Team']) {
-      const teamInfo = proj[keyProject]['Team'];
-      const getNumber = teamInfo.split(' ')[0];
-      return getNumber;
-    }
-  };
-
   return (
     <React.Fragment key={`${defaultValue}-grid`}>
       {sectionsField['SIGNIFICANT PROJECTS'].$projects.map((proj, indexProj) => (
@@ -112,18 +103,16 @@ export default function ProjectsForm({
                 </Tooltip>
               </Grid>
               <>
-                {proj[Object.keys(proj)]['Team'] ? (
+                {typeof proj[Object.keys(proj)]['Team'] !== 'undefined' ? (
                   <Grid item sm={6} xs={12} className={classes.formItem}>
                     <TextField
-                      type="number"
                       fullWidth
                       key={proj[Object.keys(proj)]['Team']}
                       className={classes.input}
                       label="Team"
                       variant="outlined"
-                      InputProps={{ inputProps: { min: 0 } }}
-                      defaultValue={splitValue(proj)}
-                      onBlur={e => setSingleFieldProject(+e.target.value, proj, 'Team', indexProj)}
+                      defaultValue={proj[Object.keys(proj)]['Team']}
+                      onBlur={e => setSingleFieldProject(e.target.value, proj, 'Team', indexProj)}
                     />
                   </Grid>
                 ) : null}
