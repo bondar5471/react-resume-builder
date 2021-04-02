@@ -6,7 +6,12 @@ import { handleInput } from '../../services/HandleInput';
 import UploadAvatarModal from '../UploadAvatarModal';
 
 import { useStyles } from './styles';
-export default function UserForm({ setUserFieldValue, userDataField, setGlobalError }) {
+export default function UserForm({
+  setUserFieldValue,
+  userDataField,
+  setGlobalError,
+  setUserDataField,
+}) {
   useEffect(() => {
     setAvatarPreview();
   }, [userDataField]);
@@ -32,7 +37,24 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
     setPreview(null);
   };
 
+  const checkPhotoExist = () => {
+    const userFieldKeys = Object.keys(userDataField);
+    return userFieldKeys.includes('$photo');
+  };
+
+  const removePhotoField = () => {
+    const updatedFields = userDataField;
+    delete updatedFields['$photo'];
+    setUserDataField({ ...userDataField, ...updatedFields });
+    setPreview(null);
+  };
+
+  const addPhotoField = () => {
+    setUserFieldValue('', '$photo');
+  };
+
   const classes = useStyles();
+
   return (
     <React.Fragment>
       <Typography variant="h6" color="textSecondary" gutterBottom>
@@ -115,6 +137,25 @@ export default function UserForm({ setUserFieldValue, userDataField, setGlobalEr
         setGlobalError={setGlobalError}
         setPreview={setPreview}
       />
+      {checkPhotoExist() ? (
+        <Button
+          className={classes.photoButton}
+          variant="contained"
+          color="secondary"
+          onClick={() => removePhotoField()}
+        >
+          Remove section photo
+        </Button>
+      ) : (
+        <Button
+          className={classes.photoButton}
+          variant="contained"
+          color="primary"
+          onClick={() => addPhotoField()}
+        >
+          Add section photo
+        </Button>
+      )}
     </React.Fragment>
   );
 }
@@ -123,4 +164,5 @@ UserForm.propTypes = {
   userDataField: PropTypes.objectOf(Object).isRequired,
   setUserFieldValue: PropTypes.func.isRequired,
   setGlobalError: PropTypes.func,
+  setUserDataField: PropTypes.func,
 };

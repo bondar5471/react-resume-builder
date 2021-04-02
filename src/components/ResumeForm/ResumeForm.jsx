@@ -305,6 +305,7 @@ export default function ResumeForm({ setResumeFields }) {
             setUserFieldValue={setUserFieldValue}
             userDataField={userDataField}
             setGlobalError={setGlobalError}
+            setUserDataField={setUserDataField}
           />
         </Card>
         <MainSectionPartForm
