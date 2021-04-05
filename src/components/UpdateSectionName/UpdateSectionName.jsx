@@ -4,6 +4,8 @@ import { Dialog, DialogTitle, IconButton, TextField } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 
+import { useStyles } from './styles';
+
 export default function UpdateSectionName({
   changeSectionName,
   open,
@@ -11,6 +13,7 @@ export default function UpdateSectionName({
   oldSectionName,
 }) {
   const [newSectionName, setNewSectionName] = useState('');
+  const classes = useStyles();
 
   const sectionNameValidation = () => {
     //string only contains whitespace (ie. spaces, tabs or line breaks) or empty
@@ -24,30 +27,32 @@ export default function UpdateSectionName({
       fullWidth
       maxWidth="md"
     >
-      <DialogTitle id="update-section-title">Set new name</DialogTitle>
-      <TextField
-        variant="outlined"
-        fullWidth
-        autoFocus
-        defaultValue={oldSectionName}
-        required
-        onChange={e => setNewSectionName(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <>
-              <IconButton
-                disabled={sectionNameValidation()}
-                onClick={() => changeSectionName(newSectionName)}
-              >
-                <DoneIcon />
-              </IconButton>
-              <IconButton onClick={() => setUpdateSectionNameModal(false)}>
-                <ClearIcon />
-              </IconButton>
-            </>
-          ),
-        }}
-      />
+      <div className={classes.modalContainer}>
+        <DialogTitle id="update-section-title">Set new name</DialogTitle>
+        <TextField
+          variant="outlined"
+          fullWidth
+          autoFocus
+          defaultValue={oldSectionName}
+          required
+          onChange={e => setNewSectionName(e.target.value)}
+          InputProps={{
+            endAdornment: (
+              <>
+                <IconButton
+                  disabled={sectionNameValidation()}
+                  onClick={() => changeSectionName(newSectionName)}
+                >
+                  <DoneIcon />
+                </IconButton>
+                <IconButton onClick={() => setUpdateSectionNameModal(false)}>
+                  <ClearIcon />
+                </IconButton>
+              </>
+            ),
+          }}
+        />
+      </div>
     </Dialog>
   );
 }
