@@ -24,7 +24,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
   const [responsibilities, setResponsibilities] = useState(['']);
   const [role, setRole] = useState('');
   const [skills, setSkills] = useState('');
-  const [team, setTeam] = useState(0);
+  const [team, setTeam] = useState('');
 
   const handleChangeRes = (value, index) => {
     const updatedData = responsibilities;
@@ -36,13 +36,13 @@ export default function AddProjModal({ handleClose, open, createProject }) {
     let project = {
       [`${name}`]: {
         $description: description,
-        Team: `${team} people`,
+        Team: team,
         Role: role,
         Skills: skills,
         Responsibilities: responsibilities,
       },
     };
-    if (team === 0 || team === '') {
+    if (team === '') {
       const projectInfo = omit(project[name], ['Team']);
       createProject({ [name]: projectInfo });
       handleClose();
@@ -141,9 +141,7 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               className={classes.textField}
               variant="filled"
               label="Team info"
-              type="number"
-              InputProps={{ inputProps: { min: 0 } }}
-              onBlur={e => setTeam(+e.target.value)}
+              onBlur={e => setTeam(e.target.value)}
             />
             <DialogActions>
               <Button color="default" variant="contained" autoFocus type="submit">

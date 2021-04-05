@@ -355,7 +355,7 @@ export default function ResumeForm({ setResumeFields }) {
         color="primary"
         className={classes.button}
       >
-        Go to nix gitlab
+        Go to gitlab
       </Button>
     </div>
   );
