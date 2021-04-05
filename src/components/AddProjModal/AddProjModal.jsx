@@ -13,7 +13,7 @@ import {
   IconButton,
 } from '@material-ui/core';
 import omit from 'lodash/omit';
-import AddIcon from '@material-ui/icons/Add';
+import ControlPointIcon from '@material-ui/icons/ControlPoint';
 
 import { useStyles } from './styles';
 
@@ -92,11 +92,10 @@ export default function AddProjModal({ handleClose, open, createProject }) {
               <Typography className={classes.label}>Responsibilities</Typography>
               <Tooltip title="Add new field">
                 <IconButton
-                  color="default"
-                  aria-label="add"
+                  color="primary"
                   onClick={() => setResponsibilities([...responsibilities, ''])}
                 >
-                  <AddIcon />
+                  <ControlPointIcon />
                 </IconButton>
               </Tooltip>
               {responsibilities.map((res, index) => (
