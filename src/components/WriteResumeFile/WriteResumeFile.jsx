@@ -23,6 +23,7 @@ import { useStyles } from './styles';
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null);
   const [fileName, setFileName] = useState('resume');
+  const [fileNameGit, setFileNameGit] = useState('resume');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
@@ -100,6 +101,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const handleBlurAccordion = () => event => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setExpanded(null);
+      setFileName('resume');
     }
   };
 
@@ -144,63 +146,93 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
             </Card>
           ) : (
             <div>
-              <Paper className={classes.saveAsFileContainer}>
-                <Typography>Save to file:</Typography>
-                <TextField
-                  className={classes.inputFileName}
-                  fullWidth
-                  error={fileNameValidation()}
-                  helperText={
-                    fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''
-                  }
-                  label="File name"
-                  defaultValue={fileName}
-                  onChange={e => setFileName(e.target.value)}
-                />
-                <Button
-                  className={classes.saveAsButton}
-                  disabled={globalError || fileNameValidation()}
-                  variant="contained"
-                  fullWidth
-                  onClick={() => createFile()}
-                >
-                  {`Save as file ${fileName}.yaml`}
-                </Button>
-                {localStorage.getItem('currentPath') ? null : (
+              <span>
+                <Paper className={classes.paperContainer}>
+                  <Typography>Save to file:</Typography>
+                  <TextField
+                    className={classes.inputFileName}
+                    fullWidth
+                    error={fileNameValidation()}
+                    helperText={
+                      fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''
+                    }
+                    label="File name"
+                    value={fileName}
+                    onChange={e => setFileName(e.target.value)}
+                  />
                   <Button
                     className={classes.saveAsButton}
                     disabled={globalError || fileNameValidation()}
                     variant="contained"
                     fullWidth
-                    onClick={() => setOpenModal(true)}
+                    onClick={() => createFile()}
                   >
-                    {`Upload new cv ${fileName}.yaml gitlab`}
-                  </Button>
-                )}
-              </Paper>
-              {localStorage.getItem('currentPath') ? (
-                <Paper className={classes.gitUploadContainer}>
-                  <Typography>Update file on GitLab :</Typography>
-                  <Button
-                    className={classes.gitButton}
-                    disabled={handleChangeResume() || globalError || loading}
-                    variant="contained"
-                    fullWidth
-                    onClick={() => updateFileOnGitLab()}
-                  >
-                    Update cv
-                  </Button>
-                  <Typography>Add new version resume on GitLab :</Typography>
-                  <Button
-                    className={classes.saveAsButton}
-                    disabled={globalError || fileNameValidation()}
-                    variant="contained"
-                    fullWidth
-                    onClick={() => setOpenModal(true)}
-                  >
-                    {`Upload new cv ${fileName}.yaml gitlab`}
+                    Save as file
                   </Button>
                 </Paper>
+                {localStorage.getItem('currentPath') ? null : (
+                  <Paper className={classes.paperContainer}>
+                    <TextField
+                      className={classes.inputFileName}
+                      fullWidth
+                      error={fileNameValidation()}
+                      helperText={
+                        fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''
+                      }
+                      label="File name"
+                      value={fileName}
+                      onChange={e => setFileName(e.target.value)}
+                    />
+                    <Button
+                      className={classes.saveAsButton}
+                      disabled={globalError || fileNameValidation()}
+                      variant="contained"
+                      fullWidth
+                      onClick={() => setOpenModal(true)}
+                    >
+                      Upload new cv gitlab
+                    </Button>
+                  </Paper>
+                )}
+              </span>
+              {localStorage.getItem('currentPath') ? (
+                <span>
+                  <Paper className={classes.paperContainer}>
+                    <Typography>Update file on GitLab :</Typography>
+                    <Button
+                      className={classes.gitButton}
+                      disabled={handleChangeResume() || globalError || loading}
+                      variant="contained"
+                      fullWidth
+                      onClick={() => updateFileOnGitLab()}
+                    >
+                      Update cv
+                    </Button>
+                  </Paper>
+                  <Paper className={classes.paperContainer}>
+                    <Typography>Add new version resume on GitLab :</Typography>
+                    <TextField
+                      className={classes.inputFileName}
+                      fullWidth
+                      error={fileNameValidation()}
+                      helperText={
+                        fileNameValidation() ? 'The field cannot be empty and contain spaces' : ''
+                      }
+                      label="File name"
+                      value={fileNameGit}
+                      onChange={e => setFileNameGit(e.target.value)}
+                    />
+                    <Button
+                      className={classes.saveAsButton}
+                      disabled={globalError || fileNameValidation()}
+                      variant="contained"
+                      fullWidth
+                      onClick={() => setOpenModal(true)}
+                    >
+                      Upload new cv gitlab
+                    </Button>
+                  </Paper>
+                </span>
               ) : null}
             </div>
           )}
@@ -231,7 +263,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
         handleSave={handleSave}
         setOpenAlertNewPush={setOpenAlertNewPush}
         createYamlData={createYamlData}
-        fileName={fileName}
+        fileNameGit={fileNameGit}
       />
     </div>
   );

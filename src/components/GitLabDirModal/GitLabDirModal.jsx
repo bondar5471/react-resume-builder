@@ -28,7 +28,7 @@ export default function GitLabDirModal({
   handleSave,
   setOpenAlertNewPush,
   createYamlData,
-  fileName,
+  fileNameGit,
 }) {
   const classes = useStyles();
   useEffect(() => {
@@ -72,13 +72,13 @@ export default function GitLabDirModal({
     });
     const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     const userName = localStorage.getItem('user');
-    const resumePath = path + '/' + fileName + '.yaml';
+    const resumePath = path + '/' + fileNameGit + '.yaml';
     api.RepositoryFiles.create(
       id,
       resumePath,
       'master',
       yamlData,
-      `User ${userName} add file ${fileName}`,
+      `User ${userName} add file ${fileNameGit}`,
     )
       .then(response => {
         localStorage.setItem('currentPath', response.file_path);
@@ -166,5 +166,5 @@ GitLabDirModal.propTypes = {
   handleSave: PropTypes.func,
   setOpenAlertNewPush: PropTypes.func,
   createYamlData: PropTypes.func,
-  fileName: PropTypes.string,
+  fileNameGit: PropTypes.string,
 };

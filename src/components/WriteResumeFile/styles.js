@@ -37,4 +37,8 @@ export const useStyles = makeStyles(() => ({
   saveAccordion: {
     marginTop: 20,
   },
+  paperContainer: {
+    padding: 5,
+    marginTop: 12,
+  },
 }));
