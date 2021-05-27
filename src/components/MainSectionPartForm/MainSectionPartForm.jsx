@@ -1,13 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Card,
-  Grid,
-  IconButton,
-  InputAdornment,
-  TextField,
-  Tooltip,
-  Typography,
-} from '@material-ui/core';
+import { Card, Grid, IconButton, TextField, Tooltip, Typography } from '@material-ui/core';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
@@ -163,69 +155,34 @@ export default function MainSectionPartForm({
                   <Grid container spacing={2} justify="flex-start">
                     {value.map((field, index) => (
                       <Grid item xs={12} key={`${index}-box`}>
-                        {key === 'TECHNICAL EXPERTISE' ? (
-                          <Grid container spacing={1} alignItems="flex-end">
-                            <Grid item style={{ width: '95%' }}>
-                              <Tooltip title={setTooltips(key)}>
-                                <Autocomplete
-                                  onInputChange={(event, newValue) => {
-                                    handleInput(
-                                      setGlobalError,
-                                      newValue,
-                                      setSectionFieldMultiValue(newValue, key, index),
-                                    );
-                                  }}
-                                  freeSolo
-                                  value={field}
-                                  options={techStackOptions.map(option => option.text)}
-                                  renderInput={params => (
-                                    <TextField {...params} variant="outlined" />
-                                  )}
-                                />
-                              </Tooltip>
-                            </Grid>
-                            <Grid item>
-                              <IconButton
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => removeField(index, key)}
-                              >
-                                <RemoveCircleOutlineIcon />
-                              </IconButton>
-                            </Grid>
+                        <Grid container spacing={1} alignItems="flex-end">
+                          <Grid item style={{ width: '95%' }}>
+                            <Tooltip title={setTooltips(key)}>
+                              <Autocomplete
+                                onInputChange={(event, newValue) => {
+                                  handleInput(
+                                    setGlobalError,
+                                    newValue,
+                                    setSectionFieldMultiValue(newValue, key, index),
+                                  );
+                                }}
+                                freeSolo
+                                value={field}
+                                options={techStackOptions[key] || []}
+                                renderInput={params => <TextField {...params} variant="outlined" />}
+                              />
+                            </Tooltip>
                           </Grid>
-                        ) : (
-                          <Tooltip title={setTooltips(key)}>
-                            <TextField
-                              fullWidth
-                              key={`${index}-field`}
-                              defaultValue={field}
-                              multiline
-                              variant="outlined"
-                              onChange={e => {
-                                e.preventDefault();
-                                handleInput(
-                                  setGlobalError,
-                                  e.target.value,
-                                  setSectionFieldMultiValue(e.target.value, key, index),
-                                );
-                              }}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    <IconButton
-                                      variant="contained"
-                                      color="secondary"
-                                      onClick={() => removeField(index, key)}
-                                    >
-                                      <RemoveCircleOutlineIcon />
-                                    </IconButton>
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                          </Tooltip>
-                        )}
+                          <Grid item>
+                            <IconButton
+                              variant="contained"
+                              color="secondary"
+                              onClick={() => removeField(index, key)}
+                            >
+                              <RemoveCircleOutlineIcon />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
                       </Grid>
                     ))}
                   </Grid>

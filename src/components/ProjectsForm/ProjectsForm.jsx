@@ -5,13 +5,12 @@ import {
   TextField,
   Tooltip,
   IconButton,
-  OutlinedInput,
-  InputAdornment,
   Accordion,
   AccordionDetails,
   AccordionSummary,
   AccordionActions,
 } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import PropTypes from 'prop-types';
 import DeleteIcon from '@material-ui/icons/Delete';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
@@ -21,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { disabledAddField } from '../../services/validationAddField';
 import { handleInput } from '../../services/HandleInput';
 import { useStyles } from './styles';
+import { projectResponsibility } from '../../template/projectResponsibility';
 
 export default function ProjectsForm({
   defaultValue,
@@ -186,34 +186,39 @@ export default function ProjectsForm({
                   <>
                     {proj[Object.keys(proj)]['Responsibilities'] &&
                       proj[Object.keys(proj)]['Responsibilities'].map((res, index) => (
-                        <Grid item sm={12} xs={12} key={res} className={classes.formItem}>
-                          <Tooltip title="Add all activities on this project, ex.: Backend development, Code review and optimization.">
-                            <OutlinedInput
-                              className={classes.input}
-                              fullWidth
-                              defaultValue={res}
-                              onBlur={e =>
-                                handleInput(
-                                  setGlobalError,
-                                  e.target.value,
-                                  setValueResponsibility(e.target.value, proj, index, indexProj),
-                                )
-                              }
-                              endAdornment={
-                                <InputAdornment position="end">
-                                  <IconButton
-                                    variant="contained"
-                                    color="secondary"
-                                    onClick={() =>
-                                      removeFieldResponsibility(proj, index, indexProj)
-                                    }
-                                  >
-                                    <RemoveCircleOutlineIcon />
-                                  </IconButton>
-                                </InputAdornment>
-                              }
-                            />
-                          </Tooltip>
+                        <Grid
+                          item
+                          sm={12}
+                          xs={12}
+                          key={`${index}-res`}
+                          className={classes.formItem}
+                        >
+                          <Grid container alignItems="flex-end">
+                            <Grid item style={{ width: '95%' }}>
+                              <Autocomplete
+                                onInputChange={(event, newValue) =>
+                                  handleInput(
+                                    setGlobalError,
+                                    newValue,
+                                    setValueResponsibility(newValue, proj, index, indexProj),
+                                  )
+                                }
+                                freeSolo
+                                value={res}
+                                options={projectResponsibility}
+                                renderInput={params => <TextField {...params} variant="outlined" />}
+                              />
+                            </Grid>
+                            <Grid item>
+                              <IconButton
+                                variant="contained"
+                                color="secondary"
+                                onClick={() => removeFieldResponsibility(proj, index, indexProj)}
+                              >
+                                <RemoveCircleOutlineIcon />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
                         </Grid>
                       ))}
                   </>
