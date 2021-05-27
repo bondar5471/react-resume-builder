@@ -12,9 +12,10 @@ import {
   Paper,
   IconButton,
 } from '@material-ui/core';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import omit from 'lodash/omit';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
-
+import { projectResponsibility } from '../../template/projectResponsibility';
 import { useStyles } from './styles';
 
 export default function AddProjModal({ handleClose, open, createProject }) {
@@ -99,20 +100,15 @@ export default function AddProjModal({ handleClose, open, createProject }) {
                 </IconButton>
               </Tooltip>
               {responsibilities.map((res, index) => (
-                <Tooltip
-                  key={res}
-                  title="Add all activities on this project, ex.: Backend development, Code review and optimization."
-                >
-                  <TextField
-                    key={index}
-                    className={classes.textField}
-                    fullWidth
-                    variant="filled"
-                    defaultValue={res}
-                    required
-                    onBlur={e => handleChangeRes(e.target.value, index)}
-                  />
-                </Tooltip>
+                <Autocomplete
+                  key={`res-${index}`}
+                  className={classes.textField}
+                  onInputChange={(event, newValue) => handleChangeRes(newValue, index)}
+                  freeSolo
+                  value={res}
+                  options={projectResponsibility}
+                  renderInput={params => <TextField {...params} variant="outlined" />}
+                />
               ))}
             </Paper>
             <Tooltip title="Ex.: Full-stack Developer">
