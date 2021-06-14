@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogTitle, IconButton, TextField } from '@material-ui/core';
+import { Dialog, DialogTitle, IconButton, TextField, Typography } from '@material-ui/core';
 import ClearIcon from '@material-ui/icons/Clear';
 import DoneIcon from '@material-ui/icons/Done';
 
@@ -16,8 +16,8 @@ export default function UpdateSectionName({
   const classes = useStyles();
 
   const sectionNameValidation = () => {
-    //string only contains whitespace (ie. spaces, tabs or line breaks) or empty
-    return !newSectionName.replace(/\s/g, '').length || newSectionName === '';
+    let isNum = /^\d+$/.test(newSectionName);
+    return !newSectionName.replace(/\s/g, '').length || newSectionName === '' || isNum;
   };
   return (
     <Dialog
@@ -52,6 +52,10 @@ export default function UpdateSectionName({
             ),
           }}
         />
+        <Typography variant="subtitle1" color="textSecondary">
+          The name must not contain only spaces (ie. spaces, tabs or line breaks), be empty and
+          contain only numbers.
+        </Typography>
       </div>
     </Dialog>
   );

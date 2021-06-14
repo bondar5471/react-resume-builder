@@ -194,20 +194,34 @@ export default function MainSectionPartForm({
               {typeof value === 'string' ? (
                 <Card className={classes.section} key={key}>
                   <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
-                    <TextField
-                      className={classes.marginBottom}
-                      fullWidth
-                      variant="outlined"
-                      label={key}
-                      defaultValue={value}
-                      onBlur={e =>
-                        handleInput(
-                          setGlobalError,
-                          e.target.value,
-                          setSectionFieldSingleValue(e.target.value, key),
-                        )
-                      }
-                    />
+                    <Grid container>
+                      <Grid item xs={11}>
+                        <TextField
+                          className={classes.marginBottom}
+                          fullWidth
+                          variant="outlined"
+                          label={key}
+                          defaultValue={value}
+                          onBlur={e =>
+                            handleInput(
+                              setGlobalError,
+                              e.target.value,
+                              setSectionFieldSingleValue(e.target.value, key),
+                            )
+                          }
+                        />
+                      </Grid>
+                      <Grid item xs={1}>
+                        <IconButton
+                          color="secondary"
+                          title={`Remove section ${key}`}
+                          className={classes.removeSectionButton}
+                          onClick={() => removeSection(key)}
+                        >
+                          <DeleteSweepIcon color="secondary" />
+                        </IconButton>
+                      </Grid>
+                    </Grid>
                   </Tooltip>
                 </Card>
               ) : null}

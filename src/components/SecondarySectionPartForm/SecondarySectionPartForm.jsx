@@ -62,6 +62,11 @@ export default function SecondarySectionPartForm({
     }
   };
 
+  const sectionNameValidation = () => {
+    let isNum = /^\d+$/.test(sectionArrayName);
+    return !sectionArrayName.replace(/\s/g, '').length || sectionArrayName === '' || isNum;
+  };
+
   return (
     <>
       {Object.entries(sectionsField).map(([key, value]) =>
@@ -144,9 +149,11 @@ export default function SecondarySectionPartForm({
               label="Section name"
               variant="outlined"
               defaultValue={sectionArrayName}
-              onBlur={e => setSectionArrayName(e.target.value)}
+              helperText="The name must not contain only spaces (ie. spaces, tabs or line breaks), be empty and contain only numbers."
+              onChange={e => setSectionArrayName(e.target.value)}
             />
             <Button
+              disabled={sectionNameValidation()}
               className={classes.createButton}
               variant="contained"
               size="small"
