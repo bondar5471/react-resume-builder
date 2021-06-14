@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { debounce, set, assign } from 'lodash';
 import { PropTypes } from 'prop-types';
 import { Button, Card, Fab } from '@material-ui/core';
@@ -356,6 +357,16 @@ export default function ResumeForm({ setResumeFields }) {
         className={classes.button}
       >
         Go to gitlab
+      </Button>
+      <Button
+        fullWidth
+        color="inherit"
+        variant="outlined"
+        component={Link}
+        to="/reorder-block"
+        className={classes.button}
+      >
+        Reorder pdf block
       </Button>
     </div>
   );

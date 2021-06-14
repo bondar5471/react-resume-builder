@@ -47,5 +47,6 @@ export const useStyles = makeStyles(theme => ({
   createButton: {
     textTransform: 'capitalize',
     marginLeft: 10,
+    height: '56px',
   },
 }));

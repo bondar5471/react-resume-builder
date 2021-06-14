@@ -10,7 +10,7 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { useStyles } from './styles';
 import logo from './logo.png';
 import HideOnScroll from './components/HideOnScroll';
-import { withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 function App(props) {
   const classes = useStyles();
@@ -48,7 +48,9 @@ function App(props) {
           <div>
             <AppBar>
               <Toolbar className={classes.toolBar}>
-                <img alt="logo" src={logo} className={classes.logo} />
+                <Link to="/">
+                  <img alt="logo" src={logo} className={classes.logo} />
+                </Link>
                 <span className={classes.buttonGroup}>
                   <IconButton onClick={handleThemeChange}>
                     {darkState ? <Brightness7Icon /> : <Brightness4Icon />}
