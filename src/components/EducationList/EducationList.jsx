@@ -12,10 +12,13 @@ import {
   IconButton,
 } from '@material-ui/core';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
+import { observer } from 'mobx-react-lite';
 
+import { StoreContext } from '../../store/Store';
 import { useStyles } from './styles';
 
-export default function EducationList({ value, updateField, removeFieldFromEducation }) {
+const EducationList = observer(function EducationList({ value, updateField }) {
+  const store = React.useContext(StoreContext);
   const classes = useStyles();
   const splitArray = value => {
     const splitedArray = chunk(value, 2);
@@ -42,7 +45,7 @@ export default function EducationList({ value, updateField, removeFieldFromEduca
                   <IconButton
                     variant="contained"
                     color="secondary"
-                    onClick={() => removeFieldFromEducation(pair[0], pair[1])}
+                    onClick={() => store.removeFieldFromEducation(pair[0], pair[1])}
                   >
                     <RemoveCircleOutlineIcon />
                   </IconButton>
@@ -54,10 +57,11 @@ export default function EducationList({ value, updateField, removeFieldFromEduca
       </Grid>
     </List>
   );
-}
+});
+
+export default EducationList;
 
 EducationList.propTypes = {
   value: PropTypes.array,
   updateField: PropTypes.func,
-  removeFieldFromEducation: PropTypes.func,
 };

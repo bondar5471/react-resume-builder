@@ -21,33 +21,51 @@ import { disabledAddField } from '../../services/validationAddField';
 import { handleInput } from '../../services/HandleInput';
 import { useStyles } from './styles';
 import { projectResponsibility } from '../../template/projectResponsibility';
+import { observer } from 'mobx-react-lite';
 
-export default function ProjectsForm({
-  defaultValue,
-  sectionsField,
-  changeProjectName,
-  setGlobalError,
-  setSingleFieldProject,
-  addFieldResponsibility,
-  setValueResponsibility,
-  removeFieldResponsibility,
-  removeProject,
-}) {
+import { StoreContext } from '../../store/Store';
+
+const ProjectsForm = observer(({ defaultValue, setGlobalError }) => {
   const classes = useStyles();
+  const store = React.useContext(StoreContext);
   const [expanded, setExpanded] = useState(false);
 
-  const handleChange = panel => (event, isExpanded) => {
+  const handleChangeAccordion = panel => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const setValueResponsibility = (newValue, proj, index, indexProj) => {
+    store.setValueResponsibility(newValue, proj, index, indexProj);
+  };
+
+  const setSingleFieldProject = (value, proj, fieldKey, indexProj) => {
+    store.updateProjectField(value, proj, fieldKey, indexProj);
+  };
+
+  const addFieldResponsibility = (proj, indexProj) => {
+    store.addFieldResponsibility(proj, indexProj);
+  };
+
+  const removeFieldResponsibility = (proj, index, indexProj) => {
+    store.removeFieldResponsibility(proj, index, indexProj);
+  };
+  const changeProjectName = (name, projectIndex, oldName) => {
+    store.changeProjectName(name, projectIndex, oldName);
+    setExpanded(projectIndex);
+  };
+
+  const removeProject = index => {
+    store.removeProject(index);
   };
 
   return (
     <React.Fragment key={`${defaultValue}-grid`}>
-      {sectionsField['SIGNIFICANT PROJECTS'].$projects.map((proj, indexProj) => (
+      {store.sectionsFields['SIGNIFICANT PROJECTS'].$projects.map((proj, indexProj) => (
         <Accordion
           className={classes.root}
-          expanded={expanded === Object.keys(proj)[0]}
-          onChange={handleChange(Object.keys(proj)[0])}
-          key={`${Object.keys(proj)}-project-fragment`}
+          expanded={expanded === indexProj}
+          onChange={handleChangeAccordion(indexProj)}
+          key={`${indexProj}-project-fragment`}
         >
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
@@ -230,19 +248,12 @@ export default function ProjectsForm({
       ))}
     </React.Fragment>
   );
-}
+});
+
+export default ProjectsForm;
 
 ProjectsForm.propTypes = {
-  sectionsField: PropTypes.objectOf(Object).isRequired,
-  setValueResponsibility: PropTypes.func.isRequired,
-  removeFieldResponsibility: PropTypes.func.isRequired,
-  addFieldResponsibility: PropTypes.func.isRequired,
-  setSingleObjectField: PropTypes.func,
-  removeTools: PropTypes.func,
   handleOpenTsForm: PropTypes.func,
-  setSingleFieldProject: PropTypes.func.isRequired,
-  removeProject: PropTypes.func.isRequired,
-  changeProjectName: PropTypes.func.isRequired,
   handleOpen: PropTypes.func,
   setGlobalError: PropTypes.func,
   defaultValue: PropTypes.array,

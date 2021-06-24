@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Gitlab } from '@gitbeaker/browser';
 import { decode } from 'js-base64';
 import yaml from 'js-yaml';
@@ -15,13 +15,15 @@ import {
 } from '@material-ui/core';
 import { Description, Folder, ArrowBack } from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
-import PropTypes from 'prop-types';
 
 import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../store/Store';
 
-export default function GitLabExplorer({ history }) {
+export default observer(function GitLabExplorer({ history }) {
+  const store = useContext(StoreContext);
   useEffect(() => {
     openGitLabRepo();
   }, []);
@@ -63,7 +65,7 @@ export default function GitLabExplorer({ history }) {
       const field = yaml.safeLoad(decodeContext);
       localStorage.setItem('currentSha', response.content_sha256);
       localStorage.setItem('currentPath', response.file_path);
-      localStorage.setItem('resumeFields', JSON.stringify(field));
+      store.setResumeFields(field);
       history.push('/');
     } else {
       setError('The file is an unknown format and cannot be opened');
@@ -141,8 +143,4 @@ export default function GitLabExplorer({ history }) {
       )}
     </Paper>
   );
-}
-
-GitLabExplorer.propTypes = {
-  history: PropTypes.func,
-};
+});

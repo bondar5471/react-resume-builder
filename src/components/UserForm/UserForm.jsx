@@ -1,28 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Grid, TextField, Typography, Tooltip, Button } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 import UploadAvatarModal from '../UploadAvatarModal';
+import { StoreContext } from '../../store/Store';
+
+import { observer } from 'mobx-react-lite';
 
 import { useStyles } from './styles';
-export default function UserForm({
-  setUserFieldValue,
-  userDataField,
-  setGlobalError,
-  setUserDataField,
-}) {
-  useEffect(() => {
-    setAvatarPreview();
-  }, [userDataField]);
-  const [openUploadAvatarModal, setOpenUploadAvatarModal] = useState(false);
-  const [preview, setPreview] = useState(null);
+const UserForm = observer(function UserForm({ setGlobalError }) {
+  const store = React.useContext(StoreContext);
+  const { userFields } = store;
 
-  const setAvatarPreview = () => {
-    if (userDataField.$photo) {
-      const avatarUrl = userDataField.$photo.split('main')[1];
+  const [openUploadAvatarModal, setOpenUploadAvatarModal] = useState(false);
+
+  const avatarPreview = () => {
+    if (userFields.$photo) {
+      const avatarUrl = userFields.$photo.split('main')[1];
       const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master${avatarUrl}`;
-      setPreview(previewAvatarUrl);
+      return previewAvatarUrl;
     }
   };
 
@@ -33,24 +30,21 @@ export default function UserForm({
     return changedLabel;
   };
 
-  const handleErrorImg = () => {
-    setPreview(null);
-  };
-
   const checkPhotoExist = () => {
-    const userFieldKeys = Object.keys(userDataField);
+    const userFieldKeys = Object.keys(userFields);
     return userFieldKeys.includes('$photo');
   };
 
   const removePhotoField = () => {
-    const updatedFields = userDataField;
-    delete updatedFields['$photo'];
-    setUserDataField({ ...userDataField, ...updatedFields });
-    setPreview(null);
+    store.removeUserPhoto();
   };
 
   const addPhotoField = () => {
-    setUserFieldValue('', '$photo');
+    store.addUserPhoto();
+  };
+
+  const handleChangeField = (key, value) => {
+    store.setUserField(key, value);
   };
 
   const classes = useStyles();
@@ -61,7 +55,7 @@ export default function UserForm({
         PERSONAL DETAILS
       </Typography>
       <Grid container spacing={2}>
-        {Object.entries(userDataField).map(([key, value]) => (
+        {Object.entries(userFields).map(([key, value]) => (
           <Grid key={key} item sm={key === '$photo' ? 12 : 6} xs={12}>
             {key === '$photo' ? (
               <span>
@@ -77,18 +71,18 @@ export default function UserForm({
                       handleInput(
                         setGlobalError,
                         e.target.value,
-                        setUserFieldValue(e.target.value, key),
+                        handleChangeField(key, e.target.value),
                       )
                     }
                     helperText={!value ? 'This field is required' : null}
                   />
                 </Tooltip>
-                {preview ? (
+                {userFields.$photo ? (
                   <>
                     <Typography>Preview</Typography>
                     <img
-                      onError={() => handleErrorImg()}
-                      src={preview}
+                      //onError={() => handleErrorImg()}
+                      src={avatarPreview()}
                       className={classes.avatar}
                       alt="Photo not found in git"
                     />
@@ -117,11 +111,11 @@ export default function UserForm({
                 variant="outlined"
                 label={capitalizeLabel(key)}
                 defaultValue={value}
-                onBlur={e =>
+                onChange={e =>
                   handleInput(
                     setGlobalError,
                     e.target.value,
-                    setUserFieldValue(e.target.value, key),
+                    handleChangeField(key, e.target.value),
                   )
                 }
                 helperText={!value ? 'This field is required' : null}
@@ -133,9 +127,7 @@ export default function UserForm({
       <UploadAvatarModal
         openUploadAvatarModal={openUploadAvatarModal}
         setOpenUploadAvatarModal={setOpenUploadAvatarModal}
-        setUserFieldValue={setUserFieldValue}
         setGlobalError={setGlobalError}
-        setPreview={setPreview}
       />
       {checkPhotoExist() ? (
         <Button
@@ -158,11 +150,10 @@ export default function UserForm({
       )}
     </React.Fragment>
   );
-}
+});
+
+export default UserForm;
 
 UserForm.propTypes = {
-  userDataField: PropTypes.objectOf(Object).isRequired,
-  setUserFieldValue: PropTypes.func.isRequired,
   setGlobalError: PropTypes.func,
-  setUserDataField: PropTypes.func,
 };

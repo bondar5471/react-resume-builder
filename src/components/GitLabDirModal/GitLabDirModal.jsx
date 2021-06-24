@@ -25,7 +25,6 @@ import Alert from '../Alert';
 export default function GitLabDirModal({
   openModal,
   setOpenModal,
-  handleSave,
   setOpenAlertNewPush,
   createYamlData,
   fileNameGit,
@@ -82,7 +81,6 @@ export default function GitLabDirModal({
     )
       .then(response => {
         localStorage.setItem('currentPath', response.file_path);
-        handleSave();
         setOpenAlertNewPush(true);
         setOpenModal(false);
       })
@@ -163,7 +161,6 @@ export default function GitLabDirModal({
 GitLabDirModal.propTypes = {
   setOpenModal: PropTypes.func,
   openModal: PropTypes.bool,
-  handleSave: PropTypes.func,
   setOpenAlertNewPush: PropTypes.func,
   createYamlData: PropTypes.func,
   fileNameGit: PropTypes.string,

@@ -15,19 +15,10 @@ import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
 import EducationList from '../EducationList';
 import UpdateSectionName from '../UpdateSectionName';
 import { techStackOptions } from '../../template/techStackTemplates';
+import { StoreContext } from '../../store/Store';
+import { observer } from 'mobx-react-lite';
 
-export default function MainSectionPartForm({
-  sectionsField,
-  setSectionFieldMultiValue,
-  setSectionFieldSingleValue,
-  removeField,
-  addField,
-  addFieldToEducation,
-  removeFieldFromEducation,
-  updateFieldToEducation,
-  setGlobalError,
-  setSectionField,
-}) {
+const MainSectionPartForm = observer(({ setGlobalError }) => {
   const [openEducationForm, setOpenEducationForm] = useState(false);
   const [openEditForm, setOpenEditForm] = useState(false);
   const [editedField, setEditedField] = useState([]);
@@ -39,6 +30,7 @@ export default function MainSectionPartForm({
   const [oldSectionName, setOldSectionName] = useState('');
   const classes = useStyles();
 
+  const store = React.useContext(StoreContext);
   const handleCloseCreate = () => {
     setOpenEducationForm(false);
     setEditedField([]);
@@ -60,15 +52,9 @@ export default function MainSectionPartForm({
     let updatedEducationArray = educationArray;
     updatedEducationArray[updatedIndex] = [university, status];
     const fields = [].concat.apply([], updatedEducationArray);
-    updateFieldToEducation(fields);
+    store.updateFieldToEducation(fields);
     setOpenEditForm(false);
     setEditedField([]);
-  };
-
-  const removeSection = key => {
-    const oldSections = sectionsField;
-    delete sectionsField[key];
-    setSectionField({ ...oldSections, ...sectionsField });
   };
 
   const setTooltips = field => {
@@ -88,21 +74,13 @@ export default function MainSectionPartForm({
   };
 
   const changeSectionName = newSectionName => {
-    let updatedObject = sectionsField;
-    updatedObject = Object.keys(updatedObject).reduce(
-      (keys, key) => ({
-        ...keys,
-        [key === oldSectionName ? newSectionName : key]: updatedObject[key],
-      }),
-      {},
-    );
-    setSectionField(updatedObject);
+    store.changeSectionName(oldSectionName, newSectionName);
     setUpdateSectionNameModal(false);
   };
 
   return (
     <>
-      {Object.entries(sectionsField).map(([key, value]) => (
+      {Object.entries(store.sectionsFields).map(([key, value]) => (
         <React.Fragment key={key}>
           {Array.isArray(value) ? (
             <Card className={classes.section}>
@@ -128,7 +106,7 @@ export default function MainSectionPartForm({
                       disabled={disabledAddField(value)}
                       variant="contained"
                       onClick={() =>
-                        key === 'EDUCATION' ? setOpenEducationForm(true) : addField(key)
+                        key === 'EDUCATION' ? setOpenEducationForm(true) : store.addField(key)
                       }
                     >
                       <AddIcon />
@@ -139,18 +117,14 @@ export default function MainSectionPartForm({
                   color="secondary"
                   title={`Remove section ${key}`}
                   className={classes.removeSectionButton}
-                  onClick={() => removeSection(key)}
+                  onClick={() => store.removeSection(key)}
                 >
                   <DeleteSweepIcon color="secondary" />
                 </IconButton>
               </Typography>
               <>
                 {key === 'EDUCATION' ? (
-                  <EducationList
-                    value={value}
-                    updateField={updateField}
-                    removeFieldFromEducation={removeFieldFromEducation}
-                  />
+                  <EducationList value={value} updateField={updateField} />
                 ) : (
                   <Grid container spacing={2} justify="flex-start">
                     {value.map((field, index) => (
@@ -163,7 +137,7 @@ export default function MainSectionPartForm({
                                   handleInput(
                                     setGlobalError,
                                     newValue,
-                                    setSectionFieldMultiValue(newValue, key, index),
+                                    store.setSectionFieldMultiValue(key, index, newValue),
                                   );
                                 }}
                                 freeSolo
@@ -177,7 +151,7 @@ export default function MainSectionPartForm({
                             <IconButton
                               variant="contained"
                               color="secondary"
-                              onClick={() => removeField(index, key)}
+                              onClick={() => store.removeField(key, index)}
                             >
                               <RemoveCircleOutlineIcon />
                             </IconButton>
@@ -202,11 +176,11 @@ export default function MainSectionPartForm({
                           variant="outlined"
                           label={key}
                           defaultValue={value}
-                          onBlur={e =>
+                          onChange={e =>
                             handleInput(
                               setGlobalError,
                               e.target.value,
-                              setSectionFieldSingleValue(e.target.value, key),
+                              store.setSectionStringField(key, e.target.value),
                             )
                           }
                         />
@@ -216,7 +190,7 @@ export default function MainSectionPartForm({
                           color="secondary"
                           title={`Remove section ${key}`}
                           className={classes.removeSectionButton}
-                          onClick={() => removeSection(key)}
+                          onClick={() => store.removeSection(key)}
                         >
                           <DeleteSweepIcon color="secondary" />
                         </IconButton>
@@ -228,7 +202,6 @@ export default function MainSectionPartForm({
               <AddEducationInfo
                 openEducationForm={openEducationForm}
                 handleCloseCreate={handleCloseCreate}
-                addFieldToEducation={addFieldToEducation}
                 institution={institution}
                 degree={degree}
                 setInstitution={setInstitution}
@@ -254,17 +227,10 @@ export default function MainSectionPartForm({
       />
     </>
   );
-}
+});
+
+export default MainSectionPartForm;
 
 MainSectionPartForm.propTypes = {
-  sectionsField: PropTypes.object,
-  setSectionFieldSingleValue: PropTypes.func,
-  setSectionFieldMultiValue: PropTypes.func,
-  removeField: PropTypes.func,
-  addField: PropTypes.func,
-  addFieldToEducation: PropTypes.func,
-  removeFieldFromEducation: PropTypes.func,
-  updateFieldToEducation: PropTypes.func,
   setGlobalError: PropTypes.func,
-  setSectionField: PropTypes.func,
 };

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -7,18 +7,24 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { TextField, Chip } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { observer } from 'mobx-react-lite';
 
 import { stackSelector } from './helpers';
 import { useStyles } from './styles';
+import { StoreContext } from '../../store/Store';
 
-export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, addTools }) {
+const TechnologyStackForm = observer(({ handleCloseTsForm, openTsForm }) => {
   const classes = useStyles();
+  const store = useContext(StoreContext);
   const [category, setCategory] = useState('Programming Languages');
   const [stack, setStack] = useState([]);
 
+  const addTools = (key, value) => {
+    store.addTools(key, value);
+  };
+
   const addFieldTs = () => {
-    const tools = { [category]: stack };
-    addTools(tools);
+    addTools(category, stack);
     handleCloseTsForm();
   };
 
@@ -94,10 +100,10 @@ export default function TechnologyStackForm({ handleCloseTsForm, openTsForm, add
       </Dialog>
     </div>
   );
-}
+});
+export default TechnologyStackForm;
 
 TechnologyStackForm.propTypes = {
-  addTools: PropTypes.func,
   handleCloseTsForm: PropTypes.func,
   openTsForm: PropTypes.bool,
 };

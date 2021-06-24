@@ -9,19 +9,21 @@ import {
   Tooltip,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
+import { observer } from 'mobx-react-lite';
 
+import { StoreContext } from '../../store/Store';
 import { useStyles } from './styles';
 
-export default function AddEducationInfo({
+const AddEducationInfo = observer(function AddEducationInfo({
   openEducationForm,
   handleCloseCreate,
-  addFieldToEducation,
   institution,
   degree,
   setInstitution,
   setDegree,
 }) {
   const classes = useStyles();
+  const store = React.useContext(StoreContext);
   return (
     <Dialog
       open={openEducationForm}
@@ -33,7 +35,7 @@ export default function AddEducationInfo({
       <form
         onSubmit={e => {
           e.preventDefault();
-          addFieldToEducation([institution, degree]);
+          store.addFieldToEducation([institution, degree]);
           handleCloseCreate();
         }}
       >
@@ -70,7 +72,9 @@ export default function AddEducationInfo({
       </form>
     </Dialog>
   );
-}
+});
+
+export default AddEducationInfo;
 
 AddEducationInfo.propTypes = {
   institution: PropTypes.string,
@@ -79,5 +83,4 @@ AddEducationInfo.propTypes = {
   setInstitution: PropTypes.func,
   openEducationForm: PropTypes.bool,
   handleCloseCreate: PropTypes.func,
-  addFieldToEducation: PropTypes.func,
 };

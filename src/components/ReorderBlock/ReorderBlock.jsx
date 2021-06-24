@@ -1,32 +1,27 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Button, Paper, Typography, IconButton } from '@material-ui/core';
-import { useStickyState } from '../../services/StickyState';
 import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
 import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
 import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../store/Store';
 
-export default function ReorderBlock({ history }) {
+const ReorderBlock = observer(({ history }) => {
+  const classes = useStyles();
+  const store = useContext(StoreContext);
+  const { resumeFields, sectionsFields } = store;
+  const userField = resumeFields.cv ? resumeFields.cv.$person : [];
+
   useEffect(() => {
-    if (!JSON.parse(localStorage.getItem('resumeFields'))) {
+    if (Object.keys(sectionsFields).length === 0) {
       history.push('/home');
     }
   }, []);
 
-  const classes = useStyles();
-  const userField = JSON.parse(localStorage.getItem('resumeFields'))
-    ? JSON.parse(localStorage.getItem('resumeFields')).cv.$person
-    : [];
-  const [sectionsField, setSectionField] = useStickyState(
-    JSON.parse(localStorage.getItem('resumeFields'))
-      ? JSON.parse(localStorage.getItem('resumeFields')).cv.$person
-      : [],
-    'updatedSectionState',
-  );
-
   const checkReorderKey = key => {
-    const keys = Object.keys(sectionsField);
+    const keys = Object.keys(sectionsFields);
     const itFirst = keys[0] === key;
     const itLast = keys[keys.length - 1] === key;
     return {
@@ -58,12 +53,12 @@ export default function ReorderBlock({ history }) {
 
   const changeOrderUp = currentIndex => {
     const moveTo = currentIndex - 1;
-    setSectionField(swap(sectionsField, currentIndex, moveTo));
+    store.setSectionFields(swap(sectionsFields, currentIndex, moveTo));
   };
 
   const changeOrderDown = currentIndex => {
     const moveTo = currentIndex + 1;
-    setSectionField(swap(sectionsField, currentIndex, moveTo));
+    store.setSectionFields(swap(sectionsFields, currentIndex, moveTo));
   };
 
   const renderItemByType = value => {
@@ -121,7 +116,7 @@ export default function ReorderBlock({ history }) {
         ))}
       </Paper>
       <Paper className={classes.sectionBlock}>
-        {Object.entries(sectionsField).map(([key, value], index) => (
+        {Object.entries(sectionsFields).map(([key, value], index) => (
           <Paper key={key} className={classes.resumeBlock}>
             <Typography variant="h4">{key}</Typography>
             {renderItemByType(value)}
@@ -151,8 +146,10 @@ export default function ReorderBlock({ history }) {
       </Button>
     </Paper>
   );
-}
+});
 
 ReorderBlock.propTypes = {
   history: PropTypes.object,
 };
+
+export default ReorderBlock;
