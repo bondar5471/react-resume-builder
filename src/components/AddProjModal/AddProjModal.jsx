@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button,
@@ -16,10 +16,13 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import omit from 'lodash/omit';
 import ControlPointIcon from '@material-ui/icons/ControlPoint';
 import { projectResponsibility } from '../../template/projectResponsibility';
+import { observer } from 'mobx-react-lite';
 import { useStyles } from './styles';
+import { StoreContext } from '../../store/Store';
 
-export default function AddProjModal({ handleClose, open, createProject }) {
+const AddProjModal = observer(({ handleClose, open }) => {
   const classes = useStyles();
+  const store = useContext(StoreContext);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [responsibilities, setResponsibilities] = useState(['']);
@@ -31,6 +34,10 @@ export default function AddProjModal({ handleClose, open, createProject }) {
     const updatedData = responsibilities;
     updatedData[index] = value;
     setResponsibilities(updatedData);
+  };
+
+  const createProject = proj => {
+    store.createProject(proj);
   };
 
   const newProject = () => {
@@ -151,10 +158,11 @@ export default function AddProjModal({ handleClose, open, createProject }) {
       </Dialog>
     </div>
   );
-}
+});
+
+export default AddProjModal;
 
 AddProjModal.propTypes = {
-  createProject: PropTypes.func,
   handleClose: PropTypes.func,
   open: PropTypes.bool,
 };

@@ -15,12 +15,12 @@ import SaveIcon from '@material-ui/icons/Save';
 import { PropTypes } from 'prop-types';
 import yaml from 'js-yaml';
 import { Gitlab } from '@gitbeaker/browser';
-
+import { StoreContext } from '../../store/Store';
 import GitLabDirModal from '../GitLabDirModal';
 import Alert from '../Alert';
 import { useStyles } from './styles';
 
-export default function WriteResumeFile({ userData, sectionData, globalError }) {
+export default function WriteResumeFile({ globalError }) {
   const [urlFile, setUrlFile] = useState(null);
   const [fileName, setFileName] = useState('resume');
   const [fileNameGit, setFileNameGit] = useState('resume');
@@ -31,8 +31,11 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const [openModal, setOpenModal] = useState(false);
   const [openAlertNewPush, setOpenAlertNewPush] = useState(false);
 
+  const store = React.useContext(StoreContext);
+  const { userFields, sectionsFields } = store;
+
   const createYamlData = () => {
-    const cv = { cv: { $person: userData, $sections: sectionData } };
+    const cv = { cv: { $person: userFields, $sections: sectionsFields } };
     const yamlStr = yaml.safeDump(cv, { indent: 2, lineWidth: 180 });
     return yamlStr;
   };
@@ -45,18 +48,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     setExpanded('save');
     const downloadUrl = window.URL.createObjectURL(yamlWrite);
     setUrlFile(downloadUrl);
-  };
-
-  const handleSave = () => {
-    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
-    localStorage.setItem('resumeFields', JSON.stringify(updatedCv));
-  };
-
-  const handleChangeResume = () => {
-    const updatedCv = { cv: { $person: userData, $sections: sectionData } };
-    const currentCv = localStorage.getItem('resumeFields');
-    const notChanged = JSON.stringify(updatedCv) === currentCv;
-    return notChanged;
   };
 
   const handleUpdate = async () => {
@@ -78,7 +69,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       `User ${userName} updated ${path}`,
     );
     setOpenAlert(response.file_path === path);
-    handleSave();
   };
 
   const updateFileOnGitLab = () => {
@@ -135,7 +125,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                 download={`${fileName}.yaml`}
                 href={urlFile}
                 onClick={() => {
-                  handleSave();
                   setUrlFile(null);
                   setExpanded(null);
                 }}
@@ -201,7 +190,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
                     <Typography>Update file on GitLab :</Typography>
                     <Button
                       className={classes.gitButton}
-                      disabled={handleChangeResume() || globalError || loading}
+                      disabled={globalError || loading}
                       variant="contained"
                       fullWidth
                       onClick={() => updateFileOnGitLab()}
@@ -260,7 +249,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
       <GitLabDirModal
         openModal={openModal}
         setOpenModal={setOpenModal}
-        handleSave={handleSave}
         setOpenAlertNewPush={setOpenAlertNewPush}
         createYamlData={createYamlData}
         fileNameGit={fileNameGit}
@@ -270,7 +258,5 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
 }
 
 WriteResumeFile.propTypes = {
-  userData: PropTypes.objectOf(Object).isRequired,
-  sectionData: PropTypes.objectOf(Object).isRequired,
   globalError: PropTypes.bool,
 };

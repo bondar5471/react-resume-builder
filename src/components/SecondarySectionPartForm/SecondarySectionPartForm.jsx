@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useContext } from 'react';
 import {
   Typography,
   InputAdornment,
@@ -21,42 +20,40 @@ import { useStyles } from './styles';
 import Card from '@material-ui/core/Card';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import { handleInput } from '../../services/HandleInput';
+import { observer } from 'mobx-react-lite';
 
+import { StoreContext } from '../../store/Store';
 import Alert from '../Alert';
 import ProjectsForm from '../ProjectsForm/ProjectsForm';
 
-export default function SecondarySectionPartForm({
-  sectionsField,
-  setValueResponsibility,
-  removeFieldResponsibility,
-  addFieldResponsibility,
-  setSingleObjectField,
-  removeTools,
-  handleOpenTsForm,
-  setSingleFieldProject,
-  removeProject,
-  setGlobalError,
-  changeProjectName,
-  handleOpen,
-  setSectionField,
-}) {
+const SecondarySectionPartForm = observer(({ handleOpenTsForm, setGlobalError, handleOpen }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [sectionArrayName, setSectionArrayName] = useState('');
   const [openErrorAlert, setOpenErrorAlert] = useState(false);
+
+  const store = useContext(StoreContext);
+  const { sectionsFields } = store;
+
+  const setSingleObjectField = (sectionKey, key, value) => {
+    store.setSectionFieldSingleValue(sectionKey, key, value);
+  };
+
+  const removeTools = key => {
+    store.removeTools(key);
+  };
+
   const classes = useStyles();
   const isObject = arg => {
     return !!arg && arg.constructor === Object;
   };
 
   const addNewSectionList = () => {
-    const oldState = JSON.parse(localStorage.getItem('updatedSectionState'));
-    const newSections = { [sectionArrayName]: [''] };
     const emptyName = /^ *$/.test(sectionArrayName);
-    const alreadyExist = Object.keys(oldState).indexOf(sectionArrayName) > -1;
+    const alreadyExist = Object.keys(sectionsFields).indexOf(sectionArrayName) > -1;
     if (emptyName || alreadyExist) {
       setOpenErrorAlert(true);
     } else {
-      setSectionField({ ...oldState, ...newSections });
+      store.addNewSection(sectionArrayName);
       setOpenAlert(true);
       setSectionArrayName('');
     }
@@ -69,69 +66,62 @@ export default function SecondarySectionPartForm({
 
   return (
     <>
-      {Object.entries(sectionsField).map(([key, value]) =>
-        isObject(value) ? (
-          <Card className={classes.section} key={key}>
-            <Typography variant="h6" color="textSecondary" gutterBottom>
-              {key}
-              <IconButton onClick={key === 'SIGNIFICANT PROJECTS' ? handleOpen : handleOpenTsForm}>
-                <AddIcon />
-              </IconButton>
-            </Typography>
-            <Grid container spacing={2} justify="flex-start">
-              {Object.entries(value).map(([label, defaultValue]) => (
-                <React.Fragment key={label}>
-                  {label === '$projects' ? (
-                    <ProjectsForm
-                      defaultValue={defaultValue}
-                      sectionsField={sectionsField}
-                      changeProjectName={changeProjectName}
-                      setGlobalError={setGlobalError}
-                      setSingleFieldProject={setSingleFieldProject}
-                      addFieldResponsibility={addFieldResponsibility}
-                      setValueResponsibility={setValueResponsibility}
-                      removeFieldResponsibility={removeFieldResponsibility}
-                      removeProject={removeProject}
-                    />
-                  ) : (
-                    <Grid item sm={6} xs={12} key={`${defaultValue}-grid`}>
-                      <InputLabel htmlFor={`${label}-component-outlined`}>
-                        <Typography variant="subtitle2">{label}</Typography>
-                      </InputLabel>
-                      <Tooltip title="Add tools separated by commas">
-                        <OutlinedInput
-                          id={`${label}-component-outlined`}
-                          className={classes.input}
-                          key={`${defaultValue}-input`}
-                          variant="outlined"
-                          defaultValue={defaultValue}
-                          onBlur={e =>
-                            handleInput(
-                              setGlobalError,
-                              e.target.value,
-                              setSingleObjectField(e.target.value, key, label),
-                            )
-                          }
-                          endAdornment={
-                            <InputAdornment position="end">
-                              <IconButton
-                                variant="contained"
-                                color="secondary"
-                                onClick={() => removeTools(label)}
-                              >
-                                <RemoveCircleOutlineIcon />
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                        />
-                      </Tooltip>
-                    </Grid>
-                  )}
-                </React.Fragment>
-              ))}
-            </Grid>
-          </Card>
-        ) : null,
+      {Object.entries(store.sectionsFields).map(
+        ([key, value]) =>
+          isObject(value) && (
+            <Card className={classes.section} key={key}>
+              <Typography variant="h6" color="textSecondary" gutterBottom>
+                {key}
+                <IconButton
+                  onClick={key === 'SIGNIFICANT PROJECTS' ? handleOpen : handleOpenTsForm}
+                >
+                  <AddIcon />
+                </IconButton>
+              </Typography>
+              <Grid container spacing={2} justify="flex-start">
+                {Object.entries(value).map(([label, defaultValue]) => (
+                  <React.Fragment key={label}>
+                    {label === '$projects' ? (
+                      <ProjectsForm defaultValue={defaultValue} setGlobalError={setGlobalError} />
+                    ) : (
+                      <Grid item sm={6} xs={12} key={`${defaultValue}-grid`}>
+                        <InputLabel htmlFor={`${label}-component-outlined`}>
+                          <Typography variant="subtitle2">{label}</Typography>
+                        </InputLabel>
+                        <Tooltip title="Add tools separated by commas">
+                          <OutlinedInput
+                            id={`${label}-component-outlined`}
+                            className={classes.input}
+                            key={`${defaultValue}-input`}
+                            variant="outlined"
+                            defaultValue={defaultValue}
+                            onBlur={e =>
+                              handleInput(
+                                setGlobalError,
+                                e.target.value,
+                                setSingleObjectField(key, label, e.target.value),
+                              )
+                            }
+                            endAdornment={
+                              <InputAdornment position="end">
+                                <IconButton
+                                  variant="contained"
+                                  color="secondary"
+                                  onClick={() => removeTools(label)}
+                                >
+                                  <RemoveCircleOutlineIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            }
+                          />
+                        </Tooltip>
+                      </Grid>
+                    )}
+                  </React.Fragment>
+                ))}
+              </Grid>
+            </Card>
+          ),
       )}
       <Card className={classes.addSectionAccordion}>
         <Accordion>
@@ -148,7 +138,7 @@ export default function SecondarySectionPartForm({
               fullWidth
               label="Section name"
               variant="outlined"
-              defaultValue={sectionArrayName}
+              value={sectionArrayName}
               helperText="The name must not contain only spaces (ie. spaces, tabs or line breaks), be empty and contain only numbers."
               onChange={e => setSectionArrayName(e.target.value)}
             />
@@ -181,20 +171,6 @@ export default function SecondarySectionPartForm({
       </Card>
     </>
   );
-}
+});
 
-SecondarySectionPartForm.propTypes = {
-  sectionsField: PropTypes.objectOf(Object).isRequired,
-  setValueResponsibility: PropTypes.func.isRequired,
-  removeFieldResponsibility: PropTypes.func.isRequired,
-  addFieldResponsibility: PropTypes.func.isRequired,
-  setSingleObjectField: PropTypes.func.isRequired,
-  removeTools: PropTypes.func.isRequired,
-  handleOpenTsForm: PropTypes.func.isRequired,
-  setSingleFieldProject: PropTypes.func.isRequired,
-  removeProject: PropTypes.func.isRequired,
-  changeProjectName: PropTypes.func.isRequired,
-  handleOpen: PropTypes.func.isRequired,
-  setGlobalError: PropTypes.func,
-  setSectionField: PropTypes.func,
-};
+export default SecondarySectionPartForm;

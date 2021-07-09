@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
@@ -20,13 +20,17 @@ import ResumeForm from '../ResumeForm';
 import { getFileFromFolderRepo, getListFolderRepo } from '../../services/HandlerGit';
 import GitUploadModal from '../GitUploadModal/GitUploadModal';
 import { webExample } from '../../template/example.js';
+import { observer } from 'mobx-react-lite';
+import { StoreContext } from '../../store/Store';
 
-export default function UploadResumeComponent() {
+const UploadResumeComponent = observer(() => {
+  const store = useContext(StoreContext);
   const classes = useStyles();
 
   useEffect(() => {
     getRepoFolders();
   }, []);
+  const { resumeFields } = store;
 
   const [repoFolders, setRepoFolders] = useState(null);
   const [listFiles, setListFiles] = useState(null);
@@ -36,9 +40,6 @@ export default function UploadResumeComponent() {
   const [isOpenListFiles, setIsOpenListFiles] = useState(false);
   const [isOpenGitModal, setIsOpenGitModal] = useState(false);
   const [resumeFile, setResumeFile] = useState(null);
-  const [resumeFields, setResumeFields] = useState(
-    JSON.parse(localStorage.getItem('resumeFields')) || null,
-  );
   const [fileName, setFileName] = useState('Upload');
 
   const [errors, setErrors] = useState([]);
@@ -82,8 +83,7 @@ export default function UploadResumeComponent() {
     const field = yaml.safeLoad(decodeContext);
     localStorage.setItem('currentSha', response.sha);
     localStorage.setItem('currentPath', path);
-    localStorage.setItem('resumeFields', JSON.stringify(field));
-    setResumeFields(field);
+    store.setResumeFields(field);
   };
   const hiddenFileInput = React.useRef(null);
 
@@ -93,9 +93,11 @@ export default function UploadResumeComponent() {
   };
 
   const handleChange = event => {
-    let file = event.target.files[0];
-    setFileName(file.name);
-    setResumeFile(file);
+    if (event.target.files.length > 0) {
+      let file = event.target.files[0];
+      setFileName(file.name);
+      setResumeFile(file);
+    }
   };
 
   const readFile = event => {
@@ -106,8 +108,7 @@ export default function UploadResumeComponent() {
 
     reader.onloadend = function () {
       const field = yaml.safeLoad(reader.result);
-      localStorage.setItem('resumeFields', JSON.stringify(field));
-      setResumeFields(field);
+      store.setResumeFields(field);
     };
 
     reader.onerror = function () {
@@ -129,14 +130,13 @@ export default function UploadResumeComponent() {
   const setTemplate = event => {
     event.preventDefault();
     const field = yaml.safeLoad(webExample.web);
-    localStorage.setItem('resumeFields', JSON.stringify(field));
-    setResumeFields(field);
+    store.setResumeFields(field);
   };
 
   return (
     <div>
-      {resumeFields ? (
-        <ResumeForm setResumeFields={setResumeFields} />
+      {resumeFields.cv ? (
+        <ResumeForm />
       ) : (
         <Box>
           <div className={classes.paper}>
@@ -231,4 +231,6 @@ export default function UploadResumeComponent() {
       )}
     </div>
   );
-}
+});
+
+export default UploadResumeComponent;

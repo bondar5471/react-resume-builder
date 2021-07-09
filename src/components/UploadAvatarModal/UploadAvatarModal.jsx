@@ -21,15 +21,16 @@ import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 import Alert from '../Alert';
 import { handleInput } from '../../services/HandleInput';
+import { StoreContext } from '../../store/Store';
 
 export default function UploadAvatarModal({
   openUploadAvatarModal,
   setOpenUploadAvatarModal,
-  setUserFieldValue,
   setGlobalError,
-  setPreview,
 }) {
   const classes = useStyles();
+  const store = React.useContext(StoreContext);
+
   useEffect(() => {
     getDirTree();
   }, []);
@@ -61,15 +62,12 @@ export default function UploadAvatarModal({
     const backUrl = backStepPath(path);
     setPath(backUrl);
     getDirTree(backUrl);
-    setPreview(null);
   };
 
   const setAvatarFile = file => {
     if (checkFileFormatJpg) {
       const avatarPath = `/builds/cv/main/${file.path}`;
-      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master/${file.path}`;
-      setPreview(previewAvatarUrl);
-      handleInput(setGlobalError, avatarPath, setUserFieldValue(avatarPath, '$photo'));
+      handleInput(setGlobalError, avatarPath, store.setUserField('$photo', avatarPath));
       setOpenUploadAvatarModal(false);
     } else {
       setOpenErrorAlert(true);
@@ -143,8 +141,6 @@ export default function UploadAvatarModal({
 
 UploadAvatarModal.propTypes = {
   setOpenUploadAvatarModal: PropTypes.func,
-  setPreview: PropTypes.func,
-  setUserFieldValue: PropTypes.func,
   setGlobalError: PropTypes.func,
   openUploadAvatarModal: PropTypes.bool,
 };
