@@ -4,7 +4,7 @@ import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
 import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
-import { Card, Typography, Tooltip, IconButton, Grid, TextField } from '@material-ui/core';
+import { Tooltip, IconButton, Grid, TextField } from '@material-ui/core';
 import { techStackOptions } from '../../template/techStackTemplates';
 import { disabledAddField } from '../../services/validationAddField';
 import { handleInput } from '../../services/HandleInput';
@@ -12,9 +12,10 @@ import EducationList from '../EducationList';
 import { StoreContext } from '../../store/Store';
 import { observer } from 'mobx-react-lite';
 import { useStyles } from './styles';
+import Section from '../shared/Section/Section';
 
 const ArrayForm = observer(
-  ({ setGlobalError, value, key, updateField, setOpenEducationForm, editSection }) => {
+  ({ setGlobalError, value, keyName, updateField, setOpenEducationForm, editSection }) => {
     const classes = useStyles();
     const store = React.useContext(StoreContext);
     const setTooltips = field => {
@@ -28,48 +29,62 @@ const ArrayForm = observer(
       }
     };
 
-    return (
-      <Card className={classes.section}>
-        <Typography variant="h6" color="textSecondary" gutterBottom>
-          {key !== 'EDUCATION' ? (
-            <IconButton variant="contained" onClick={() => editSection(key)}>
-              <EditIcon />
-            </IconButton>
-          ) : null}
-          {key}
-          <Tooltip
-            element={'span'}
-            title={
-              disabledAddField(value) ? (
-                <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
-              ) : (
-                ''
-              )
+    const AddTooltip = (
+      <Tooltip
+        element={'span'}
+        title={
+          disabledAddField(value) ? (
+            <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
+          ) : (
+            ''
+          )
+        }
+      >
+        <span>
+          <IconButton
+            disabled={disabledAddField(value)}
+            variant="contained"
+            onClick={() =>
+              keyName === 'EDUCATION' ? setOpenEducationForm(true) : store.addField(keyName)
             }
           >
-            <span>
-              <IconButton
-                disabled={disabledAddField(value)}
-                variant="contained"
-                onClick={() =>
-                  key === 'EDUCATION' ? setOpenEducationForm(true) : store.addField(key)
-                }
-              >
-                <AddIcon />
-              </IconButton>
-            </span>
-          </Tooltip>
-          <IconButton
-            color="secondary"
-            title={`Remove section ${key}`}
-            className={classes.removeSectionButton}
-            onClick={() => store.removeSection(key)}
-          >
-            <DeleteSweepIcon color="secondary" />
+            <AddIcon />
           </IconButton>
-        </Typography>
+        </span>
+      </Tooltip>
+    );
+
+    const DeleteButton = (
+      <IconButton
+        color="secondary"
+        title={`Remove section ${keyName}`}
+        className={classes.removeSectionButton}
+        onClick={() => store.removeSection(keyName)}
+      >
+        <DeleteSweepIcon color="secondary" />
+      </IconButton>
+    );
+
+    const EditButton = (
+      <>
+        {keyName !== 'EDUCATION' && (
+          <IconButton variant="contained" onClick={() => editSection(keyName)}>
+            <EditIcon />
+          </IconButton>
+        )}
+      </>
+    );
+
+    return (
+      <Section
+        className={classes.section}
+        title={keyName}
+        AddTooltip={AddTooltip}
+        DeleteButton={DeleteButton}
+        EditButton={EditButton}
+      >
         <>
-          {key === 'EDUCATION' ? (
+          {keyName === 'EDUCATION' ? (
             <EducationList value={value} updateField={updateField} />
           ) : (
             <Grid container spacing={2} justify="flex-start">
@@ -77,18 +92,18 @@ const ArrayForm = observer(
                 <Grid item xs={12} key={`${index}-box`}>
                   <Grid container spacing={1} alignItems="flex-end">
                     <Grid item style={{ width: '95%' }}>
-                      <Tooltip title={setTooltips(key)}>
+                      <Tooltip title={setTooltips(keyName)}>
                         <Autocomplete
                           onInputChange={(event, newValue) => {
                             handleInput(
                               setGlobalError,
                               newValue,
-                              //store.setSectionFieldMultiValue(key, index, newValue),
+                              //store.setSectionFieldMultiValue(keyName, index, newValue),
                             );
                           }}
                           freeSolo
                           value={field}
-                          options={techStackOptions[key] || []}
+                          options={techStackOptions[keyName] || []}
                           renderInput={params => <TextField {...params} variant="outlined" />}
                         />
                       </Tooltip>
@@ -97,7 +112,7 @@ const ArrayForm = observer(
                       <IconButton
                         variant="contained"
                         color="secondary"
-                        onClick={() => store.removeField(key, index)}
+                        onClick={() => store.removeField(keyName, index)}
                       >
                         <RemoveCircleOutlineIcon />
                       </IconButton>
@@ -108,7 +123,7 @@ const ArrayForm = observer(
             </Grid>
           )}
         </>
-      </Card>
+      </Section>
     );
   },
 );

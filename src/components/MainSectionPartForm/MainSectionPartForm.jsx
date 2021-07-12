@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
-import { Card, Grid, IconButton, TextField, Tooltip } from '@material-ui/core';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import { useStyles } from './styles';
 import { PropTypes } from 'prop-types';
-import { handleInput } from '../../services/HandleInput';
 
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
 import EditEducationInfo from '../EditEducationInfo/EditEducationInfo';
@@ -11,6 +8,8 @@ import UpdateSectionName from '../UpdateSectionName';
 import { StoreContext } from '../../store/Store';
 import { observer } from 'mobx-react-lite';
 import ArrayForm from '../ArrayForm';
+import SimpleSection from '../shared/SimpleSection/SimpleSection';
+import SimpleForm from '../shared/SimpleForm/SimpleForm';
 
 const MainSectionPartForm = observer(({ setGlobalError }) => {
   const [openEducationForm, setOpenEducationForm] = useState(false);
@@ -69,47 +68,18 @@ const MainSectionPartForm = observer(({ setGlobalError }) => {
             <ArrayForm
               setGlobalError={setGlobalError}
               value={value}
-              key={key}
+              keyName={key}
               updateField={updateField}
               setOpenEducationForm={setOpenEditForm}
               editSection={editSection}
             />
           ) : (
             <>
-              {typeof value === 'string' ? (
-                <Card className={classes.section} key={key}>
-                  <Tooltip title={key === 'ROLE' ? 'Ex.: Full-stack Ruby Developer' : ''}>
-                    <Grid container>
-                      <Grid item xs={11}>
-                        <TextField
-                          className={classes.marginBottom}
-                          fullWidth
-                          variant="outlined"
-                          label={key}
-                          defaultValue={value}
-                          onChange={e =>
-                            handleInput(
-                              setGlobalError,
-                              e.target.value,
-                              store.setSectionStringField(key, e.target.value),
-                            )
-                          }
-                        />
-                      </Grid>
-                      <Grid item xs={1}>
-                        <IconButton
-                          color="secondary"
-                          title={`Remove section ${key}`}
-                          className={classes.removeSectionButton}
-                          onClick={() => store.removeSection(key)}
-                        >
-                          <DeleteSweepIcon color="secondary" />
-                        </IconButton>
-                      </Grid>
-                    </Grid>
-                  </Tooltip>
-                </Card>
-              ) : null}
+              {typeof value === 'string' && (
+                <SimpleSection className={classes.section} key={key}>
+                  <SimpleForm keyName={key} />
+                </SimpleSection>
+              )}
               <AddEducationInfo
                 openEducationForm={openEducationForm}
                 handleCloseCreate={handleCloseCreate}
