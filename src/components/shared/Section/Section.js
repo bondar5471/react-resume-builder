@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
-import SimpleSection from '../SimpleSection/SimpleSection';
+import SimpleSection from '../SimpleSection';
 
 const Section = props => {
   return (

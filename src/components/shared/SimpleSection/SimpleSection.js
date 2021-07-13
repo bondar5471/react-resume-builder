@@ -1,8 +1,12 @@
 import React from 'react';
-import { Card } from '@material-ui/core';
+import { PropTypes } from 'prop-types';
 
 const SimpleSection = props => {
-  return <Card {...props}>{props.children}</Card>;
+  return <React.Fragment {...props}>{props.children}</React.Fragment>;
+};
+
+SimpleSection.propTypes = {
+  children: PropTypes.element.isRequired,
 };
 
 export default SimpleSection;

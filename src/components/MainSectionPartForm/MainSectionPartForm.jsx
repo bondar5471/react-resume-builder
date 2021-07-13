@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useStyles } from './styles';
 import { PropTypes } from 'prop-types';
 
 import AddEducationInfo from '../AddEducationInfo/AddEducationInfo';
@@ -8,7 +7,6 @@ import UpdateSectionName from '../UpdateSectionName';
 import { StoreContext } from '../../store/Store';
 import { observer } from 'mobx-react-lite';
 import ArrayForm from '../ArrayForm';
-import SimpleSection from '../shared/SimpleSection/SimpleSection';
 import SimpleForm from '../shared/SimpleForm/SimpleForm';
 
 const MainSectionPartForm = observer(({ setGlobalError }) => {
@@ -21,7 +19,6 @@ const MainSectionPartForm = observer(({ setGlobalError }) => {
   const [degree, setDegree] = useState('');
   const [updateSectionNameModal, setUpdateSectionNameModal] = useState(false);
   const [oldSectionName, setOldSectionName] = useState('');
-  const classes = useStyles();
 
   const store = React.useContext(StoreContext);
   const handleCloseCreate = () => {
@@ -76,9 +73,7 @@ const MainSectionPartForm = observer(({ setGlobalError }) => {
           ) : (
             <>
               {typeof value === 'string' && (
-                <SimpleSection className={classes.section} key={key}>
-                  <SimpleForm keyName={key} />
-                </SimpleSection>
+                <SimpleForm key={key} keyName={key} value={value} setGlobalError={setGlobalError} />
               )}
               <AddEducationInfo
                 openEducationForm={openEducationForm}
