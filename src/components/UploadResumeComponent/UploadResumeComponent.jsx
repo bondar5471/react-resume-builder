@@ -182,7 +182,7 @@ const UploadResumeComponent = observer(() => {
                 >
                   {fileName}
                 </Button>
-                <FormHelperText> Support only .yml, .yaml files</FormHelperText>
+                <FormHelperText>Support only .yml, .yaml files</FormHelperText>
                 {errors.map(e => (
                   <Typography color="error" key={e.message}>
                     {e.message}
