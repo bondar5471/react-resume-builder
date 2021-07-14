@@ -1,18 +1,17 @@
 import React from 'react';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import RemoveCircleOutlineIcon from '@material-ui/icons/RemoveCircleOutline';
-import EditIcon from '@material-ui/icons/Edit';
-import AddIcon from '@material-ui/icons/Add';
-import DeleteSweepIcon from '@material-ui/icons/DeleteSweep';
 import { Tooltip, IconButton, Grid, TextField } from '@material-ui/core';
 import { techStackOptions } from '../../template/techStackTemplates';
-import { disabledAddField } from '../../services/validationAddField';
 import { handleInput } from '../../services/HandleInput';
 import EducationList from '../EducationList';
 import { StoreContext } from '../../store/Store';
 import { observer } from 'mobx-react-lite';
 import { useStyles } from './styles';
 import Section from '../shared/Section/Section';
+import AddTooltip from '../shared/AddTooltip/AddTooltip';
+import DeleteButton from '../shared/DeleteButtont/DeleteButton';
+import EditButton from '../shared/EditButton/EditButton';
 
 const ArrayForm = observer(
   ({ setGlobalError, value, keyName, updateField, setOpenEducationForm, editSection }) => {
@@ -29,59 +28,21 @@ const ArrayForm = observer(
       }
     };
 
-    const AddTooltip = (
-      <Tooltip
-        element={'span'}
-        title={
-          disabledAddField(value) ? (
-            <span style={{ fontSize: '22px' }}>Please fill all input fields</span>
-          ) : (
-            ''
-          )
-        }
-      >
-        <span>
-          <IconButton
-            disabled={disabledAddField(value)}
-            variant="contained"
-            onClick={() =>
-              keyName === 'EDUCATION' ? setOpenEducationForm(true) : store.addField(keyName)
-            }
-          >
-            <AddIcon />
-          </IconButton>
-        </span>
-      </Tooltip>
-    );
-
-    const DeleteButton = (
-      <IconButton
-        color="secondary"
-        title={`Remove section ${keyName}`}
-        className={classes.removeSectionButton}
-        onClick={() => store.removeSection(keyName)}
-      >
-        <DeleteSweepIcon color="secondary" />
-      </IconButton>
-    );
-
-    const EditButton = (
-      <>
-        {keyName !== 'EDUCATION' && (
-          <IconButton variant="contained" onClick={() => editSection(keyName)}>
-            <EditIcon />
-          </IconButton>
-        )}
-      </>
-    );
+    // const AddTooltipButton = <AddTooltip value={value} keyName={keyName} setOpenEducationForm={setOpenEducationForm} />;
+    // const DeleteSectionButton =  <DeleteButton sectionName={keyName}/>;
+    // const EditSectionButton = (
+    //   <>
+    //     {keyName !== 'EDUCATION' && <EditButton editSection={editSection} sectionName={keyName} />}
+    //   </>
+    // );
 
     return (
       <Section
         className={classes.section}
         title={keyName}
-        AddTooltip={AddTooltip}
-        DeleteButton={DeleteButton}
-        EditButton={EditButton}
+        // AddTooltip={AddTooltipButton}
+        // DeleteButton={DeleteSectionButton}
+        // EditButton={EditSectionButton}
       >
         <>
           {keyName === 'EDUCATION' ? (

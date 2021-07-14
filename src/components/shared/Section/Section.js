@@ -6,10 +6,10 @@ const Section = props => {
   return (
     <SimpleSection {...props}>
       <Typography variant="h6" color="textSecondary" gutterBottom>
-        {props.EditButton}
+        {props.EditButton && props.EditButton}
         {props.title}
-        {props.AddTooltip}
-        {props.DeleteButton}
+        {props.AddTooltip && props.AddTooltip}
+        {props.DeleteButton && props.DeleteButton}
       </Typography>
       {props.children}
     </SimpleSection>
