@@ -10,7 +10,7 @@ import ArrowDownwardIcon from '@material-ui/icons/ArrowDownward';
 export default function ReorderBlock({ history }) {
   useEffect(() => {
     if (!JSON.parse(localStorage.getItem('resumeFields'))) {
-      history.push('/home');
+      history.push('/');
     }
   }, []);
 

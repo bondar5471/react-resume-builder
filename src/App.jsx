@@ -11,10 +11,11 @@ import { useStyles } from './styles';
 import logo from './logo.png';
 import HideOnScroll from './components/HideOnScroll';
 import { Link, withRouter } from 'react-router-dom';
+import { useKeycloak } from "@react-keycloak/web";
 
 function App(props) {
   const classes = useStyles();
-
+  const [userName, setUserName] = useState(null);
   const [darkState, setDarkState] = useState(JSON.parse(localStorage.getItem('darkTheme')));
   const palletType = darkState ? 'dark' : 'light';
   const mainPrimaryColor = darkState ? '#724b4b' : '#39C3FC';
@@ -35,12 +36,22 @@ function App(props) {
     localStorage.setItem('darkTheme', !JSON.parse(darkState));
   };
 
+  const { keycloak, initialized } = useKeycloak();
+  
+  if (initialized && !keycloak.authenticated) {
+    keycloak.login({
+      scope: 'openid'
+    });
+  }
+
+  if (initialized && keycloak.authenticated && !userName) {
+    setUserName(() => keycloak.tokenParsed.preferred_username);
+  }
+
   const handleLogOut = () => {
-    localStorage.clear();
-    props.history.push('/');
+    keycloak.logout();
   };
 
-  const userName = localStorage.getItem('user');
   return (
     <ErrorBoundary>
       <ThemeProvider theme={darkTheme}>
