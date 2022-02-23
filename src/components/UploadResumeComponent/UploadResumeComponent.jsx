@@ -164,7 +164,7 @@ export default function UploadResumeComponent({history}) {
                 <Button
                   variant="outlined"
                   component={Link}
-                  to="/git_explorer"
+                  to="/gitlab"
                   fullWidth
                   className={classes.editButton}
                 >

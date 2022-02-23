@@ -14,7 +14,7 @@ function AppRouter() {
     <UserContext.Provider value={value}>
       <Switch>
         <PrivateRoute component={Home} path="/" exact />
-        <PrivateRoute component={GitLabExplorer} path="/git_explorer/:path?" exact />
+        <PrivateRoute component={GitLabExplorer} path="/gitlab/:path?/:path?/:path?/:path?/:path?" />
         <PrivateRoute component={ReorderBlock} path="/reorder-block" />
       </Switch>
     </UserContext.Provider>

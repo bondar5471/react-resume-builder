@@ -22,11 +22,20 @@ import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
 import { defaultPath } from '../../services/HandlerGit'
 
-export default function GitLabExplorer({ history }) {
-  useEffect(() => {
-    openGitLabRepo(defaultPath);
-  }, []);
+export default function GitLabExplorer({ history, location }) {
+  // debugger;
   const [currentPath, setCurrentPath] = useState(defaultPath);
+
+  useEffect(() => {
+    const path = `/gitlab/${currentPath}`
+    if (history.action === "POP") {
+      window.history.pushState(null, "New Page Title", backStepPath(path));
+    } else {
+     window.history.pushState(null, "New Page Title", path);
+    }
+    // console.log(location.pathname);
+    openGitLabRepo(currentPath);
+  }, [history]);
   const [files, setFiles] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -38,6 +47,7 @@ export default function GitLabExplorer({ history }) {
       token: process.env.REACT_APP_GITLAB_TOKEN,
     });
     const id = process.env.REACT_APP_GITLAB_PROJ_ID;
+    // console.log(path);
     api.Repositories.tree(id, { path }).then(files => {
       setFiles(files);
       setLoading(false);
@@ -75,6 +85,10 @@ export default function GitLabExplorer({ history }) {
     setError(null);
     setCurrentPath(folder.path);
     openGitLabRepo(folder.path);
+    // window.history.replaceState(null, "New Page Title", folder.path);
+    debugger
+    const path = `/gitlab/${folder.path}`
+    window.history.pushState(null, "New Page Title", path);
   };
 
   const handleFileClick = file => {
