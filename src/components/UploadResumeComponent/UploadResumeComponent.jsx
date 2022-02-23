@@ -21,8 +21,18 @@ import { getFileFromFolderRepo, getListFolderRepo } from '../../services/Handler
 import GitUploadModal from '../GitUploadModal/GitUploadModal';
 import { webExample } from '../../template/example.js';
 
-export default function UploadResumeComponent() {
+export default function UploadResumeComponent({history}) {
   const classes = useStyles();
+
+  useEffect(() => {
+    return () => {
+      if (history.action === "POP") {
+        localStorage.removeItem('resumeFields');
+        localStorage.removeItem('updatedUserState');
+        localStorage.removeItem('updatedSectionState');
+      }
+    };
+  }, [history]);
 
   useEffect(() => {
     getRepoFolders();
@@ -154,7 +164,7 @@ export default function UploadResumeComponent() {
                 <Button
                   variant="outlined"
                   component={Link}
-                  to="/git_explorer"
+                  to="/gitlab"
                   fullWidth
                   className={classes.editButton}
                 >

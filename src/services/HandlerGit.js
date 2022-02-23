@@ -4,9 +4,12 @@ const { Octokit } = require('@octokit/rest');
 const owner = 'bondar5471';
 const repo = 'resume';
 
+
 const octokit = new Octokit({
   auth: token,
 });
+
+const defaultPath = "src/yaml";
 
 const getListFolderRepo = async () => {
   const files = await octokit.repos.getContent({
@@ -42,4 +45,4 @@ const updateOrCreateFile = async content => {
   return response;
 };
 
-export { getFileFromFolderRepo, getListFolderRepo, updateOrCreateFile };
+export { getFileFromFolderRepo, getListFolderRepo, updateOrCreateFile, defaultPath };
