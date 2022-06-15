@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import InsertDriveFileIcon from '@material-ui/icons/InsertDriveFile';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import BorderColorIcon from '@material-ui/icons/BorderColor';
 import {
   Button,
   FormControl,
@@ -96,13 +97,13 @@ export default function UploadResumeComponent() {
     let file = event.target.files[0];
     setFileName(file.name);
     setResumeFile(file);
+    readFile(file)
   };
 
-  const readFile = event => {
-    event.preventDefault();
+  const readFile = file => {
     let reader = new FileReader();
 
-    reader.readAsText(resumeFile);
+    reader.readAsText(file);
 
     reader.onloadend = function () {
       const field = yaml.safeLoad(reader.result);
@@ -150,19 +151,29 @@ export default function UploadResumeComponent() {
           <form className={classes.form} noValidate onSubmit={readFile}>
             <FormControl component="fieldset">
               <Card className={classes.cardBox}>
-                <FormLabel component="legend">Upload resume file from GitLab:</FormLabel>
+                <Button
+                  color="primary"
+                  fullWidth
+                  variant="contained"
+                  component="span"
+                  className={classes.button}
+                  startIcon={<InsertDriveFileIcon />}
+                  onClick={e => setTemplate(e)}
+                >
+                  CREATE CV
+                </Button>
+
                 <Button
                   variant="outlined"
                   component={Link}
                   to="/git_explorer"
                   fullWidth
+                  startIcon={<BorderColorIcon />}
                   className={classes.editButton}
                 >
-                  Open GitLab
+                  EDIT CV
                 </Button>
-              </Card>
-              <Card className={classes.cardBox}>
-                <FormLabel component="legend">Upload resume file:</FormLabel>
+
                 <input
                   style={{ display: 'none' }}
                   accept=".yaml, .yml"
@@ -176,11 +187,11 @@ export default function UploadResumeComponent() {
                   color="secondary"
                   variant="contained"
                   fullWidth
-                  className={classes.button}
+                  className={classes.editButton}
                   startIcon={<CloudUploadIcon />}
                   onClick={handleClick}
                 >
-                  {fileName}
+                  UPLOAD CV
                 </Button>
                 <FormHelperText> Support only .yml, .yaml files</FormHelperText>
                 {errors.map(e => (
@@ -188,30 +199,6 @@ export default function UploadResumeComponent() {
                     {e.message}
                   </Typography>
                 ))}
-                <Button
-                  className={classes.editButton}
-                  type="submit"
-                  variant="contained"
-                  color="default"
-                  fullWidth
-                  disabled={!resumeFile}
-                >
-                  Edit file
-                </Button>
-              </Card>
-              <Card className={classes.cardBox}>
-                <FormLabel component="legend">Use template:</FormLabel>
-                <Button
-                  color="secondary"
-                  fullWidth
-                  variant="contained"
-                  component="span"
-                  className={classes.button}
-                  startIcon={<InsertDriveFileIcon />}
-                  onClick={e => setTemplate(e)}
-                >
-                  Create new CV
-                </Button>
               </Card>
             </FormControl>
           </form>

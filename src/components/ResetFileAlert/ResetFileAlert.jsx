@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogActions, DialogContent, DialogContentText, Button } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, deleteResume }) {
   return (
@@ -16,10 +17,22 @@ export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, de
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={closeCancelEditFile} autoFocus>
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={closeCancelEditFile}
+          autoFocus
+        >
           Disagree
         </Button>
-        <Button onClick={() => deleteResume()}>Agree</Button>
+        <Button
+          variant="outlined"
+          startIcon={<DeleteIcon />}
+          color="secondary"
+          onClick={() => deleteResume()}
+        >
+          Agree
+        </Button>
       </DialogActions>
     </Dialog>
   );

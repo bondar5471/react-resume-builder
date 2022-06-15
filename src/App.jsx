@@ -87,7 +87,7 @@ function App(props) {
           <footer className={classes.footer}>
             <Container maxWidth="sm">
               <Typography variant="body2" align="center">
-                Support: bondar54711745@gmail.com
+                Support: <a href="mailto:ruby@nixsolutions.com?subject=Mail from CV builder">ruby@nixsolutions.com</a>
               </Typography>
             </Container>
           </footer>
