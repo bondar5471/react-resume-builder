@@ -22,13 +22,14 @@ import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
 
 export default function GitLabExplorer({ history }) {
-  useEffect(() => {
-    openGitLabRepo();
-  }, []);
-  const [currentPath, setCurrentPath] = useState(null);
+  const [currentPath, setCurrentPath] = useState('src/yaml');
   const [files, setFiles] = useState(null);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    openGitLabRepo(currentPath);
+  }, []);
 
   const openGitLabRepo = path => {
     setLoading(true);
