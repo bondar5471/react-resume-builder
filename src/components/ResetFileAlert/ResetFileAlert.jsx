@@ -1,23 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogActions, DialogContent, DialogContentText, Button } from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import { Dialog, DialogActions, DialogContent, DialogContentText, Button, Typography } from '@material-ui/core';
+import { useStyles } from './styles';
 
 export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, deleteResume }) {
+  const classes = useStyles();
+
   return (
     <Dialog
       open={cancelEditFile}
       onClose={closeCancelEditFile}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
+      classes={classes}
     >
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          Do you want leave this page ?
+        <DialogContentText id="alert-dialog-description" className={classes.dialogContent}>
+          Your changes won't be saved. Do you want to leave this page?
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button
+      <Button
           color="primary"
           variant="contained"
           onClick={closeCancelEditFile}
@@ -27,7 +30,6 @@ export default function ResetFileAlert({ cancelEditFile, closeCancelEditFile, de
         </Button>
         <Button
           variant="outlined"
-          startIcon={<DeleteIcon />}
           color="secondary"
           onClick={() => deleteResume()}
         >
