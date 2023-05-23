@@ -14,8 +14,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import SaveIcon from '@material-ui/icons/Save';
 import { PropTypes } from 'prop-types';
 import yaml from 'js-yaml';
-import { Gitlab } from '@gitbeaker/browser';
-
+// import { Gitlab } from '@gitbeaker/browser';
+import { api, id } from '../../services/HandlerGitLab.js';
 import GitLabDirModal from '../GitLabDirModal';
 import Alert from '../Alert';
 import { useStyles } from './styles';
@@ -63,12 +63,7 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
     setLoading(true);
     setExpanded('save');
     const yamlData = createYamlData();
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
     const path = localStorage.getItem('currentPath');
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     const userName = localStorage.getItem('user');
     const response = await api.RepositoryFiles.edit(
       id,

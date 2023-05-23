@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Grid, TextField, Typography, Tooltip, Button } from '@material-ui/core';
+import { Grid, TextField, Typography, Tooltip, Button, IconButton } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PropTypes from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 import UploadAvatarModal from '../UploadAvatarModal';
@@ -55,11 +56,23 @@ export default function UserForm({
 
   const classes = useStyles();
 
+  const currentPath = localStorage.getItem('currentPath');
+  const linkGit = window.location.href + '?link=' + currentPath;
+
+  const copyContent = async () => {
+    await navigator.clipboard.writeText(linkGit);
+  };
+
   return (
     <React.Fragment>
-      <Typography variant="h6" color="textSecondary" gutterBottom>
-        PERSONAL DETAILS
-      </Typography>
+      <Grid container spacing={2}>
+        <Typography variant="contained" color="textSecondary" gutterBottom>
+          PERSONAL DETAILS
+        </Typography>
+        <IconButton variant="contained" color="secondary" onClick={() => copyContent()}>
+          <FileCopyIcon />
+        </IconButton>
+      </Grid>
       <Grid container spacing={2}>
         {Object.entries(userDataField).map(([key, value]) => (
           <Grid key={key} item sm={key === '$photo' ? 12 : 6} xs={12}>

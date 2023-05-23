@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Gitlab } from '@gitbeaker/browser';
+// import { Gitlab } from '@gitbeaker/browser';
 import { decode } from 'js-base64';
 import yaml from 'js-yaml';
 import {
@@ -16,7 +16,7 @@ import {
 import { Description, Folder, ArrowBack } from '@material-ui/icons';
 import HomeIcon from '@material-ui/icons/Home';
 import PropTypes from 'prop-types';
-
+import { api, id } from '../../services/HandlerGitLab.js';
 import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 import { Link } from 'react-router-dom';
@@ -33,11 +33,6 @@ export default function GitLabExplorer({ history }) {
 
   const openGitLabRepo = path => {
     setLoading(true);
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     api.Repositories.tree(id, { path }).then(files => {
       setFiles(files);
       setLoading(false);
@@ -51,12 +46,8 @@ export default function GitLabExplorer({ history }) {
       handleFileClick(item);
     }
   };
+
   const getFile = async path => {
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     const response = await api.RepositoryFiles.show(id, path, 'master');
     const fileExtension = response.file_path.split('.').pop();
     if (fileExtension === 'yaml') {

@@ -45,7 +45,8 @@ function App(props) {
   }
 
   if (initialized && keycloak.authenticated && !userName) {
-    setUserName(() => keycloak.tokenParsed.preferred_username);
+    setUserName(() => keycloak.tokenParsed.name);
+    localStorage.setItem('user', keycloak.tokenParsed.name);
   }
 
   const handleLogOut = () => {

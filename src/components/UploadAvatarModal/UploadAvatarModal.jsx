@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ArrowBack, Folder, Photo } from '@material-ui/icons';
-import { Gitlab } from '@gitbeaker/browser';
+// import { Gitlab } from '@gitbeaker/browser';
 import {
   Dialog,
   DialogTitle,
@@ -16,7 +16,7 @@ import {
   IconButton,
   Snackbar,
 } from '@material-ui/core';
-
+import { api, id } from '../../services/HandlerGitLab.js';
 import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 import Alert from '../Alert';
@@ -41,11 +41,6 @@ export default function UploadAvatarModal({
 
   const getDirTree = path => {
     setLoading(true);
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     api.Repositories.tree(id, { path }).then(data => {
       setFiles(data);
       setLoading(false);
