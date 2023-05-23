@@ -13,6 +13,9 @@ export default function UserForm({
   setGlobalError,
   setUserDataField,
 }) {
+
+  const [copyText, setCopyText] = useState("Copy path");
+
   useEffect(() => {
     setAvatarPreview();
   }, [userDataField]);
@@ -61,17 +64,37 @@ export default function UserForm({
 
   const copyContent = async () => {
     await navigator.clipboard.writeText(linkGit);
+    setCopyText("Copied!")
+    setTimeout(() => setCopyText("Copy path"), 5000)
   };
 
   return (
     <React.Fragment>
       <Grid container spacing={2}>
-        <Typography variant="contained" color="textSecondary" gutterBottom>
-          PERSONAL DETAILS
-        </Typography>
-        <IconButton variant="contained" color="secondary" onClick={() => copyContent()}>
-          <FileCopyIcon />
-        </IconButton>
+        <Grid item xs={10}>
+          <TextField
+            variant="outlined"
+            disabled
+            fullWidth
+            key="editLink"
+            label="URL"
+            value={linkGit}
+          />
+        </Grid>
+        <Grid item xs={2}>
+          <Tooltip title={copyText}>
+            <IconButton color="primary" onClick={() => copyContent()}>
+              <FileCopyIcon />
+            </IconButton>
+          </Tooltip>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={10}>
+          <Typography color="textSecondary" gutterBottom>
+            PERSONAL DETAILS
+          </Typography>
+        </Grid>
       </Grid>
       <Grid container spacing={2}>
         {Object.entries(userDataField).map(([key, value]) => (

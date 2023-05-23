@@ -158,7 +158,9 @@ export default function UploadResumeComponent() {
   const link = urlParams.get('link');
 
   useEffect(() => {
-    getFile(link);
+    if(link) {
+      getFile(link);
+    }
   }, [link]);
 
   return (
