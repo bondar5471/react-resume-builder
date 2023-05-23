@@ -20,8 +20,8 @@ export default function UserForm({
 
   const setAvatarPreview = () => {
     if (userDataField.$photo) {
-      const avatarUrl = userDataField.$photo.split('main')[1];
-      const previewAvatarUrl = `https://gitlab.nixdev.co/cv/main/-/raw/master${avatarUrl}`;
+      const avatarUrl = userDataField.$photo.split('cv/main')[1];
+      const previewAvatarUrl = `${process.env.REACT_APP_GITLAB_URL}/cv/main/-/raw/master${avatarUrl}`;
       setPreview(previewAvatarUrl);
     }
   };
