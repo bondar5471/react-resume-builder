@@ -62,10 +62,8 @@ export default function UserForm({
   const classes = useStyles();
 
   const currentPath = localStorage.getItem('currentPath');
-  const searchParams = useMemo(
-    () => new URLSearchParams(search),
-    [search]
-  );
+
+  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
   useEffect(() => {
     if (currentPath && !searchParams.get('link')) {
       searchParams.set('link', currentPath);
@@ -75,8 +73,8 @@ export default function UserForm({
 
   const copyContent = async () => {
     await navigator.clipboard.writeText(window.location.href);
-    setCopyText("Copied!")
-    setTimeout(() => setCopyText("Copy path"), 5000)
+    setCopyText('Copied!');
+    setTimeout(() => setCopyText('Copy path'), 5000);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -22,14 +22,23 @@ import { useStyles } from './styles';
 
 export default function WriteResumeFile({ userData, sectionData, globalError }) {
   const [urlFile, setUrlFile] = useState(null);
-  const [fileName, setFileName] = useState('resume');
-  const [fileNameGit, setFileNameGit] = useState('resume');
+  const [fileName, setFileName] = useState(`${userData.$firstname}_${userData.$lastname}`);
+  const [fileNameGit, setFileNameGit] = useState(`${userData.$firstname}_${userData.$lastname}`);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [expanded, setExpanded] = useState(null);
   const [openModal, setOpenModal] = useState(false);
   const [openAlertNewPush, setOpenAlertNewPush] = useState(false);
+
+  useEffect(() => {
+    setFileName(`${userData.$firstname}_${userData.$lastname}`);
+
+    const currentPath = localStorage.getItem('currentPath');
+    if (currentPath) {
+      setFileNameGit(`${currentPath.split('/').pop().split('.')[0]}_copy`);
+    }
+  }, [userData.$firstname, userData.$lastname]);
 
   const createYamlData = () => {
     const cv = { cv: { $person: userData, $sections: sectionData } };
@@ -96,7 +105,6 @@ export default function WriteResumeFile({ userData, sectionData, globalError }) 
   const handleBlurAccordion = () => event => {
     if (!event.currentTarget.contains(event.relatedTarget)) {
       setExpanded(null);
-      setFileName('resume');
     }
   };
 

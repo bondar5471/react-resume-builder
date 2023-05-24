@@ -29,7 +29,7 @@ export default function UploadResumeComponent() {
 
   useEffect(() => {
     if (resumeFields == null) {
-      setResumeFields(JSON.parse(localStorage.getItem('resumeFields')))
+      setResumeFields(JSON.parse(localStorage.getItem('resumeFields')));
     }
     // getRepoFolders();
   }, []);
@@ -158,7 +158,7 @@ export default function UploadResumeComponent() {
   const link = urlParams.get('link');
 
   useEffect(() => {
-    if(link) {
+    if (link) {
       getFile(link);
     }
   }, [link]);
