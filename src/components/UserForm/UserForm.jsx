@@ -1,20 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Grid, TextField, Typography, Tooltip, Button, IconButton } from '@material-ui/core';
 import { CloudUpload } from '@material-ui/icons';
 import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PropTypes from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 import UploadAvatarModal from '../UploadAvatarModal';
-
+import { useLocation, useHistory } from 'react-router-dom';
 import { useStyles } from './styles';
+
 export default function UserForm({
   setUserFieldValue,
   userDataField,
   setGlobalError,
   setUserDataField,
 }) {
-
   const [copyText, setCopyText] = useState("Copy path");
+  const { search } = useLocation();
+  const history = useHistory();
 
   useEffect(() => {
     setAvatarPreview();
@@ -60,35 +62,46 @@ export default function UserForm({
   const classes = useStyles();
 
   const currentPath = localStorage.getItem('currentPath');
-  const linkGit = window.location.href + '?link=' + currentPath;
+  const searchParams = useMemo(
+    () => new URLSearchParams(search),
+    [search]
+  );
+  useEffect(() => {
+    if (currentPath && !searchParams.get('link')) {
+      searchParams.set('link', currentPath);
+      history.replace({ search: searchParams.toString() });
+    }
+  }, [searchParams]);
 
   const copyContent = async () => {
-    await navigator.clipboard.writeText(linkGit);
+    await navigator.clipboard.writeText(window.location.href);
     setCopyText("Copied!")
     setTimeout(() => setCopyText("Copy path"), 5000)
   };
 
   return (
     <React.Fragment>
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
-          <TextField
-            variant="outlined"
-            disabled
-            fullWidth
-            key="editLink"
-            label="URL"
-            value={linkGit}
-          />
+      {currentPath && 
+        <Grid container spacing={2}>
+          <Grid item xs={10}>
+            <TextField
+              variant="outlined"
+              disabled
+              fullWidth
+              key="editLink"
+              label="URL"
+              value={window.location.href}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Tooltip title={copyText}>
+              <IconButton color="primary" onClick={() => copyContent()}>
+                <FileCopyIcon />
+              </IconButton>
+            </Tooltip>
+          </Grid>
         </Grid>
-        <Grid item xs={2}>
-          <Tooltip title={copyText}>
-            <IconButton color="primary" onClick={() => copyContent()}>
-              <FileCopyIcon />
-            </IconButton>
-          </Tooltip>
-        </Grid>
-      </Grid>
+      }
       <Grid container spacing={2}>
         <Grid item xs={10}>
           <Typography color="textSecondary" gutterBottom>
