@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { debounce, set, assign } from 'lodash';
 import { PropTypes } from 'prop-types';
@@ -16,6 +16,7 @@ import MainSectionPartForm from '../MainSectionPartForm';
 import UserForm from '../UserForm';
 import ResetFileAlert from '../ResetFileAlert';
 import { useStickyState } from '../../services/StickyState';
+import { useHistory, useLocation } from 'react-router-dom';
 
 export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
@@ -33,6 +34,9 @@ export default function ResumeForm({ setResumeFields }) {
       deleteResume();
     };
   };
+  
+  const { search } = useLocation();
+  const history = useHistory();
   const classes = useStyles();
   const [showScroll, setShowScroll] = useState(false);
   const [userDataField, setUserDataField] = useStickyState(
@@ -230,6 +234,8 @@ export default function ResumeForm({ setResumeFields }) {
     localStorage.removeItem('currentSha');
     localStorage.removeItem('currentPath');
     setResumeFields(null);
+    searchParams.delete('link');
+    history.replace({ search: searchParams.toString() });
   };
 
   const resetChange = () => {
@@ -264,6 +270,17 @@ export default function ResumeForm({ setResumeFields }) {
     return null;
   };
 
+  const currentPath = localStorage.getItem('currentPath');
+
+  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
+  useEffect(() => {
+    if (currentPath && !searchParams.get('link')) {
+      searchParams.set('link', currentPath);
+      history.replace({ search: searchParams.toString() });
+    }
+  }, [searchParams]);
+
+
   return (
     <div>
       <form>
@@ -283,6 +300,7 @@ export default function ResumeForm({ setResumeFields }) {
             userDataField={userDataField}
             setGlobalError={setGlobalError}
             setUserDataField={setUserDataField}
+            currentPath={currentPath}
           />
         </Card>
         <MainSectionPartForm
