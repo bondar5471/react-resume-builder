@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { ArrowBack, Folder } from '@material-ui/icons';
-import { Gitlab } from '@gitbeaker/browser';
 import {
   Dialog,
   DialogTitle,
@@ -17,7 +16,8 @@ import {
   Button,
   Snackbar,
 } from '@material-ui/core';
-
+import { api, id } from '../../services/HandlerGitLab.js';
+// import { Gitlab } from '@gitbeaker/browser';
 import { backStepPath } from '../../services/gitLabService';
 import { useStyles } from './styles';
 import Alert from '../Alert';
@@ -42,11 +42,6 @@ export default function GitLabDirModal({
 
   const getDirTree = path => {
     setLoading(true);
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     api.Repositories.tree(id, { path }).then(files => {
       setFolders(files);
       setLoading(false);
@@ -66,11 +61,6 @@ export default function GitLabDirModal({
 
   const createNewPushRequest = async () => {
     const yamlData = createYamlData();
-    const api = new Gitlab({
-      host: process.env.REACT_APP_GITLAB_URL,
-      token: process.env.REACT_APP_GITLAB_TOKEN,
-    });
-    const id = process.env.REACT_APP_GITLAB_PROJ_ID;
     const userName = localStorage.getItem('user');
     const resumePath = path + '/' + fileNameGit + '.yaml';
     api.RepositoryFiles.create(

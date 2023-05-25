@@ -9,16 +9,18 @@ import {
   Typography,
   Box,
   Avatar,
-  FormLabel,
+  // FormLabel,
   FormHelperText,
   Card,
 } from '@material-ui/core';
+// import { Gitlab } from '@gitbeaker/browser';
 import yaml from 'js-yaml';
 import { decode } from 'js-base64';
 
 import { useStyles } from './styles';
 import ResumeForm from '../ResumeForm';
-import { getFileFromFolderRepo, getListFolderRepo } from '../../services/HandlerGit';
+import { api, id } from '../../services/HandlerGitLab.js';
+// import { getFileFromFolderRepo, getListFolderRepo } from '../../services/HandlerGit';
 import GitUploadModal from '../GitUploadModal/GitUploadModal';
 import { webExample } from '../../template/example.js';
 
@@ -26,66 +28,69 @@ export default function UploadResumeComponent() {
   const classes = useStyles();
 
   useEffect(() => {
-    getRepoFolders();
+    if (resumeFields == null) {
+      setResumeFields(JSON.parse(localStorage.getItem('resumeFields')));
+    }
+    // getRepoFolders();
   }, []);
 
-  const [repoFolders, setRepoFolders] = useState(null);
-  const [listFiles, setListFiles] = useState(null);
-  const [error, setError] = useState(null);
-  const [loadingFolder, setLoadingFolder] = useState(false);
-  const [loadingFiles, setLoadingFiles] = useState(false);
-  const [isOpenListFiles, setIsOpenListFiles] = useState(false);
+  // const [repoFolders, setRepoFolders] = useState(null);
+  // const [listFiles, setListFiles] = useState(null);
+  // const [error, setError] = useState(null);
+  // const [loadingFolder, setLoadingFolder] = useState(false);
+  // const [loadingFiles, setLoadingFiles] = useState(false);
+  // const [isOpenListFiles, setIsOpenListFiles] = useState(false);
   const [isOpenGitModal, setIsOpenGitModal] = useState(false);
-  const [resumeFile, setResumeFile] = useState(null);
+  // const [resumeFile, setResumeFile] = useState(null);
   const [resumeFields, setResumeFields] = useState(
     JSON.parse(localStorage.getItem('resumeFields')) || null,
   );
-  const [fileName, setFileName] = useState('Upload');
+  // const [fileName, setFileName] = useState('Upload');
 
   const [errors, setErrors] = useState([]);
 
-  async function getRepoFolders() {
-    try {
-      setLoadingFolder(true);
-      const response = await getListFolderRepo();
-      setRepoFolders(response);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoadingFolder(false);
-    }
-  }
-  async function getListFiles(path) {
-    try {
-      setLoadingFiles(true);
-      const response = await getFileFromFolderRepo(path);
-      setListFiles(response);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setLoadingFiles(false);
-    }
-  }
+  // async function getRepoFolders() {
+  //   try {
+  //     setLoadingFolder(true);
+  //     const response = await getListFolderRepo();
+  //     setRepoFolders(response);
+  //   } catch (e) {
+  //     setError(e);
+  //   } finally {
+  //     setLoadingFolder(false);
+  //   }
+  // }
+  // async function getListFiles(path) {
+  //   try {
+  //     setLoadingFiles(true);
+  //     const response = await getFileFromFolderRepo(path);
+  //     setListFiles(response);
+  //   } catch (e) {
+  //     setError(e);
+  //   } finally {
+  //     setLoadingFiles(false);
+  //   }
+  // }
 
-  const getFile = path => {
-    try {
-      writeFile(path);
-    } catch (e) {
-      setError(e);
-    } finally {
-      setIsOpenGitModal(false);
-    }
-  };
+  // const getFile = path => {
+  //   try {
+  //     writeFile(path);
+  //   } catch (e) {
+  //     setError(e);
+  //   } finally {
+  //     setIsOpenGitModal(false);
+  //   }
+  // };
 
-  const writeFile = async path => {
-    const response = await getFileFromFolderRepo(path);
-    const decodeContext = decode(response.content);
-    const field = yaml.safeLoad(decodeContext);
-    localStorage.setItem('currentSha', response.sha);
-    localStorage.setItem('currentPath', path);
-    localStorage.setItem('resumeFields', JSON.stringify(field));
-    setResumeFields(field);
-  };
+  // const writeFile = async path => {
+  //   const response = await getFileFromFolderRepo(path);
+  //   const decodeContext = decode(response.content);
+  //   const field = yaml.safeLoad(decodeContext);
+  //   localStorage.setItem('currentSha', response.sha);
+  //   localStorage.setItem('currentPath', path);
+  //   localStorage.setItem('resumeFields', JSON.stringify(field));
+  //   setResumeFields(field);
+  // };
   const hiddenFileInput = React.useRef(null);
 
   const handleClick = event => {
@@ -95,9 +100,9 @@ export default function UploadResumeComponent() {
 
   const handleChange = event => {
     let file = event.target.files[0];
-    setFileName(file.name);
-    setResumeFile(file);
-    readFile(file)
+    // setFileName(file.name);
+    // setResumeFile(file);
+    readFile(file);
   };
 
   const readFile = file => {
@@ -116,16 +121,16 @@ export default function UploadResumeComponent() {
     };
   };
 
-  const openDir = async path => {
-    if (!isOpenListFiles) {
-      await getListFiles(path);
-    }
-    setIsOpenListFiles(!isOpenListFiles);
-  };
+  // const openDir = async path => {
+  //   if (!isOpenListFiles) {
+  //     await getListFiles(path);
+  //   }
+  //   setIsOpenListFiles(!isOpenListFiles);
+  // };
 
-  const setFileFromGit = async path => {
-    await getFile(path);
-  };
+  // const setFileFromGit = async path => {
+  //   await getFile(path);
+  // };
 
   const setTemplate = event => {
     event.preventDefault();
@@ -133,6 +138,30 @@ export default function UploadResumeComponent() {
     localStorage.setItem('resumeFields', JSON.stringify(field));
     setResumeFields(field);
   };
+
+  const getFile = async path => {
+    try {
+      const response = await api.RepositoryFiles.show(id, path, 'master');
+      const decodeContext = decode(response.content);
+      const field = yaml.safeLoad(decodeContext);
+      localStorage.setItem('currentSha', response.content_sha256);
+      localStorage.setItem('currentPath', response.file_path);
+      localStorage.setItem('resumeFields', JSON.stringify(field));
+      setResumeFields(JSON.stringify(field));
+    } catch (e) {
+      console.log('Error', e);
+    }
+  };
+
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  const link = urlParams.get('link');
+
+  useEffect(() => {
+    if (link) {
+      getFile(link);
+    }
+  }, [link]);
 
   return (
     <div>
@@ -205,14 +234,14 @@ export default function UploadResumeComponent() {
           <GitUploadModal
             setIsOpenGitModal={setIsOpenGitModal}
             isOpenGitModal={isOpenGitModal}
-            error={error}
-            loadingFolder={loadingFolder}
-            repoFolders={repoFolders}
-            openDir={openDir}
-            isOpenListFiles={isOpenListFiles}
-            loadingFiles={loadingFiles}
-            listFiles={listFiles}
-            setFileFromGit={setFileFromGit}
+            // error={error}
+            // loadingFolder={loadingFolder}
+            // repoFolders={repoFolders}
+            // openDir={openDir}
+            // isOpenListFiles={isOpenListFiles}
+            // loadingFiles={loadingFiles}
+            // listFiles={listFiles}
+            // setFileFromGit={setFileFromGit}
           />
         </Box>
       )}

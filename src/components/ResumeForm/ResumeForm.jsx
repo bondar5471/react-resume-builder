@@ -260,7 +260,7 @@ export default function ResumeForm({ setResumeFields }) {
   };
 
   const redirectToGitlab = () => {
-    window.location.href = process.env.REACT_APP_GIT_REPO_URL;
+    window.location.href = `${process.env.REACT_APP_GITLAB_URL}/cv/main/`;
     return null;
   };
 
