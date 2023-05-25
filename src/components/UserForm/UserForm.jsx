@@ -5,18 +5,17 @@ import FileCopyIcon from '@material-ui/icons/FileCopy';
 import PropTypes from 'prop-types';
 import { handleInput } from '../../services/HandleInput';
 import UploadAvatarModal from '../UploadAvatarModal';
-import { useLocation, useHistory } from 'react-router-dom';
 import { useStyles } from './styles';
+import { copyToClipboard } from '../../services/copyToClipboard';
 
 export default function UserForm({
   setUserFieldValue,
   userDataField,
   setGlobalError,
   setUserDataField,
+  currentPath,
 }) {
   const [copyText, setCopyText] = useState("Copy path");
-  const { search } = useLocation();
-  const history = useHistory();
 
   useEffect(() => {
     setAvatarPreview();
@@ -61,25 +60,15 @@ export default function UserForm({
 
   const classes = useStyles();
 
-  const currentPath = localStorage.getItem('currentPath');
-
-  const searchParams = useMemo(() => new URLSearchParams(search), [search]);
-  useEffect(() => {
-    if (currentPath && !searchParams.get('link')) {
-      searchParams.set('link', currentPath);
-      history.replace({ search: searchParams.toString() });
-    }
-  }, [searchParams]);
-
   const copyContent = async () => {
-    await navigator.clipboard.writeText(window.location.href);
+    copyToClipboard(window.location.href);
     setCopyText('Copied!');
     setTimeout(() => setCopyText('Copy path'), 5000);
   };
 
   return (
     <React.Fragment>
-      {currentPath && 
+      {currentPath &&
         <Grid container spacing={2}>
           <Grid item xs={10}>
             <TextField
@@ -212,4 +201,5 @@ UserForm.propTypes = {
   setUserFieldValue: PropTypes.func.isRequired,
   setGlobalError: PropTypes.func,
   setUserDataField: PropTypes.func,
+  currentPath: PropTypes.string
 };
