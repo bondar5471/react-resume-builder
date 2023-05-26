@@ -276,7 +276,7 @@ export default function ResumeForm({ setResumeFields }) {
   useEffect(() => {
     if (currentPath && !searchParams.get('link')) {
       searchParams.set('link', currentPath);
-      history.replace({ search: searchParams.toString() });
+      history.replace({ search: decodeURIComponent(searchParams) });
     }
   }, [searchParams]);
 
